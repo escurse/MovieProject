@@ -4,9 +4,9 @@
   "settings": {
     "width": 2000,
     "height": 2000,
-    "scrollTop": -613,
-    "scrollLeft": -336,
-    "zoomLevel": 0.78,
+    "scrollTop": -163.4444,
+    "scrollLeft": -262,
+    "zoomLevel": 0.72,
     "show": 431,
     "database": 4,
     "databaseName": "movie",
@@ -319,15 +319,15 @@
           "4P2PtQE3K4YKZZdycECNI"
         ],
         "ui": {
-          "x": 965.5557,
-          "y": 772.1112,
+          "x": 962.7779,
+          "y": 715.1667,
           "zIndex": 469,
           "widthName": 60,
           "widthComment": 60,
           "color": ""
         },
         "meta": {
-          "updateAt": 1730942142365,
+          "updateAt": 1730946156378,
           "createAt": 1730939013450
         }
       },
@@ -2318,8 +2318,8 @@
           "columnIds": [
             "ylcASnSsIAz7qXEus50Go"
           ],
-          "x": 1160.0557,
-          "y": 972.1112,
+          "x": 1157.2779,
+          "y": 915.1667,
           "direction": 8
         },
         "meta": {
@@ -2374,8 +2374,8 @@
           "columnIds": [
             "4P2PtQE3K4YKZZdycECNI"
           ],
-          "x": 1160.0557,
-          "y": 772.1112,
+          "x": 1157.2779,
+          "y": 715.1667,
           "direction": 4
         },
         "meta": {
