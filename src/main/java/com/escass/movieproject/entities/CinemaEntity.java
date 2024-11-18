@@ -6,7 +6,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = {"num"})
+@EqualsAndHashCode(of = {"ciNum"})
 public class CinemaEntity {
-    private int num;
+    private int ciNum;
+    private String ciName;
+    private String ciType;
+    private int ciMaxSeat;
+    private int thNum;
 }

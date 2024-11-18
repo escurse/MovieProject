@@ -6,7 +6,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = {"num"})
+@EqualsAndHashCode(of = {"regNum"})
 public class RegionEntity {
-    private int num;
+    private int regNum;
+    private String regName;
 }

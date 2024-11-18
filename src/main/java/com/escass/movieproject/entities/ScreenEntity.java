@@ -6,7 +6,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = {"num"})
+@EqualsAndHashCode(of = {"scNum"})
 public class ScreenEntity {
-    private int num;
+    private int scNum;
+    private String scStartDate;
+    private int moNum;
+    private int ciNum;
 }

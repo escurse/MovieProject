@@ -6,7 +6,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = {"num"})
+@EqualsAndHashCode(of = {"thNum"})
 public class TheaterEntity {
-    private int num;
+    private int thNum;
+    private String thName;
+    private String thAddr;
+    private int regNum;
 }
