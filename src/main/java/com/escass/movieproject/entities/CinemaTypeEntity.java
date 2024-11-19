@@ -10,4 +10,5 @@ import lombok.Setter;
 public class CinemaTypeEntity {
     private int citNum;
     private String citName;
+    private int citPrice;
 }

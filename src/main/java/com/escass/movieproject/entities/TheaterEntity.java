@@ -11,5 +11,6 @@ public class TheaterEntity {
     private int thNum;
     private String thName;
     private String thAddr;
+    private String thImg;
     private int regNum;
 }

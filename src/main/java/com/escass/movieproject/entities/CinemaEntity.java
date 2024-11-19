@@ -10,7 +10,6 @@ import lombok.Setter;
 public class CinemaEntity {
     private int ciNum;
     private String ciName;
-    private int ciMaxSeat;
     private int thNum;
     private int citNum;
 }
