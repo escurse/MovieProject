@@ -12,10 +12,9 @@ public class MovieProjectApplication {
     public static void main(String[] args) throws Exception {
         SpringApplication.run(MovieProjectApplication.class, args);
 
-        String URL = "http://www.cgv.co.kr/theaters/?areacode=11&theaterCode=0157&date=20241107#tile_0";
-        Document doc = Jsoup.connect(URL).get();
-        System.out.println(doc);
-        Elements element = doc.select(".thumb-image");
-        System.out.println(element);
+//        String URL = "http://www.cgv.co.kr/theaters/";
+//        Document doc = Jsoup.connect(URL).get();
+//        Elements element = doc.select(".title");
+//        System.out.println(element);
     }
 }

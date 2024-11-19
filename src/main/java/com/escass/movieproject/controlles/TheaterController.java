@@ -7,12 +7,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping(value="/theater")
+@RequestMapping(value = "/theater")
 public class TheaterController {
 
-    @RequestMapping(value="/", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView getIndex() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("theater/index");        return modelAndView;
+        modelAndView.setViewName("theater/index");
+        return modelAndView;
     }
 }
