@@ -8,4 +8,8 @@ body {
   flex-direction: column;
 }
 
+ol, ul {
+  list-style-type: none;
+}
+
 /*# sourceMappingURL=common.css.map */

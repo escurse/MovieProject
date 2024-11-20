@@ -10,3 +10,7 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+ol, ul {
+  list-style-type: none;
+}

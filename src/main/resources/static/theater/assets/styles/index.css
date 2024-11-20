@@ -9,6 +9,16 @@
   height: 28rem;
   background-image: url("https://img.cgv.co.kr/r2014/images/common/bg/bg_showtimes_favorite.gif");
 }
+#main .img .header {
+  height: 33.3333333333%;
+}
+#main .img .header.main {
+  align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+  justify-content: center;
+}
 #main .line-wrapper {
   align-items: center;
   display: flex;
@@ -16,13 +26,29 @@
   justify-content: center;
 }
 #main .line-wrapper .line {
-  margin-top: 3rem;
-  line-height: 1rem;
+  margin-top: 2rem;
   width: 61.4rem;
-  height: 0.5rem;
   background-image: url("https://img.cgv.co.kr/r2014/images/common/bg/bg_h3_line.jpg");
   background-repeat: repeat-x;
+  background-position: center;
   text-align: center;
+}
+#main .theater-container {
+  width: 61.4rem;
+}
+#main .theater-container .header {
+  width: 100%;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+#main .theater-container .header .text {
+  font-size: 2rem;
+  font-weight: 400;
+}
+#main .theater-container .header .spring {
+  flex-grow: 1;
 }
 
 /*# sourceMappingURL=index.css.map */
