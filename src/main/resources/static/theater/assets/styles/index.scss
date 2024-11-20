@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+#main {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .img {
+    width: 61.4rem;
+    height: 28rem;
+    background-image: url("https://img.cgv.co.kr/r2014/images/common/bg/bg_showtimes_favorite.gif");
+  }
+}
+
+
