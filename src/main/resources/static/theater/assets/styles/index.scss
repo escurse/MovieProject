@@ -11,6 +11,25 @@
     height: 28rem;
     background-image: url("https://img.cgv.co.kr/r2014/images/common/bg/bg_showtimes_favorite.gif");
   }
+
+  .line-wrapper {
+
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .line {
+      margin-top: 3rem;
+      line-height: 1rem;
+      width: 61.4rem;
+      height: 0.5rem;
+      background-image: url("https://img.cgv.co.kr/r2014/images/common/bg/bg_h3_line.jpg");
+      background-repeat: repeat-x;
+
+      text-align: center;
+    }
+  }
 }
 
 
