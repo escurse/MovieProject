@@ -10,6 +10,7 @@ body {
 
 ol, ul {
   list-style-type: none;
+  padding-inline-start: 0;
 }
 
 /*# sourceMappingURL=common.css.map */

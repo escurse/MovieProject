@@ -11,15 +11,49 @@
     height: 28rem;
     background-image: url("https://img.cgv.co.kr/r2014/images/common/bg/bg_showtimes_favorite.gif");
 
-    .header {
-      height: calc(100% / 3);
+    .head {
+      margin: 3rem 0 0 5rem;
 
-      &.main {
-        align-items: stretch;
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+
+      #favorite-theaters {
+        align-items: center;
         display: flex;
         flex-direction: row;
-        gap: 3rem;
         justify-content: center;
+
+        > .container {
+          > .text {
+            color: #ffffff;
+          }
+        }
+      }
+
+      > .button {
+        background-color: #636162;
+        border: 0.2rem solid #6e6c6d;
+      }
+    }
+
+    .main {
+      width: 56.5rem;
+      height: 2rem;
+      margin-left: 2.3rem;
+      border-top: 0.2rem solid #424242;
+      border-bottom: 0.2rem solid #424242;
+
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+
+      > .item {
+        margin-left: 3.45rem;
+        color: #ffffff;
+        cursor: pointer;
       }
     }
   }
