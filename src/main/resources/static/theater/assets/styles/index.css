@@ -4,54 +4,127 @@
   flex-direction: column;
   justify-content: center;
 }
-#main .img {
+#main > .img {
   width: 61.4rem;
   height: 28rem;
   background-image: url("https://img.cgv.co.kr/r2014/images/common/bg/bg_showtimes_favorite.gif");
 }
-#main .img .head {
-  margin: 3rem 0 0 5rem;
+#main > .img > .head {
+  margin: 3rem 0 0 4rem;
   align-items: center;
   display: flex;
   flex-direction: row;
+  gap: 0.3rem;
   justify-content: flex-start;
 }
-#main .img .head #favorite-theaters {
+#main > .img > .head #favorite-theaters {
+  margin-left: 1rem;
   align-items: center;
   display: flex;
   flex-direction: row;
+  gap: 0.15rem;
   justify-content: center;
 }
-#main .img .head #favorite-theaters > .container > .text {
-  color: #ffffff;
-}
-#main .img .head > .button {
-  background-color: #636162;
-  border: 0.2rem solid #6e6c6d;
-}
-#main .img .main {
-  width: 56.5rem;
-  height: 2rem;
-  margin-left: 2.3rem;
-  border-top: 0.2rem solid #424242;
-  border-bottom: 0.2rem solid #424242;
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-}
-#main .img .main > .item {
-  margin-left: 3.45rem;
-  color: #ffffff;
-  cursor: pointer;
-}
-#main .line-wrapper {
+#main > .img > .head #favorite-theaters > .container {
+  width: 7.5rem;
+  height: 2.5rem;
+  border: 0.15rem solid #6e6c6d;
   align-items: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-#main .line-wrapper .line {
+#main > .img > .head #favorite-theaters > .container > .text-container {
+  width: 95%;
+  height: 90%;
+  border: 0.1rem solid #6e6c6d;
+  text-decoration: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+#main > .img > .head #favorite-theaters > .container > .text-container > .text {
+  color: #ffffff;
+}
+#main > .img > .head > .button {
+  background-color: #636162;
+  border: 0.2rem solid #6e6c6d;
+}
+#main > .img > .head > .button > .image {
+  width: 1.7rem;
+  height: 1.7rem;
+  cursor: pointer;
+}
+#main > .img > .main {
+  width: 53.5rem;
+  height: 2rem;
+  margin-left: 4rem;
+  border-top: 0.15rem solid #727171;
+  border-bottom: 0.15rem solid #727171;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+  justify-content: flex-start;
+}
+#main > .img > .main > .item {
+  color: #dbdbdb;
+  cursor: pointer;
+  font-weight: 600;
+}
+#main > .img > .main > .item.select {
+  padding: 0.5rem 1rem;
+  color: #ffffff;
+  border-left: 0.15rem solid #727171;
+  border-right: 0.15rem solid #727171;
+  background-image: url("https://img.cgv.co.kr/r2014/images/common/ico/ico_arrow02.png");
+  background-repeat: no-repeat;
+  background-position-x: 50%;
+  background-position-y: 96%;
+}
+#main > .img > .main > .item:nth-child(1) {
+  margin-left: 3rem;
+}
+#main > .img > .main > .item:hover {
+  color: #ffffff;
+}
+#main > .img > .item-container {
+  width: 53.5rem;
+  flex-wrap: wrap;
+  margin-left: 4rem;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  justify-content: flex-start;
+}
+#main > .img > .item-container > .item {
+  padding-right: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-right: 0.1rem solid #6e6c6d;
+  color: #dbdbdb;
+  cursor: pointer;
+}
+#main > .img > .item-container > .item.select {
+  color: #ffffff;
+}
+#main > .img > .item-container > .item:hover {
+  color: #ffffff;
+}
+#main > .img > .item-container > .item:nth-child(1) {
+  margin-left: 1rem;
+}
+#main > .img > .item-container > .item:nth-last-child(1) {
+  border: none;
+}
+#main > .line-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#main > .line-wrapper > .line {
   margin-top: 2rem;
   width: 61.4rem;
   background-image: url("https://img.cgv.co.kr/r2014/images/common/bg/bg_h3_line.jpg");
@@ -59,22 +132,25 @@
   background-position: center;
   text-align: center;
 }
-#main .theater-container {
+#main > .theater-container {
   width: 61.4rem;
 }
-#main .theater-container .header {
+#main > .theater-container > .header {
   width: 100%;
   align-items: center;
   display: flex;
   flex-direction: row;
   justify-content: center;
 }
-#main .theater-container .header .text {
+#main > .theater-container > .header > .text {
   font-size: 2rem;
   font-weight: 400;
 }
-#main .theater-container .header .spring {
+#main > .theater-container > .header > .spring {
   flex-grow: 1;
+}
+#main > .theater-container > .img > .image {
+  width: 100%;
 }
 
 /*# sourceMappingURL=index.css.map */

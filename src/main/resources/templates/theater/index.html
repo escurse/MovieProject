@@ -16,24 +16,34 @@
             <img src="https://img.cgv.co.kr/R2014/images/title/h4_favorite_cgv.png" alt="" class="image">
             <ul id="favorite-theaters">
                 <li class="container">
-                    <span class="text">1</span>
+                    <a href="#" class="text-container">
+                        <span class="text">1</span>
+                    </a>
                 </li>
                 <li class="container">
-                    <span class="text">2</span>
+                    <a href="#" class="text-container">
+                        <span class="text">2</span>
+                    </a>
                 </li>
                 <li class="container">
-                    <span class="text">3</span>
+                    <a href="#" class="text-container">
+                        <span class="text">3</span>
+                    </a>
                 </li>
                 <li class="container">
-                    <span class="text">4</span>
+                    <a href="#" class="text-container">
+                        <span class="text">4</span>
+                    </a>
                 </li>
                 <li class="container">
-                    <span class="text">5</span>
+                    <a href="#" class="text-container">
+                        <span class="text">5</span>
+                    </a>
                 </li>
             </ul>
-            <button class="button">
-                <img src="https://img.cgv.co.kr/r2014/images/common/btn/btn_plus.gif" alt="">
-            </button>   
+            <button class="button" type="button">
+                <img src="https://img.cgv.co.kr/r2014/images/common/btn/btn_plus.gif" alt="" class="image">
+            </button>
         </div>
         <ul class="main">
             <li class="item">서울</li>
@@ -41,12 +51,22 @@
             <li class="item">인천</li>
             <li class="item">강원</li>
             <li class="item">대전/충청</li>
-            <li class="item">대구</li>
+            <li class="item select">대구</li>
             <li class="item">부산/울산</li>
             <li class="item">경상</li>
             <li class="item">광주/전라/제주</li>
         </ul>
-        <ul class="item-container"></ul>
+        <ul class="item-container">
+            <li class="item select">CGV대구</li>
+            <li class="item">CGV대구수성</li>
+            <li class="item">CGV대구스타디움</li>
+            <li class="item">CGV대구아카데미</li>
+            <li class="item">CGV대구연경</li>
+            <li class="item">CGV대구월성</li>
+            <li class="item">CGV대구죽전</li>
+            <li class="item">CGV대구한일</li>
+            <li class="item">CGV대구현대</li>
+        </ul>
     </div>
     <div class="line-wrapper">
         <div class="line">
@@ -55,9 +75,12 @@
     </div>
     <div class="theater-container">
         <div class="header">
-            <span class="text">CGV대구스타디움</span>
+            <span class="text">CGV대구월성</span>
             <span class="spring"></span>
             <button class="button">단체/대관 문의</button>
+        </div>
+        <div class="img">
+            <img th:src="@{/assets/images/대구월성.jpg}" alt="" class="image">
         </div>
     </div>
 </main>

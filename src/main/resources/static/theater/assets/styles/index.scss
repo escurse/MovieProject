@@ -6,28 +6,52 @@
   flex-direction: column;
   justify-content: center;
 
-  .img {
+  > .img {
     width: 61.4rem;
     height: 28rem;
     background-image: url("https://img.cgv.co.kr/r2014/images/common/bg/bg_showtimes_favorite.gif");
 
-    .head {
-      margin: 3rem 0 0 5rem;
+    > .head {
+      margin: 3rem 0 0 4rem;
 
       align-items: center;
       display: flex;
       flex-direction: row;
+      gap: 0.3rem;
       justify-content: flex-start;
 
       #favorite-theaters {
+        margin-left: 1rem;
+
         align-items: center;
         display: flex;
         flex-direction: row;
+        gap: 0.15rem;
         justify-content: center;
 
         > .container {
-          > .text {
-            color: #ffffff;
+          width: 7.5rem;
+          height: 2.5rem;
+          border: 0.15rem solid #6e6c6d;
+
+          align-items: center;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+
+          > .text-container {
+            width: 95%;
+            height: 90%;
+            border: 0.1rem solid #6e6c6d;
+            text-decoration: none;
+
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+
+            > .text {
+              color: #ffffff;
+            }
           }
         }
       }
@@ -35,36 +59,99 @@
       > .button {
         background-color: #636162;
         border: 0.2rem solid #6e6c6d;
+
+        > .image {
+          width: 1.7rem;
+          height: 1.7rem;
+          cursor: pointer;
+        }
       }
     }
 
-    .main {
-      width: 56.5rem;
+    > .main {
+      width: 53.5rem;
       height: 2rem;
-      margin-left: 2.3rem;
-      border-top: 0.2rem solid #424242;
-      border-bottom: 0.2rem solid #424242;
+      margin-left: 4rem;
+      border-top: 0.15rem solid #727171;
+      border-bottom: 0.15rem solid #727171;
 
       align-items: center;
       display: flex;
       flex-direction: row;
+      gap: 3rem;
       justify-content: flex-start;
 
       > .item {
-        margin-left: 3.45rem;
-        color: #ffffff;
+        color: #dbdbdb;
         cursor: pointer;
+        font-weight: 600;
+
+        &.select {
+          padding: 0.5rem 1rem;
+          color: #ffffff;
+          border-left: 0.15rem solid #727171;
+          border-right: 0.15rem solid #727171;
+          background-image: url("https://img.cgv.co.kr/r2014/images/common/ico/ico_arrow02.png");
+          background-repeat: no-repeat;
+          background-position-x: 50%;
+          background-position-y: 96%;
+        }
+
+        &:nth-child(1) {
+          margin-left: 3rem;
+        }
+
+        &:hover {
+          color: #ffffff;
+        }
+      }
+    }
+
+    > .item-container {
+      width: 53.5rem;
+      flex-wrap: wrap;
+      margin-left: 4rem;
+
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      gap: 0.5rem;
+      justify-content: flex-start;
+
+      > .item {
+        padding-right: 0.5rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border-right: 0.1rem solid #6e6c6d;
+        color: #dbdbdb;
+        cursor: pointer;
+
+        &.select {
+          color: #ffffff;
+        }
+
+        &:hover {
+          color: #ffffff;
+        }
+
+        &:nth-child(1) {
+          margin-left: 1rem;
+        }
+
+        &:nth-last-child(1) {
+          border: none;
+        }
       }
     }
   }
 
-  .line-wrapper {
+  > .line-wrapper {
     align-items: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
 
-    .line {
+    > .line {
       margin-top: 2rem;
       width: 61.4rem;
       background-image: url("https://img.cgv.co.kr/r2014/images/common/bg/bg_h3_line.jpg");
@@ -75,10 +162,10 @@
     }
   }
 
-  .theater-container {
+  > .theater-container {
     width: 61.4rem;
 
-    .header {
+    > .header {
       width: 100%;
 
       align-items: center;
@@ -86,13 +173,19 @@
       flex-direction: row;
       justify-content: center;
 
-      .text {
+      > .text {
         font-size: 2rem;
         font-weight: 400;
       }
 
-      .spring {
+      > .spring {
         flex-grow: 1;
+      }
+    }
+
+    > .img {
+      > .image {
+        width: 100%;
       }
     }
   }
