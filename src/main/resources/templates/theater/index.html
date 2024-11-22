@@ -46,26 +46,16 @@
             </button>
         </div>
         <ul class="main">
-            <li class="item">서울</li>
-            <li class="item">경기</li>
-            <li class="item">인천</li>
-            <li class="item">강원</li>
-            <li class="item">대전/충청</li>
-            <li class="item select">대구</li>
-            <li class="item">부산/울산</li>
-            <li class="item">경상</li>
-            <li class="item">광주/전라/제주</li>
+            <li class="item"
+                th:each="region : ${regions}"
+                th:text="${region.getRegName()}">
+            </li>
         </ul>
         <ul class="item-container">
-            <li class="item select">CGV대구</li>
-            <li class="item">CGV대구수성</li>
-            <li class="item">CGV대구스타디움</li>
-            <li class="item">CGV대구아카데미</li>
-            <li class="item">CGV대구연경</li>
-            <li class="item">CGV대구월성</li>
-            <li class="item">CGV대구죽전</li>
-            <li class="item">CGV대구한일</li>
-            <li class="item">CGV대구현대</li>
+            <li class="item"
+                th:each="theater : ${theaters}"
+                th:text="${theater.getThName()}">
+            </li>
         </ul>
     </div>
     <div class="line-wrapper">
@@ -80,7 +70,8 @@
             <button class="button">단체/대관 문의</button>
         </div>
         <div class="img">
-            <img th:src="@{/assets/images/대구월성.jpg}" alt="" class="image">
+            <img th:each="theater : ${theaters}"
+                 th:src="${theater.getThImg()}" alt="" class="image">
         </div>
     </div>
 </main>

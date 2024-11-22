@@ -78,13 +78,14 @@
       align-items: center;
       display: flex;
       flex-direction: row;
-      gap: 3rem;
+      gap: 3.5rem;
       justify-content: flex-start;
 
       > .item {
         color: #dbdbdb;
         cursor: pointer;
         font-weight: 600;
+        font-size: 0.9rem;
 
         &.select {
           padding: 0.5rem 1rem;
@@ -98,7 +99,7 @@
         }
 
         &:nth-child(1) {
-          margin-left: 3rem;
+          margin-left: 2rem;
         }
 
         &:hover {
@@ -108,9 +109,9 @@
     }
 
     > .item-container {
-      width: 53.5rem;
+      width: 52.5rem;
       flex-wrap: wrap;
-      margin-left: 4rem;
+      margin-left: 5rem;
 
       align-items: center;
       display: flex;
@@ -132,10 +133,6 @@
 
         &:hover {
           color: #ffffff;
-        }
-
-        &:nth-child(1) {
-          margin-left: 1rem;
         }
 
         &:nth-last-child(1) {
