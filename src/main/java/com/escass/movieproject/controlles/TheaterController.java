@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Arrays;
+
 @Controller
 @RequestMapping(value = "/theater")
 @RequiredArgsConstructor
@@ -21,8 +23,13 @@ public class TheaterController {
         ModelAndView modelAndView = new ModelAndView();
         RegionEntity[] region = this.theaterService.findRegionAll();
         TheaterEntity[] theater = this.theaterService.findTheaterAll();
+        String[] a = new String[theater.length];
+        for (TheaterEntity theaters : theater) {
+            a = theaters.getThAddr().split("\n");
+        }
         modelAndView.addObject("regions", region);
         modelAndView.addObject("theaters", theater);
+        modelAndView.addObject("a", a);
         modelAndView.setViewName("theater/index");
         return modelAndView;
     }

@@ -72,6 +72,7 @@
         <div class="img">
             <img th:each="theater : ${theaters}"
                  th:src="${theater.getThImg()}" alt="" class="image">
+            <div class="theater-info" th:each="theater : ${a}" th:text="${theater}"></div>
         </div>
     </div>
 </main>
