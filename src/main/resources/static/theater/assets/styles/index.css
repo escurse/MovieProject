@@ -147,8 +147,47 @@
 #main > .theater-container > .header > .spring {
   flex-grow: 1;
 }
+#main > .theater-container > .img {
+  position: relative;
+}
 #main > .theater-container > .img > .image {
   width: 100%;
+}
+#main > .theater-container > .img > .theater-info-container {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-image: url("https://img.cgv.co.kr/R2014/images/common/bg/bg_dim80.png");
+  background-repeat: repeat;
+  position: absolute;
+  align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+#main > .theater-container > .img > .theater-info-container .theater-info {
+  color: #ffffff;
+}
+#main > .theater-container > .img > .theater-info-container > .small-container > .header {
+  display: flex;
+}
+#main > .theater-container > .img > .theater-info-container > .small-container > .header > .cinema-type {
+  top: 0;
+  right: 15rem;
+  width: 5rem;
+  height: 1rem;
+  background-image: url("https://img.cgv.co.kr/R2014/images/sprite/sprite_screentype02.png");
+  background-position: -99px -162px;
+  background-repeat: no-repeat;
+  position: absolute;
+}
+#main > .theater-container > .img > .theater-info-container > .notice-container > .button {
+  width: 1.3rem;
+  height: 1.3rem;
+  background-image: url("https://img.cgv.co.kr/R2014/images/sprite/sprite_btn.png");
+  background-position: -50px -62px;
+  background-repeat: no-repeat;
+  position: absolute;
 }
 
 /*# sourceMappingURL=index.css.map */

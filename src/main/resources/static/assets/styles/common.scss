@@ -9,6 +9,14 @@ body {
 
   display: flex;
   flex-direction: column;
+
+  .stretch {
+    flex-grow: 1;
+  }
+}
+
+a {
+  text-decoration: none;
 }
 
 ol, ul {

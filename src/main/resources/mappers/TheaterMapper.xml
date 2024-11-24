@@ -15,5 +15,6 @@
                th_img  AS `thImg`,
                reg_num AS `regNum`
         FROM `jgv`.`theater`
+        LIMIT 1
     </select>
 </mapper>

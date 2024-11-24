@@ -72,7 +72,24 @@
         <div class="img">
             <img th:each="theater : ${theaters}"
                  th:src="${theater.getThImg()}" alt="" class="image">
-            <div class="theater-info" th:each="theater : ${a}" th:text="${theater}"></div>
+            <div class="theater-info-container">
+                <div class="small-container">
+                    <div class="header">
+                        <div class="info-container">
+                            <div class="theater-info" th:each="theater : ${a}" th:text="${theater}">
+                            </div>
+                        </div>
+                        <a href="#" class="theater-info" target="_blank">위치 / 주차 안내</a>
+                        <a href="#" class="cinema-type" target="_blank"></a>
+                    </div>
+                    <div class="theater-info">6관/874석</div>
+                </div>
+                <div class="stretch"></div>
+                <div class="notice-container">
+                    <div class="theater-info">공지사항</div>
+                    <a href="#" class="button"></a>
+                </div>
+            </div>
         </div>
     </div>
 </main>
