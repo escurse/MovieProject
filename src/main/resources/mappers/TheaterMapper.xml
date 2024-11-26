@@ -3,12 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.escass.movieproject.mappers.TheaterMapper">
-    <select id="getRegionAll" parameterType="com.escass.movieproject.entities.RegionEntity">
+    <select id="getRegionAll"
+            parameterType="com.escass.movieproject.entities.RegionEntity">
         SELECT `reg_num`  AS `regNum`,
                `reg_name` AS `regName`
         FROM `jgv`.`region`
     </select>
-    <select id="getTheaterAll" parameterType="com.escass.movieproject.entities.TheaterEntity">
+    <select id="getTheaterAll"
+            parameterType="com.escass.movieproject.entities.TheaterEntity">
         SELECT th_num  AS `thNum`,
                th_name AS `thName`,
                th_addr AS `thAddr`,
@@ -16,5 +18,14 @@
                reg_num AS `regNum`
         FROM `jgv`.`theater`
         LIMIT 1
+    </select>
+    <select id="getTheatersAll"
+            parameterType="com.escass.movieproject.entities.TheaterEntity">
+        SELECT th_num  AS `thNum`,
+               th_name AS `thName`,
+               th_addr AS `thAddr`,
+               th_img  AS `thImg`,
+               reg_num AS `regNum`
+        FROM `jgv`.`theater`
     </select>
 </mapper>

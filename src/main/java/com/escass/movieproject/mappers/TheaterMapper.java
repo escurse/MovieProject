@@ -9,4 +9,6 @@ public interface TheaterMapper {
     RegionEntity[] getRegionAll();
 
     TheaterEntity[] getTheaterAll();
+
+    TheaterEntity[] getTheatersAll();
 }

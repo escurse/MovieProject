@@ -18,4 +18,8 @@ public class TheaterService {
     public TheaterEntity[] findTheaterAll() {
         return this.theaterMapper.getTheaterAll();
     }
+
+    public TheaterEntity[] findTheatersAll() {
+        return this.theaterMapper.getTheatersAll();
+    }
 }
