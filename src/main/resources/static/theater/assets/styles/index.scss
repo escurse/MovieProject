@@ -207,6 +207,7 @@
         > .small-container {
           > .header {
             display: flex;
+
             > .cinema-type {
               top: 0;
               right: 15rem;
@@ -230,6 +231,15 @@
             position: absolute;
           }
         }
+      }
+    }
+  }
+
+  > .advertisement-info {
+    > .advertisement-move {
+      > .advertisement {
+        margin-top: 1rem;
+        width: 61.4rem;
       }
     }
   }

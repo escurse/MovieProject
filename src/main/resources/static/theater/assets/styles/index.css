@@ -189,5 +189,9 @@
   background-repeat: no-repeat;
   position: absolute;
 }
+#main > .advertisement-info > .advertisement-move > .advertisement {
+  margin-top: 1rem;
+  width: 61.4rem;
+}
 
 /*# sourceMappingURL=index.css.map */
