@@ -84,7 +84,7 @@
                             <div class="theater-info" th:each="b : ${a}" th:text="${b}">
                             </div>
                         </div>
-                        <a href="#" class="theater-info" target="_blank">위치 / 주차 안내</a>
+                        <a href="#" class="theater-info guide" target="_blank">위치 / 주차 안내 ></a>
                         <a href="#" class="cinema-type" target="_blank"></a>
                     </div>
                     <div class="theater-info">6관/874석</div>
@@ -99,12 +99,17 @@
     </div>
     <div class="advertisement-info">
         <a href="#" target="_self" class="advertisement-move">
-            <img src="https://adimg.cgv.co.kr/images/202411/Firefighters/1121_980x90.jpg" alt="배너" class="advertisement">
+            <img src="https://adimg.cgv.co.kr/images/202411/Firefighters/1121_980x90.jpg" alt="배너"
+                 class="advertisement">
         </a>
     </div>
     <div class="button-container">
-        <div class="screen-button">상영시간표</div>
-        <div class="position-button">위치/주차안내</div>
+        <div class="button">
+            <a href="#" class="text">상영시간표</a>
+        </div>
+        <div class="button">
+            <a href="#" class="text">위치/주차안내</a>
+        </div>
     </div>
 </main>
 <th:block th:replace="~{fragments/common.html :: footer}"></th:block>

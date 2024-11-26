@@ -12,7 +12,7 @@
     background-image: url("https://img.cgv.co.kr/r2014/images/common/bg/bg_showtimes_favorite.gif");
 
     > .head {
-      margin: 3rem 0 0 4rem;
+      margin: 4rem 0 1rem 5rem;
 
       align-items: center;
       display: flex;
@@ -61,8 +61,8 @@
         border: 0.2rem solid #6e6c6d;
 
         > .image {
-          width: 1.7rem;
-          height: 1.7rem;
+          width: 2.5rem;
+          height: 2rem;
           cursor: pointer;
         }
       }
@@ -111,7 +111,7 @@
     > .item-container {
       width: 52.5rem;
       flex-wrap: wrap;
-      margin-left: 5rem;
+      margin: 1rem 0 0 5rem;
 
       align-items: center;
       display: flex;
@@ -191,6 +191,7 @@
         left: 0;
         bottom: 0;
         width: 100%;
+        height: 40%;
         background-image: url('https://img.cgv.co.kr/R2014/images/common/bg/bg_dim80.png');
         background-repeat: repeat;
         position: absolute;
@@ -202,11 +203,28 @@
 
         .theater-info {
           color: #ffffff;
+          font-weight: 600;
+          font-size: 0.85rem;
+
+          &.guide {
+            display: flex;
+            align-items: flex-end;
+
+            color: #b1b1ab;
+            font-size: 0.7rem;
+          }
         }
 
         > .small-container {
+          margin: 2rem 0 0 1rem;
+
+          display: flex;
+          flex-direction: column;
+          gap: 3rem;
+
           > .header {
             display: flex;
+            gap: 0.5rem;
 
             > .cinema-type {
               top: 0;
@@ -222,13 +240,24 @@
         }
 
         > .notice-container {
+          width: 10rem;
+          height: 7rem;
+          margin: 2rem 5rem 0 0;
+          padding: 0 0 0 5rem;
+          border-left: 0.1rem solid #ffffff;
+
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          gap: 1rem;
+
+
           > .button {
             width: 1.3rem;
             height: 1.3rem;
             background-image: url("https://img.cgv.co.kr/R2014/images/sprite/sprite_btn.png");
             background-position: -50px -62px;
             background-repeat: no-repeat;
-            position: absolute;
           }
         }
       }
@@ -240,6 +269,31 @@
       > .advertisement {
         margin-top: 1rem;
         width: 61.4rem;
+      }
+    }
+  }
+
+  > .button-container {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #fb4357;
+    font-size: 1rem;
+    font-weight: 600;
+
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+
+    > .button {
+
+      &:nth-child(1) {
+        padding-right: 1rem;
+        border-right: 0.1rem solid #ffffff;
+      }
+      > .text {
+        color: #ffffff;
       }
     }
   }
