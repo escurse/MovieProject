@@ -28,4 +28,13 @@
                reg_num AS `regNum`
         FROM `jgv`.`theater`
     </select>
+    <select id="getTheatersByRegion" parameterType="com.escass.movieproject.entities.TheaterEntity">
+        SELECT `th_num`            AS `thNum`,
+               `th_name`           AS `thName`,
+               `th_addr`           AS `thAddr`,
+               `th_img`            AS `thImg`
+        FROM `jgv`.`theater`
+                 LEFT JOIN jgv.region reg ON theater.reg_num = reg.reg_num
+        WHERE `reg_name` = #{region}
+    </select>
 </mapper>
