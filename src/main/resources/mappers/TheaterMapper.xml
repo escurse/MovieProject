@@ -28,7 +28,8 @@
                reg_num AS `regNum`
         FROM `jgv`.`theater`
     </select>
-    <select id="getTheatersByRegion" parameterType="com.escass.movieproject.entities.TheaterEntity">
+    <select id="getTheatersByRegion"
+            resultType="com.escass.movieproject.entities.TheaterEntity">
         SELECT `th_num`            AS `thNum`,
                `th_name`           AS `thName`,
                `th_addr`           AS `thAddr`,

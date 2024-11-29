@@ -22,4 +22,8 @@ public class TheaterService {
     public TheaterEntity[] findTheatersAll() {
         return this.theaterMapper.getTheatersAll();
     }
+
+    public TheaterEntity[] getTheatersByRegion(String region) {
+        return this.theaterMapper.getTheatersByRegion(region);
+    }
 }

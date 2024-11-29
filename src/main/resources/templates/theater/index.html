@@ -54,13 +54,14 @@
         <ul class="main">
             <li class="item"
                 th:each="region : ${regions}"
-                th:text="${region.getRegName()}">
+                th:text="${region.getRegName()}"
+                th:rel="${region.getRegName()}">
             </li>
         </ul>
         <ul class="item-container">
             <li class="item"
-                th:each="theaters : ${theaters}"
-                th:text="${theaters.getThName()}">
+                th:each="abc : ${theaters}"
+                th:text="${abc.getThName()}">
             </li>
         </ul>
     </div>
@@ -71,13 +72,13 @@
     </div>
     <div class="theater-container">
         <div class="header">
-            <span class="text" th:each="theater : ${theater}" th:text="${theater.getThName()}"></span>
+            <span class="text" th:each="theaters : ${theater}" th:text="${theaters.getThName()}"></span>
             <span class="stretch"></span>
             <button class="button">단체/대관 문의</button>
         </div>
         <div class="img">
-            <img th:each="theater : ${theater}"
-                 th:src="${theater.getThImg()}" alt="" class="image">
+            <img th:each="theaters : ${theater}"
+                 th:src="${theaters.getThImg()}" alt="" class="image">
             <div class="theater-info-container">
                 <div class="small-container">
                     <div class="header">
