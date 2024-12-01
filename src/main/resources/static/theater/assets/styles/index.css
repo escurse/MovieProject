@@ -234,12 +234,69 @@
   justify-content: center;
   gap: 1rem;
 }
+#main > .button-container > .button {
+  cursor: pointer;
+}
 #main > .button-container > .button:nth-child(1) {
   padding-right: 1rem;
   border-right: 0.1rem solid #ffffff;
 }
 #main > .button-container > .button > .text {
   color: #ffffff;
+}
+#main > .information {
+  width: 100%;
+  margin-bottom: 3rem;
+  display: flex;
+  flex-direction: row;
+}
+#main > .information.hidden {
+  display: none;
+}
+#main > .information > .car-info {
+  width: 84%;
+  margin-right: 1rem;
+}
+#main > .information > .car-info .header {
+  display: flex;
+  border-bottom: 0.15rem solid #222222;
+  padding-bottom: 0.5rem;
+}
+#main > .information > .car-info .header > .bus {
+  width: 3.5rem;
+  height: 1.67rem;
+  background-image: url("https://img.cgv.co.kr/R2014/images/sprite/sprite_icon.png");
+  background-position-x: -200px;
+  background-position-y: -130px;
+  background-repeat: no-repeat;
+}
+#main > .information > .car-info .header .text {
+  font-size: 1rem;
+  font-weight: 600;
+}
+#main > .information > .car-info .header > .find {
+  padding: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border: 0.15rem solid #FB4357;
+  color: #FB4357;
+}
+#main > .information > .car-info .header > .car {
+  width: 3.5rem;
+  height: 1.67rem;
+  background-image: url("https://img.cgv.co.kr/R2014/images/sprite/sprite_icon.png");
+  background-position-x: -200px;
+  background-position-y: -158px;
+  background-repeat: no-repeat;
+}
+#main > .information > .advertisement-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+#main > .information > .cinema-info {
+  width: 84%;
+  margin-right: 1rem;
 }
 
 /*# sourceMappingURL=index.css.map */
