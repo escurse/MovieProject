@@ -64,18 +64,20 @@
   align-items: center;
   display: flex;
   flex-direction: row;
-  gap: 2.5rem;
+  gap: 3.5rem;
   justify-content: flex-start;
 }
 #main > .img > .main > .item {
-  padding: 0.5rem 0.5rem;
   color: #dbdbdb;
   cursor: pointer;
   font-weight: 600;
   font-size: 0.9rem;
 }
 #main > .img > .main > .item.select {
+  padding: 0.5rem 0.5rem;
   color: #ffffff;
+  border-left: 0.15rem solid #727171;
+  border-right: 0.15rem solid #727171;
   background-image: url("https://img.cgv.co.kr/r2014/images/common/ico/ico_arrow02.png");
   background-repeat: no-repeat;
   background-position-x: 50%;
