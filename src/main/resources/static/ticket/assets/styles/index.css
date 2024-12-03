@@ -6,7 +6,9 @@
   justify-content: center;
 }
 #main > .header {
-  width: 62%;
+  width: 980px;
+  max-width: 980px;
+  min-width: 980px;
   height: 10rem;
 }
 #main > .main-container {
@@ -18,7 +20,9 @@
   justify-content: center;
 }
 #main > .main-container > .main {
-  width: 62%;
+  width: 980px;
+  max-width: 980px;
+  min-width: 980px;
   height: 100rem;
   background-color: red;
 }

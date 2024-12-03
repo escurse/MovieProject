@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@import "global";
 
 #main {
   width: 100%;
@@ -9,7 +10,7 @@
   justify-content: center;
 
   > .header {
-    width: 62%;
+    @include minmaxWidth(980px);
     height: 10rem;
   }
 
@@ -22,7 +23,7 @@
     justify-content: center;
 
     > .main {
-      width: 62%;
+      @include minmaxWidth(980px);
       height: 100rem;
       background-color: red;
     }

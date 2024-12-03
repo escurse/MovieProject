@@ -40,7 +40,7 @@ public class TheaterController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String getRegionIndex(@RequestParam(value = "region", required = false) String region) {
+    public String getIndexByRegion(@RequestParam(value = "region", required = false) String region) {
         JSONObject response = new JSONObject();
         TheaterEntity[] theaters = this.theaterService.getTheatersByRegion(region);
         response.put(Result.NAME, theaters);

@@ -74,14 +74,12 @@
   font-size: 0.9rem;
 }
 #main > .img > .main > .item.select {
-  padding: 0.5rem 0.5rem;
+  padding: 0.5rem 0;
   color: #ffffff;
-  border-left: 0.15rem solid #727171;
-  border-right: 0.15rem solid #727171;
   background-image: url("https://img.cgv.co.kr/r2014/images/common/ico/ico_arrow02.png");
   background-repeat: no-repeat;
   background-position-x: 50%;
-  background-position-y: 96%;
+  background-position-y: 97%;
 }
 #main > .img > .main > .item:nth-child(1) {
   margin-left: 2rem;
