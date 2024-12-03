@@ -1,11 +1,11 @@
 const $main = document.getElementById('main');
 const $items = $main.querySelector(':scope > .img > .main');
-const $move = Array.from($items.querySelectorAll(':scope > .item'));
+const $theater = Array.from($items.querySelectorAll(':scope > .item'));
 const $itemContainer = $main.querySelector(':scope > .img > .item-container');
 
-$move.forEach(($item) => {
+$theater.forEach(($item) => {
     $item.onclick = () => {
-        $move.forEach((x) => x.classList.remove('select'));
+        $theater.forEach((x) => x.classList.remove('select'));
         $item.classList.add('select');
         const url = new URL(location.href)
         url.searchParams.set('region', $item.innerText);
