@@ -239,6 +239,9 @@
   padding-right: 1rem;
   border-right: 0.1rem solid #ffffff;
 }
+#main > .button-container > .button > .select.hidden {
+  display: none;
+}
 #main > .button-container > .button > .text {
   color: #ffffff;
 }

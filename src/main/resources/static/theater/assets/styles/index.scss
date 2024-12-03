@@ -297,6 +297,12 @@
         border-right: 0.1rem solid #ffffff;
       }
 
+      > .select {
+        &.hidden {
+          display: none;
+        }
+      }
+
       > .text {
         color: #ffffff;
       }
