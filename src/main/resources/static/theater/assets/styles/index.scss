@@ -170,7 +170,17 @@
 
       > .text {
         font-size: 2rem;
-        font-weight: 400;
+        font-weight: 500;
+      }
+
+      > .button {
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.1rem 0.5rem;
+        cursor: pointer;
+        background-color: #fb4357;
+        border: #fb4357 solid 0.25rem;
+        color: #ffffff;
       }
     }
 
@@ -179,6 +189,7 @@
 
       > .image {
         width: 100%;
+        height: 25rem;
       }
 
       > .theater-info-container {
@@ -230,12 +241,39 @@
               display: flex;
               gap: 0.5rem;
 
+              > .imax {
+                width: 5rem;
+                height: 1rem;
+                background-image: url("https://img.cgv.co.kr/R2014/images/sprite/sprite_screentype02.png");
+                background-repeat: no-repeat;
+                background-position: -99px -18px;
+                display: flex;
+              }
+
+              > .dx {
+                width: 5rem;
+                height: 1rem;
+                background-image: url("https://img.cgv.co.kr/R2014/images/sprite/sprite_screentype02.png");
+                background-repeat: no-repeat;
+                background-position: -99px -36px;
+                display: flex;
+              }
+
               > .screenX {
                 width: 5rem;
                 height: 1rem;
                 background-image: url("https://img.cgv.co.kr/R2014/images/sprite/sprite_screentype02.png");
                 background-repeat: no-repeat;
                 background-position: -99px -162px;
+                display: flex;
+              }
+
+              > .cine {
+                width: 5rem;
+                height: 1rem;
+                background-image: url("https://img.cgv.co.kr/R2014/images/sprite/sprite_screentype02.png");
+                background-repeat: no-repeat;
+                background-position: -99px -348px;
                 display: flex;
               }
             }

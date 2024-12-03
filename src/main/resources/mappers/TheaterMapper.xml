@@ -9,25 +9,6 @@
                `reg_name` AS `regName`
         FROM `jgv`.`region`
     </select>
-    <select id="getTheaterAll"
-            parameterType="com.escass.movieproject.entities.TheaterEntity">
-        SELECT th_num  AS `thNum`,
-               th_name AS `thName`,
-               th_addr AS `thAddr`,
-               th_img  AS `thImg`,
-               reg_num AS `regNum`
-        FROM `jgv`.`theater`
-        LIMIT 1
-    </select>
-    <select id="getTheatersAll"
-            parameterType="com.escass.movieproject.entities.TheaterEntity">
-        SELECT th_num  AS `thNum`,
-               th_name AS `thName`,
-               th_addr AS `thAddr`,
-               th_img  AS `thImg`,
-               reg_num AS `regNum`
-        FROM `jgv`.`theater`
-    </select>
     <select id="getTheatersByRegion"
             resultType="com.escass.movieproject.entities.TheaterEntity">
         SELECT `th_num`            AS `thNum`,

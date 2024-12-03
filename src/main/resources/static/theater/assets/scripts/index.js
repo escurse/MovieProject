@@ -34,13 +34,8 @@ $theater.forEach(($item) => {
                         $item.classList.add('select');
                         responses.forEach((item) => {
                             if (item['thName'] === $item.innerText) {
-                                //     $thName.innerText = item['thName'];
-                                //
-                                //     $thImage.innerHTML =
-                                //         `<img src="${item['thImg']}" alt=""
-                                //              class="image"/>;`
-                                //     console.log(item['thAddr'])
-
+                                let $addr = item['thAddr'].slice(1, -1).split(",").map(item => item.trim());
+                                $addr = [$addr[0], $addr.slice(1).join(", ")];
                                 const $theaterHead = new DOMParser().parseFromString(`
         <div class="theater-container">        
             <div class="header">
@@ -58,7 +53,7 @@ $theater.forEach(($item) => {
                 <div class="small-container">
                     <div class="header">
                         <div class="info-container">
-                            <div class="theater-info">${item['thAddr']}</div>
+                            <div class="theater-info">${$addr[0]}<br>${$addr[1]}</div>
                         </div>
                         <a href="#" class="theater-info guide" target="_blank">위치 / 주차 안내 ></a>
                         <div class="stretch"></div>

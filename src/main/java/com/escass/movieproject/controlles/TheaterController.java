@@ -21,19 +21,10 @@ public class TheaterController {
     private final TheaterService theaterService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView getIndex(@RequestParam(value = "region", required = false) String region) {
+    public ModelAndView getIndex() {
         ModelAndView modelAndView = new ModelAndView();
         RegionEntity[] regions = this.theaterService.findRegionAll();
-        TheaterEntity[] theater = this.theaterService.findTheaterAll();
-        TheaterEntity[] theaters = this.theaterService.getTheatersByRegion(region);
-        String[] a = new String[theater.length];
-        for (TheaterEntity theatersss : theater) {
-            a = theatersss.getThAddr().split("\n");
-        }
         modelAndView.addObject("regions", regions);
-        modelAndView.addObject("theater", theater);
-        modelAndView.addObject("theaters", theaters);
-        modelAndView.addObject("a", a);
         modelAndView.setViewName("theater/index");
         return modelAndView;
     }
