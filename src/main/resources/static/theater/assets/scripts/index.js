@@ -41,7 +41,7 @@ $theater.forEach(($item) => {
             <div class="header">
                 <span class="text">${item['thName']}</span>
                 <span class="stretch"></span>
-                <button class="button">단체/대관 문의</button>
+                <span class="button">단체/대관 문의</span>
             </div>
         </div>
 `, 'text/html').querySelector('.header');

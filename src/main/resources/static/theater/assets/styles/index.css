@@ -333,5 +333,32 @@
   width: 84%;
   margin-right: 1rem;
 }
+#main > .information > .cinema-info > .day-containers {
+  display: flex;
+  flex-direction: row;
+  gap: 5rem;
+}
+#main > .information > .cinema-info > .day-containers > .before {
+  background-color: #ffffff;
+  width: 3.5rem;
+  height: 1.5rem;
+  background-image: url("https://img.cgv.co.kr/r2014/images/sprite/sprite_btn.png");
+  background-repeat: no-repeat;
+  background-position: -117px -174px;
+  border: none;
+}
+#main > .information > .cinema-info > .day-containers > .after {
+  margin-top: 0.5rem;
+  background-color: #ffffff;
+  width: 3.5rem;
+  height: 1.15rem;
+  background-image: url("https://img.cgv.co.kr/r2014/images/sprite/sprite_btn.png");
+  background-repeat: no-repeat;
+  background-position: -117px -155px;
+  border: none;
+}
+#main > .information > .cinema-info > .day-containers > .day-container {
+  border: #000000 solid 0.15rem;
+}
 
 /*# sourceMappingURL=index.css.map */
