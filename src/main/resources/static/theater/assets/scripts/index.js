@@ -109,3 +109,16 @@ $buttons.forEach(($item) => {
     }
 })
 
+const $cinemaInformation = $main.querySelector(':scope > .information[data-id="cinema"]');
+const $dayContainer = $cinemaInformation.querySelector(':scope > .cinema-info > .cinema-header > .day-containers');
+const $days = Array.from($dayContainer.querySelectorAll(':scope > .day-container > .item'))
+$days.forEach(($item) => {
+    $item.onclick = () => {
+        $days.forEach((y) => {
+            y.classList.remove('select');
+            if ($item === y) {
+                y.classList.add('select');
+            }
+        })
+    }
+});
