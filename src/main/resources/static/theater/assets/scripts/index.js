@@ -7,7 +7,7 @@ $theater.forEach(($item) => {
     $item.onclick = () => {
         $theater.forEach((x) => x.classList.remove('select'));
         $item.classList.add('select');
-        const url = new URL(location.href)
+        const url = new URL(location.href)  // ticket/
         url.searchParams.set('region', $item.innerText);
         const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = () => {

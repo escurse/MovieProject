@@ -7,6 +7,7 @@ import com.escass.movieproject.services.TheaterService;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +20,11 @@ import org.springframework.web.servlet.ModelAndView;
 @RequiredArgsConstructor
 public class TheaterController {
     private final TheaterService theaterService;
+
+//    @Scheduled(cron = "0 0 0 * * *")
+//    public void doCrawl() {
+//        // 상영 일정을 크롤링 한다.
+//    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView getIndex() {
