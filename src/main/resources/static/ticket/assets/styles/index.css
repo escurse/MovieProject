@@ -91,8 +91,54 @@
   background-position: 50% 100%;
 }
 #main > .main-container > .main > .section .body.theater > .content {
+  height: 100%;
   display: flex;
   flex-direction: row;
+}
+#main > .main-container > .main > .section .body.theater > .content > .region-container {
+  width: 50%;
+}
+#main > .main-container > .main > .section .body.theater > .content > .region-container > .region {
+  padding: 0.5rem;
+  margin-bottom: 0.1rem;
+  background-color: #e6e4d9;
+  font-size: 0.78rem;
+  cursor: pointer;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+#main > .main-container > .main > .section .body.theater > .content > .region-container > .region.select {
+  background-image: url("https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/step1/theaterarealist_item_selected.png");
+  background-repeat: no-repeat;
+  background-position: right;
+}
+#main > .main-container > .main > .section .body.theater > .content > .theater-container {
+  width: 50%;
+  height: 100%;
+  overflow-y: auto;
+}
+#main > .main-container > .main > .section .body.theater > .content > .theater-container > .theater {
+  width: 100%;
+  font-weight: 600;
+  border: 1px solid transparent;
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#main > .main-container > .main > .section .body.theater > .content > .theater-container > .theater.select {
+  box-sizing: border-box;
+  background-color: #333;
+  border: 1px solid #000;
+  color: #ffffff;
+}
+#main > .main-container > .main > .section .body.theater > .content > .theater-container > .theater.select > .text {
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem;
+  border: 1px solid #5c5c5c;
 }
 
 .button-container {
