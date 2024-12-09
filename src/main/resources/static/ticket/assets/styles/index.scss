@@ -23,19 +23,34 @@
     justify-content: center;
 
     > .main {
-      height: 25rem;
+      height: 565px;
       @include minmaxWidth(980px);
 
       display: flex;
       flex-direction: row;
 
       > .section {
-        width: 100%;
         height: 100%;
         border-left: 0.15rem solid #d4d3c9;
 
         &:nth-last-child(1) {
           border-right: 0.15rem solid #d4d3c9;
+        }
+
+        &.movie {
+          width: 284px;
+        }
+
+        &.theater {
+          width: 265px;
+        }
+
+        &.day {
+          width: 91px;
+        }
+
+        &.time {
+          width: 346px;
         }
 
         > .header {
@@ -76,6 +91,8 @@
           background-color: #f2f0e5;
 
           .content {
+            box-sizing: border-box;
+            height: 100%;
             padding: 1rem 1rem;
 
             > .order {
@@ -100,12 +117,54 @@
                 }
               }
             }
+
+            > .movie {
+              height: 100%;
+              overflow-y: auto;
+
+              > .item-container {
+                margin-top: 0.1rem;
+                width: 100%;
+                font-weight: 600;
+                border: 0.1rem solid transparent;
+                box-sizing: border-box;
+                cursor: pointer;
+
+                > .text {
+                  box-sizing: border-box;
+                  width: 100%;
+                  height: 100%;
+                  padding: 0.3rem;
+                  border: 0.1rem solid transparent;
+                  line-height: 1;
+
+                  align-items: center;
+                  display: flex;
+                  flex-direction: row;
+                  gap: 0.3rem;
+                  justify-content: flex-start;
+
+                  > .rating {
+                    width: 1.25rem;
+                    height: 1.294rem;
+                  }
+                }
+
+                &.select {
+                  background-color: #333;
+                  border-color: #000;
+                  color: #ffffff;
+
+                  > .text {
+                    border-color: #5c5c5c;
+                  }
+                }
+              }
+            }
           }
 
           &.theater {
             > .content {
-              height: 100%;
-
               display: flex;
               flex-direction: row;
 
@@ -116,7 +175,7 @@
                   padding: 0.5rem;
                   margin-bottom: 0.1rem;
                   background-color: #e6e4d9;
-                  font-size: 0.78rem;
+                  font-size: 0.75rem;
                   cursor: pointer;
 
                   align-items: center;
@@ -128,39 +187,108 @@
                     background-image: url("https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/step1/theaterarealist_item_selected.png");
                     background-repeat: no-repeat;
                     background-position: right;
+                    background-color: transparent;
                   }
                 }
               }
 
               > .theater-container {
                 width: 50%;
-                height: 100%;
                 overflow-y: auto;
 
                 > .theater {
                   width: 100%;
+                  height: 30px;
                   font-weight: 600;
-                  border: 1px solid transparent;
+                  border: 0.1rem solid transparent;
+                  box-sizing: border-box;
+                  line-height: 1;
+                  cursor: pointer;
 
                   align-items: flex-start;
                   display: flex;
                   flex-direction: column;
                   justify-content: center;
 
-                  &.select {
+                  > .text {
                     box-sizing: border-box;
+                    width: 100%;
+                    height: 100%;
+                    padding: 0.4rem;
+                    border: 0.1rem solid transparent;
+                  }
+
+                  &.select {
                     background-color: #333;
-                    border: 1px solid #000;
+                    border-color: #000;
                     color: #ffffff;
 
                     > .text {
-                      width: 100%;
-                      height: 100%;
-                      padding: 0.5rem;
-                      border: 1px solid #5c5c5c;
+                      border-color: #5c5c5c;
                     }
                   }
                 }
+              }
+            }
+          }
+
+          &.day {
+            > .content {
+              > .title {
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+
+                > .year, .month {
+                  color: #666;
+                  font-weight: 600;
+                }
+
+                > .year {
+                  font-size: 0.8rem;
+                }
+
+                > .month {
+                  font-size: 2.5rem;
+                  padding: 0;
+                }
+              }
+
+              > .day-container {
+                height: 100%;
+                overflow-y: auto;
+                margin-right: -17px;
+                box-sizing: border-box;
+
+                /* 스크롤바 전체 영역 */
+                &::-webkit-scrollbar {
+                  width: 10px; /* 세로축 스크롤바 폭 너비 */
+                  height: 20px; /* 가로축 스크롤바 폭 너비 */
+                }
+
+                &::-webkit-scrollbar-thumb {
+                  background: #e89a3e; /* 스크롤바 막대 색상 */
+                  border: 2px solid #9b6a2f; /* 스크롤바 막대 테두리 설정  */
+                  border-radius: 12px 12px 12px 12px;
+                }
+
+                > .day {
+                  display: flex;
+                  flex-direction: row;
+                }
+              }
+            }
+          }
+
+          &.time {
+            > .content {
+              align-items: center;
+              display: flex;
+              justify-content: center;
+
+              > .notice {
+                color: #666;
               }
             }
           }
@@ -1370,4 +1498,3 @@
     height: 8.75rem;
   }
 }
-

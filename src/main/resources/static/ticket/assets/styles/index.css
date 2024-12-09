@@ -1,3 +1,4 @@
+@charset "UTF-8";
 #main {
   width: 100%;
   align-items: center;
@@ -20,7 +21,7 @@
   justify-content: center;
 }
 #main > .main-container > .main {
-  height: 25rem;
+  height: 565px;
   width: 980px;
   max-width: 980px;
   min-width: 980px;
@@ -28,12 +29,23 @@
   flex-direction: row;
 }
 #main > .main-container > .main > .section {
-  width: 100%;
   height: 100%;
   border-left: 0.15rem solid #d4d3c9;
 }
 #main > .main-container > .main > .section:nth-last-child(1) {
   border-right: 0.15rem solid #d4d3c9;
+}
+#main > .main-container > .main > .section.movie {
+  width: 284px;
+}
+#main > .main-container > .main > .section.theater {
+  width: 265px;
+}
+#main > .main-container > .main > .section.day {
+  width: 91px;
+}
+#main > .main-container > .main > .section.time {
+  width: 346px;
 }
 #main > .main-container > .main > .section > .header {
   height: 2rem;
@@ -68,6 +80,8 @@
   background-color: #f2f0e5;
 }
 #main > .main-container > .main > .section .body .content {
+  box-sizing: border-box;
+  height: 100%;
   padding: 1rem 1rem;
 }
 #main > .main-container > .main > .section .body .content > .order {
@@ -90,8 +104,44 @@
   background-repeat: no-repeat;
   background-position: 50% 100%;
 }
-#main > .main-container > .main > .section .body.theater > .content {
+#main > .main-container > .main > .section .body .content > .movie {
   height: 100%;
+  overflow-y: auto;
+}
+#main > .main-container > .main > .section .body .content > .movie > .item-container {
+  margin-top: 0.1rem;
+  width: 100%;
+  font-weight: 600;
+  border: 0.1rem solid transparent;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+#main > .main-container > .main > .section .body .content > .movie > .item-container > .text {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 0.3rem;
+  border: 0.1rem solid transparent;
+  line-height: 1;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0.3rem;
+  justify-content: flex-start;
+}
+#main > .main-container > .main > .section .body .content > .movie > .item-container > .text > .rating {
+  width: 1.25rem;
+  height: 1.294rem;
+}
+#main > .main-container > .main > .section .body .content > .movie > .item-container.select {
+  background-color: #333;
+  border-color: #000;
+  color: #ffffff;
+}
+#main > .main-container > .main > .section .body .content > .movie > .item-container.select > .text {
+  border-color: #5c5c5c;
+}
+#main > .main-container > .main > .section .body.theater > .content {
   display: flex;
   flex-direction: row;
 }
@@ -102,7 +152,7 @@
   padding: 0.5rem;
   margin-bottom: 0.1rem;
   background-color: #e6e4d9;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   cursor: pointer;
   align-items: center;
   display: flex;
@@ -113,32 +163,84 @@
   background-image: url("https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/step1/theaterarealist_item_selected.png");
   background-repeat: no-repeat;
   background-position: right;
+  background-color: transparent;
 }
 #main > .main-container > .main > .section .body.theater > .content > .theater-container {
   width: 50%;
-  height: 100%;
   overflow-y: auto;
 }
 #main > .main-container > .main > .section .body.theater > .content > .theater-container > .theater {
   width: 100%;
+  height: 30px;
   font-weight: 600;
-  border: 1px solid transparent;
+  border: 0.1rem solid transparent;
+  box-sizing: border-box;
+  line-height: 1;
+  cursor: pointer;
   align-items: flex-start;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-#main > .main-container > .main > .section .body.theater > .content > .theater-container > .theater.select {
+#main > .main-container > .main > .section .body.theater > .content > .theater-container > .theater > .text {
   box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 0.4rem;
+  border: 0.1rem solid transparent;
+}
+#main > .main-container > .main > .section .body.theater > .content > .theater-container > .theater.select {
   background-color: #333;
-  border: 1px solid #000;
+  border-color: #000;
   color: #ffffff;
 }
 #main > .main-container > .main > .section .body.theater > .content > .theater-container > .theater.select > .text {
-  width: 100%;
+  border-color: #5c5c5c;
+}
+#main > .main-container > .main > .section .body.day > .content > .title {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#main > .main-container > .main > .section .body.day > .content > .title > .year, #main > .main-container > .main > .section .body.day > .content > .title .month {
+  color: #666;
+  font-weight: 600;
+}
+#main > .main-container > .main > .section .body.day > .content > .title > .year {
+  font-size: 0.8rem;
+}
+#main > .main-container > .main > .section .body.day > .content > .title > .month {
+  font-size: 2.5rem;
+  padding: 0;
+}
+#main > .main-container > .main > .section .body.day > .content > .day-container {
   height: 100%;
-  padding: 0.5rem;
-  border: 1px solid #5c5c5c;
+  overflow-y: auto;
+  margin-right: -17px;
+  box-sizing: border-box;
+  /* 스크롤바 전체 영역 */
+}
+#main > .main-container > .main > .section .body.day > .content > .day-container::-webkit-scrollbar {
+  width: 10px; /* 세로축 스크롤바 폭 너비 */
+  height: 20px; /* 가로축 스크롤바 폭 너비 */
+}
+#main > .main-container > .main > .section .body.day > .content > .day-container::-webkit-scrollbar-thumb {
+  background: #e89a3e; /* 스크롤바 막대 색상 */
+  border: 2px solid #9b6a2f; /* 스크롤바 막대 테두리 설정  */
+  border-radius: 12px 12px 12px 12px;
+}
+#main > .main-container > .main > .section .body.day > .content > .day-container > .day {
+  display: flex;
+  flex-direction: row;
+}
+#main > .main-container > .main > .section .body.time > .content {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+#main > .main-container > .main > .section .body.time > .content > .notice {
+  color: #666;
 }
 
 .button-container {
