@@ -92,7 +92,7 @@ public class TicketService {
                 System.out.println(theater.cgvName);
 
                 // 7일 간의 날짜를 반복하며 크롤링
-                for (int i = 0; i < 1; i++) {
+                for (int i = 0; i < 14; i++) {
                     String date = currentDate.plusDays(i).toString().replace("-", ""); // YYYYMMDD 형식의 날짜
                     System.out.println("상영일: " + date);
 
