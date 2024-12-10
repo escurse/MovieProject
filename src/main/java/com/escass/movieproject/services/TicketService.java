@@ -3,6 +3,7 @@ package com.escass.movieproject.services;
 import com.escass.movieproject.entities.CinemaEntity;
 import com.escass.movieproject.entities.MovieEntity;
 import com.escass.movieproject.entities.ScreenEntity;
+import com.escass.movieproject.exceptions.TransactionalException;
 import com.escass.movieproject.mappers.TicketMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -49,7 +51,7 @@ public class TicketService {
         NORMAL("2D"),
         IMAX("IMAX"),
         FOURDX("4DX"),
-        SCREENX("SCRRENX"),
+        SCREENX("SCREENX"),
         RECLINER("리클라이너"),
         CINE("CINE&FORET");
 
@@ -71,7 +73,8 @@ public class TicketService {
 //    }
     // endregion
 
-    public void Crawl(ScreenEntity screen) {
+    @Transactional
+    public void Crawl(ScreenEntity screen) throws TransactionalException {
         // ChromeDriver 경로 설정
         System.setProperty("webdriver.chrome.driver", "./chromedriver.exe"); // chromedriver.exe 경로 지정
 
@@ -98,7 +101,6 @@ public class TicketService {
                     // CGV 극장 URL 열기
                     driver.get(url);
 
-
                     // iframe 요소 찾기 및 전환
                     WebElement iframe = driver.findElement(By.id("ifrm_movie_time_table"));
                     driver.switchTo().frame(iframe);
@@ -120,11 +122,41 @@ public class TicketService {
                             for (WebElement cinema : cinemas) {
                                 String result = "";
                                 for (CinemaCode code : CinemaCode.values()) {
+                                    if (cinema.getText().trim().contains("4DX관")) {
+                                        result = "4DX";
+                                        CinemaEntity cinemaTypeNum = this.ticketMapper.selectCinemaNumByCinemaType(result, theater.cgvName);
+                                        screen.setCiNum(cinemaTypeNum.getCiNum());
+                                        break;
+                                    }
+                                    if (cinema.getText().trim().contains("씨네앤포레")) {
+                                        result = "CINE&FORET";
+                                        CinemaEntity cinemaTypeNum = this.ticketMapper.selectCinemaNumByCinemaType(result, theater.cgvName);
+                                        screen.setCiNum(cinemaTypeNum.getCiNum());
+                                        break;
+                                    }
+                                    if (cinema.getText().contains("[CGV아트하우스]") || cinema.getText().contains("[영남이공대학교]")) {
+                                        result = cinema.getText();
+                                        CinemaEntity artCinema = this.ticketMapper.selectCinemaNumByCinemaTitle(result.substring(0, 2), theater.cgvName);
+                                        screen.setCiNum(artCinema.getCiNum());
+                                        break;
+                                    }
                                     if (code.citName.equals(cinema.getText())) {
-                                        CinemaEntity cinemaNum = this.ticketMapper.selectCinemaNumByCinemaType(code.citName, theater.cgvName);
-                                        screen.setCiNum(cinemaNum.getCiNum());
+                                        result = cinema.getText();
+                                        CinemaEntity cinemaTypeNum = this.ticketMapper.selectCinemaNumByCinemaType(result, theater.cgvName);
+                                        screen.setCiNum(cinemaTypeNum.getCiNum());
+                                        break;
                                     } else {
-                                        CinemaEntity cinemaNum = this.ticketMapper.selectCinemaNumByCinemaTitle(cinema.getText().substring(0, 2), theater.cgvName);
+                                        screen.setCiNum(0);
+                                    }
+                                }
+                                if (screen.getCiNum() == 0) { // 조건에 맞는 값을 찾지 못한 경우 처리
+                                    if (cinema.getText() != null && cinema.getText().length() >= 3) {
+                                        result = cinema.getText();
+                                        CinemaEntity cinemaNum = this.ticketMapper.selectCinemaNumByCinemaTitle(result.substring(0, 3), theater.cgvName);
+                                        screen.setCiNum(cinemaNum.getCiNum());
+                                    } else if (cinema.getText() != null && cinema.getText().length() >= 2) {
+                                        result = cinema.getText();
+                                        CinemaEntity cinemaNum = this.ticketMapper.selectCinemaNumByCinemaTitle(result.substring(0, 2), theater.cgvName);
                                         screen.setCiNum(cinemaNum.getCiNum());
                                     }
                                 }
