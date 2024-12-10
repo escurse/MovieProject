@@ -25,7 +25,7 @@ public class TheaterController {
 
 //    @Scheduled(cron = "0 0 0 * * *")
 //    public void doCrawl() {
-//        // 상영 일정을 크롤링 한다.
+//         상영 일정을 크롤링 한다.
 //    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
