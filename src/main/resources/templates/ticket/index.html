@@ -19,12 +19,8 @@
 <th:block th:replace="~{fragments/common.html :: nav}"></th:block>
 <main id="main">
     <div class="button-container">
-        <a class="content-bar-timetable" href="#">
-            <img class="image" alt="상영시간표" th:src="@{'/ticket/assets/images/titmetable.png'}">
-            &nbsp 상영 시간표</a>
-        <a class="content-bar-retry" href="#">
-            <img class="image" alt="예매다시하기" th:src="@{'/ticket/assets/images/retry.png'}">
-            &nbsp 예매 다시하기</a>
+        <a class="content-bar-timetable" href="#"></a>
+        <a class="content-bar-retry" href="#"></a>
     </div>
     <div class="main-container">
         <div class="advertisement-container">
@@ -33,7 +29,7 @@
                      class="advertisement">
             </a>
         </div>
-        <div class="main">
+        <div class="main mains" data-id="main">
             <div class="section movie">
                 <div class="header">
                     <div class="movie"></div>
@@ -297,12 +293,10 @@
                     <div class="content">
                         <div class="notice">영화,극장,날짜를 선택해 주세요.</div>
                     </div>
-                    <!--                    <div class="content hidden">-->
-                    <!--                    </div>-->
                 </div>
             </div>
         </div>
-        <div id="main-seat" style="display: none">
+        <div class="mains main-seat hidden" id="main-seat" data-id="main-seat">
             <div class="seat-div">
                 <div class="content">인원/좌석</div>
                 <div class="screen-container">
@@ -377,7 +371,7 @@
                 </div>
             </div>
         </div>
-        <div id="main-payment" style="display: none">
+        <div class="mains main-payment hidden" id="main-payment" data-id="main-payment">
             <div class="left-container">
                 <div class="payment-bar">결제 수단</div>
                 <div class="payment-container" id="payment-container">
@@ -653,7 +647,7 @@
             </a>
         </div>
     </div>
-    <div id="payment-section" style="display: none;">
+    <div id="payment-section" class="hidden" data-id="payment-section">
         <h4>예매내역 확인</h4>
         <div class="pay-sec-container">
             <div class="title">
@@ -752,12 +746,13 @@
 </main>
 <section class="control-bar" id="control-bar">
     <div class="container">
-        <div class="first left-button hidden"></div>
-        <div class="second left-button hidden"></div>
+        <div class="first left-button button hidden" data-id="main-seat"></div>
+        <div class="second left-button button hidden" data-id="main-payment"></div>
         <div class="movie-container hidden"></div>
-        <div class="poster-container" data-id="poster">
+        <div class="posters info" data-id="poster">
             <div class="poster">
-                <img class="movie" src="http://img.cgv.co.kr/Movie/Thumbnail/Poster/000089/89072/89072_185.JPG" alt="대가족">
+                <img class="movie" src="http://img.cgv.co.kr/Movie/Thumbnail/Poster/000089/89072/89072_185.JPG"
+                     alt="대가족">
             </div>
             <div class="movie-info">
                 <div class="title">대가족</div>
@@ -766,29 +761,37 @@
                 <div class="rating">12세 관람가</div>
             </div>
         </div>
-        <img src="https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/tnb/split.png" alt="split">
-        <div class="theater-container">
-
+        <img class="info" src="https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/tnb/split.png" alt="split">
+        <div class="theater-container hidden"></div>
+        <div class="theater info">
+            <div class="text">
+                <span class="head">극장</span>
+                <a href="#" class="data">CGV 등촌 ></a>
+            </div>
+            <div class="text">
+                <span class="head">일시</span>
+                <span class="data">2024.12.13(금) 10:40</span>
+            </div>
+            <div class="text">
+                <span class="head">상영관</span>
+                <span class="data">5관 7층(Laser)</span>
+            </div>
+            <div class="text">
+                <span class="head">인원</span>
+                <span class="data"></span>
+            </div>
         </div>
-        <img src="https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/tnb/split.png" alt="split">
-        <div class="seat-container">
-
-        </div>
-        <div class="payment-container">
-
-        </div>
-        <div class="first right-button"></div>
-        <div class="second right-button hidden"></div>
-        <div class="third right-button hidden"></div>
-<!--        <button class="icon-box right">-->
-<!--            <img class="arrows" src="./assets/images/right-click-before.png" alt="오른쪽 화살표">-->
-<!--            <span class="text">좌석 선택</span>-->
-<!--        </button>-->
+        <img class="info" src="https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/tnb/split.png" alt="split">
+        <div class="seat-container"></div>
+        <div class="payment-container"></div>
+        <div class="first right-button" data-id="main"></div>
+        <div class="second right-button hidden" data-id="main-seat"></div>
+        <div class="third right-button hidden" data-id="main-payment"></div>
     </div>
 </section>
-<div class="add">
+<a href="#" class="add">
     <img class="image" src="https://adimg.cgv.co.kr/images/202411/MorningCalm/996x140.jpg" alt="">
-</div>
+</a>
 
 <th:block th:replace="~{fragments/common.html :: footer}"></th:block>
 </body>

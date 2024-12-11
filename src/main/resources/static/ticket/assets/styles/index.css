@@ -20,6 +20,9 @@
   gap: 0.25rem;
   justify-content: center;
 }
+#main > .main-container > .mains.hidden {
+  display: none;
+}
 #main > .main-container > .main {
   height: 565px;
   width: 980px;
@@ -287,7 +290,7 @@
   text-align: center;
   color: rgb(51, 51, 51);
   font-weight: 400;
-  height: 4.625rem;
+  height: 4rem;
   padding: 0 0.09rem;
   display: flex;
   flex-direction: row;
@@ -302,16 +305,22 @@
   justify-content: center;
   text-align: center;
   height: 1.875rem;
-  width: 7rem;
+  width: 101px;
   color: rgb(51, 51, 51);
   background-color: #f2f0e5;
-  border: 1px solid rgb(51, 51, 51);
-  border-radius: 0.3rem;
   font-weight: 600;
   font-size: 0.75rem;
 }
-.button-container > .content-bar-timetable > .image, .button-container .content-bar-retry > .image {
-  height: 1.2rem;
+.button-container > .content-bar-timetable {
+  background-image: url("https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/top_buttons.png");
+  background-repeat: no-repeat;
+  background-position: 0 -90px;
+}
+.button-container > .content-bar-retry {
+  width: 113px;
+  background-image: url("https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/top_buttons.png");
+  background-repeat: no-repeat;
+  background-position: 0 -120px;
 }
 
 #main-seat > .seat-div {
@@ -953,6 +962,9 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+#payment-section.hidden {
+  display: none;
+}
 #payment-section > h4 {
   padding: 0.5rem 0 0.1rem 0.2rem;
   text-align: left;
@@ -1205,7 +1217,11 @@
 .control-bar > .container > .movie-container.hidden {
   display: none;
 }
-.control-bar > .container > .poster-container {
+.control-bar > .container > .info {
+  user-select: none;
+  pointer-events: none;
+}
+.control-bar > .container > .posters {
   width: 210px;
   height: 100%;
   box-sizing: border-box;
@@ -1213,11 +1229,11 @@
   display: flex;
   flex-direction: row;
 }
-.control-bar > .container > .poster-container > .poster > .movie {
+.control-bar > .container > .posters > .poster > .movie {
   width: 74px;
   height: 100%;
 }
-.control-bar > .container > .poster-container > .movie-info {
+.control-bar > .container > .posters > .movie-info {
   height: 100%;
   padding: 1rem 0 1rem 1rem;
   color: #cccccc;
@@ -1236,6 +1252,38 @@
 }
 .control-bar > .container > .theater-container.hidden {
   display: none;
+}
+.control-bar > .container > .theater {
+  width: 185px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  justify-content: center;
+}
+.control-bar > .container > .theater > .text {
+  padding-left: 0.5rem;
+  color: #cccccc;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0.1rem;
+}
+.control-bar > .container > .theater > .text > .head {
+  width: 2.2rem;
+  font-size: 0.8rem;
+}
+.control-bar > .container > .theater > .text:nth-child(1) {
+  pointer-events: all;
+}
+.control-bar > .container > .theater > .text:nth-child(1) > .data:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+.control-bar > .container > .theater > .text > .data {
+  color: #cccccc;
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 .control-bar > .container > .seat-container {
   width: 111px;
