@@ -44,4 +44,15 @@
         WHERE `cit_name` = #{citName}
           AND `th_name` = #{thName}
     </select>
+    <select id="selectDuplicateScreen"
+            resultType="com.escass.movieproject.entities.ScreenEntity">
+        SELECT sc_num        AS `scNum`,
+               sc_start_date AS `scStartDate`,
+               mo_num        AS `moNum`,
+               ci_num        AS `ciNum`
+        FROM `jgv`.`screen`
+        WHERE `sc_start_date` = #{startDate}
+          AND `mo_num` = #{moNum}
+          AND `ci_num` = #{ciNum}
+    </select>
 </mapper>

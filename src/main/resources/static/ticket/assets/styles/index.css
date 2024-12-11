@@ -108,6 +108,14 @@
   height: 100%;
   overflow-y: auto;
 }
+#main > .main-container > .main > .section .body .content > .movie::-webkit-scrollbar {
+  width: 10px; /* 스크롤바 너비 */
+}
+#main > .main-container > .main > .section .body .content > .movie::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5); /* 스크롤바의 색상 */
+  border-radius: 5px; /* 둥근 모서리 */
+  height: 10%;
+}
 #main > .main-container > .main > .section .body .content > .movie > .item-container {
   margin-top: 0.1rem;
   width: 100%;
@@ -169,6 +177,14 @@
   width: 50%;
   overflow-y: auto;
 }
+#main > .main-container > .main > .section .body.theater > .content > .theater-container::-webkit-scrollbar {
+  width: 10px; /* 스크롤바 너비 */
+}
+#main > .main-container > .main > .section .body.theater > .content > .theater-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5); /* 스크롤바의 색상 */
+  border-radius: 5px; /* 둥근 모서리 */
+  height: 10%;
+}
 #main > .main-container > .main > .section .body.theater > .content > .theater-container > .theater {
   width: 100%;
   height: 30px;
@@ -197,42 +213,65 @@
 #main > .main-container > .main > .section .body.theater > .content > .theater-container > .theater.select > .text {
   border-color: #5c5c5c;
 }
-#main > .main-container > .main > .section .body.day > .content > .title {
+#main > .main-container > .main > .section .body.day > .content {
+  padding: 0.5rem 0.5rem;
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  /* 스크롤바 전체 영역 */
+  /* 전체 스크롤바 스타일 */
+}
+#main > .main-container > .main > .section .body.day > .content::-webkit-scrollbar {
+  width: 10px; /* 스크롤바 너비 */
+}
+#main > .main-container > .main > .section .body.day > .content::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5); /* 스크롤바의 색상 */
+  border-radius: 5px; /* 둥근 모서리 */
+  height: 10%;
+}
+#main > .main-container > .main > .section .body.day > .content > .day-container {
+  height: 100%;
+  border: 0.1rem solid transparent;
+  box-sizing: border-box;
+}
+#main > .main-container > .main > .section .body.day > .content > .day-container > .title {
   align-items: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-#main > .main-container > .main > .section .body.day > .content > .title > .year, #main > .main-container > .main > .section .body.day > .content > .title .month {
+#main > .main-container > .main > .section .body.day > .content > .day-container > .title > .year, #main > .main-container > .main > .section .body.day > .content > .day-container > .title .month {
   color: #666;
   font-weight: 600;
 }
-#main > .main-container > .main > .section .body.day > .content > .title > .year {
+#main > .main-container > .main > .section .body.day > .content > .day-container > .title > .year {
   font-size: 0.8rem;
 }
-#main > .main-container > .main > .section .body.day > .content > .title > .month {
+#main > .main-container > .main > .section .body.day > .content > .day-container > .title > .month {
   font-size: 2.5rem;
   padding: 0;
 }
-#main > .main-container > .main > .section .body.day > .content > .day-container {
-  height: 100%;
-  overflow-y: auto;
-  margin-right: -17px;
-  box-sizing: border-box;
-  /* 스크롤바 전체 영역 */
-}
-#main > .main-container > .main > .section .body.day > .content > .day-container::-webkit-scrollbar {
-  width: 10px; /* 세로축 스크롤바 폭 너비 */
-  height: 20px; /* 가로축 스크롤바 폭 너비 */
-}
-#main > .main-container > .main > .section .body.day > .content > .day-container::-webkit-scrollbar-thumb {
-  background: #e89a3e; /* 스크롤바 막대 색상 */
-  border: 2px solid #9b6a2f; /* 스크롤바 막대 테두리 설정  */
-  border-radius: 12px 12px 12px 12px;
-}
 #main > .main-container > .main > .section .body.day > .content > .day-container > .day {
+  border: 0.1rem solid transparent;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+#main > .main-container > .main > .section .body.day > .content > .day-container > .day.select {
+  background-color: #333;
+  border-color: #000;
+  color: #ffffff;
+}
+#main > .main-container > .main > .section .body.day > .content > .day-container > .day.select > .day-container {
+  border-color: #5c5c5c;
+}
+#main > .main-container > .main > .section .body.day > .content > .day-container > .day > .day-container {
+  padding: 0.5rem 0.5rem;
+  border: 0.1rem solid transparent;
   display: flex;
   flex-direction: row;
+}
+#main > .main-container > .main > .section .body.day > .content > .day-container > .day > .day-container > .date {
+  font-weight: 600;
 }
 #main > .main-container > .main > .section .body.time > .content {
   align-items: center;
@@ -278,7 +317,7 @@
 #main-seat > .seat-div {
   left: 50%;
   transform: translate(-50%, 0);
-  width: 62.5rem;
+  width: 61.25rem;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -309,7 +348,7 @@
 #main-seat > .seat-div .screen-container.screen-down {
   height: 24.0625rem;
 }
-#main-seat > .seat-div .screen-container .infor-container {
+#main-seat > .seat-div .screen-container .info-container {
   margin: 1rem;
   width: 50%;
   display: flex;
@@ -317,13 +356,13 @@
   justify-content: flex-start;
   height: auto;
 }
-#main-seat > .seat-div .screen-container .infor-container.title-right-box {
+#main-seat > .seat-div .screen-container .info-container.title-right-box {
   gap: 1rem;
 }
-#main-seat > .seat-div .screen-container .infor-container#nopContainer {
+#main-seat > .seat-div .screen-container .info-container#nopContainer {
   border-right: 1px solid #d4d3c9;
 }
-#main-seat > .seat-div .screen-container .infor-container #maximum_people {
+#main-seat > .seat-div .screen-container .info-container #maximum_people {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -334,7 +373,7 @@
   box-sizing: border-box;
   color: rgb(255, 0, 0);
 }
-#main-seat > .seat-div .screen-container .infor-container .title-container {
+#main-seat > .seat-div .screen-container .info-container .title-container {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -343,24 +382,24 @@
   gap: 0.2rem;
   box-sizing: border-box;
 }
-#main-seat > .seat-div .screen-container .infor-container .title-container > .text {
+#main-seat > .seat-div .screen-container .info-container .title-container > .text {
   width: auto;
   height: 1rem;
   font-size: 0.75rem;
   padding: 0 0.5rem;
 }
-#main-seat > .seat-div .screen-container .infor-container .title-container > .text.center {
+#main-seat > .seat-div .screen-container .info-container .title-container > .text.center {
   border-right: 1px solid #d4d3c9;
   border-left: 1px solid #d4d3c9;
 }
-#main-seat > .seat-div .screen-container .infor-container .title-container > .big-text {
+#main-seat > .seat-div .screen-container .info-container .title-container > .big-text {
   font-weight: 700;
   font-size: 1.28rem;
 }
-#main-seat > .seat-div .screen-container .infor-container .title-container .title {
+#main-seat > .seat-div .screen-container .info-container .title-container .title {
   width: 3rem;
 }
-#main-seat > .seat-div .screen-container .infor-container .title-container > .adult {
+#main-seat > .seat-div .screen-container .info-container .title-container > .adult {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -369,7 +408,7 @@
   gap: 0.3rem;
   box-sizing: border-box;
 }
-#main-seat > .seat-div .screen-container .infor-container .title-container > .adult > .selected {
+#main-seat > .seat-div .screen-container .info-container .title-container > .adult > .selected {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -381,26 +420,26 @@
   font-weight: 700;
   cursor: pointer;
 }
-#main-seat > .seat-div .screen-container .infor-container .title-container > .adult > .selected > .adults {
+#main-seat > .seat-div .screen-container .info-container .title-container > .adult > .selected > .adults {
   display: none;
 }
-#main-seat > .seat-div .screen-container .infor-container .title-container > .adult > .selected > .-adult {
+#main-seat > .seat-div .screen-container .info-container .title-container > .adult > .selected > .-adult {
   color: rgb(51, 51, 51);
   text-decoration: none;
   cursor: pointer;
 }
-#main-seat > .seat-div .screen-container .infor-container .title-container > .adult > .selected:has(.adults:checked) {
+#main-seat > .seat-div .screen-container .info-container .title-container > .adult > .selected:has(.adults:checked) {
   background-color: rgb(51, 51, 51);
   color: rgb(255, 255, 255);
 }
-#main-seat > .seat-div .screen-container .infor-container .text {
+#main-seat > .seat-div .screen-container .info-container .text {
   padding: 0 0.3rem;
 }
-#main-seat > .seat-div .screen-container .infor-container .cinema {
+#main-seat > .seat-div .screen-container .info-container .cinema {
   border-right: 0.025rem solid #d4d3c9;
   border-left: 0.025rem solid #d4d3c9;
 }
-#main-seat > .seat-div .screen-container .infor-container .seat-color {
+#main-seat > .seat-div .screen-container .info-container .seat-color {
   color: red;
 }
 #main-seat > .seat-div .screen-container > .seat-container {
@@ -463,7 +502,7 @@
 
 #main-payment {
   box-sizing: border-box;
-  width: 62.5rem;
+  width: 61.25rem;
   height: auto;
   display: flex;
   flex-direction: row;
@@ -663,6 +702,13 @@
   border-radius: 0.2rem;
   cursor: pointer;
 }
+#main-payment > .left-container > .simple-pay-container > .simple-pay-text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+}
 #main-payment > .left-container > .simple-pay-container > .simple-pay-text-container > .label-checkbox {
   display: flex;
   flex-direction: row;
@@ -675,7 +721,7 @@
   gap: 0.2rem;
 }
 #main-payment > .left-container > .simple-pay-container > .simple-pay-text-container > .text-space {
-  height: 5rem;
+  height: 3rem;
   width: 100%;
 }
 #main-payment > .left-container > .simple-pay-container > .simple-pay-text-container > .simple-pay-on-text {
@@ -689,12 +735,13 @@
   padding-bottom: 1rem;
 }
 #main-payment > .left-container > .simple-pay-container > .simple-pay-text-container > .simple-pay-on-text > .text {
-  height: 2rem;
+  height: 4rem;
   font-size: 0.75rem;
   font-weight: 400;
   width: 100%;
 }
 #main-payment > .left-container > .simple-pay-container > .simple-pay-text-container > .simple-pay-under-text {
+  width: 100%;
   padding: 1rem 0;
   display: flex;
   flex-direction: column;
@@ -900,7 +947,7 @@
   justify-content: center;
   align-items: center;
   border: 0.5rem solid rgb(112, 112, 112);
-  width: 62.5rem;
+  width: 61.25rem;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -916,23 +963,23 @@
   width: 100%;
   height: 2.15rem;
 }
-#payment-section > .pay-sec-container {
+#payment-section > .pay-form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100%;
   width: calc(100% - 4rem);
-  padding: 3rem 0 3rem 2rem;
+  padding: 3rem 1rem 3rem 1rem;
 }
-#payment-section > .pay-sec-container > .title {
+#payment-section > .pay-form > .title {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   width: 100%;
 }
-#payment-section > .pay-sec-container > .title > div {
+#payment-section > .pay-form > .title > div {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -942,22 +989,22 @@
   height: 2rem;
   width: 100%;
 }
-#payment-section > .pay-sec-container > .title > div > .title {
+#payment-section > .pay-form > .title > div > .title {
   height: 100%;
   width: 100%;
   text-align: left;
   font-size: 1.4rem;
   font-weight: 2000;
 }
-#payment-section > .pay-sec-container > .title > div > .title.title2 {
+#payment-section > .pay-form > .title > div > .title.title2 {
   border-left: 0.1rem solid rgb(190, 190, 189);
 }
-#payment-section > .pay-sec-container > .title > div > .title > .small-text {
+#payment-section > .pay-form > .title > div > .title > .small-text {
   width: 100%;
   font-size: 0.75rem;
   font-weight: 400;
 }
-#payment-section > .pay-sec-container > .table-div {
+#payment-section > .pay-form > .table-div {
   height: 10rem;
   width: 100%;
   display: flex;
@@ -966,11 +1013,11 @@
   align-items: center;
   border-bottom: 0.1rem solid rgb(190, 190, 189);
 }
-#payment-section > .pay-sec-container > .table-div > div > .img {
+#payment-section > .pay-form > .table-div > div > .img {
   height: 9.7rem;
   width: 6.875rem;
 }
-#payment-section > .pay-sec-container > .table-div > .div-title1 {
+#payment-section > .pay-form > .table-div > .div-title1 {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -981,32 +1028,32 @@
   font-weight: 700;
   font-size: 0.75rem;
 }
-#payment-section > .pay-sec-container > .table-div > .div-content1 {
+#payment-section > .pay-form > .table-div > .div-content1 {
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  width: 20.11rem;
+  width: 20.07rem;
   gap: 0.2rem;
   font-weight: 400;
   font-size: 0.75rem;
   border-right: 0.1rem solid rgb(190, 190, 189);
 }
-#payment-section > .pay-sec-container > .table-div > .div-title2 {
+#payment-section > .pay-form > .table-div > .div-title2 {
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  width: 8.39rem;
+  width: 8.43rem;
   padding-left: 3rem;
   gap: 0.2rem;
   margin-bottom: 5rem;
   font-weight: 400;
   font-size: 0.75rem;
 }
-#payment-section > .pay-sec-container > .table-div > .div-content2 {
+#payment-section > .pay-form > .table-div > .div-content2 {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -1018,18 +1065,18 @@
   font-weight: 400;
   font-size: 0.75rem;
 }
-#payment-section > .pay-sec-container > .table-div > .div-content2 > span > .big-red {
+#payment-section > .pay-form > .table-div > .div-content2 > span > .big-red {
   font-size: 1rem;
   font-weight: 700;
   color: red;
 }
-#payment-section > .pay-sec-container > .table-div > .div-content2 > span > .big-font {
+#payment-section > .pay-form > .table-div > .div-content2 > span > .big-font {
   font-weight: 700;
 }
-#payment-section > .pay-sec-container > .table-div > .div-content2 > span > .small-red {
+#payment-section > .pay-form > .table-div > .div-content2 > span > .small-red {
   color: red;
 }
-#payment-section > .pay-sec-container > .cancel {
+#payment-section > .pay-form > .cancel {
   padding-top: 1rem;
   display: flex;
   flex-direction: column;
@@ -1039,7 +1086,7 @@
   gap: 0.5rem;
   padding-bottom: 0.5rem;
 }
-#payment-section > .pay-sec-container > .agree {
+#payment-section > .pay-form > .agree {
   border-top: 0.1rem solid rgb(190, 190, 189);
   border-bottom: 0.1rem solid rgb(190, 190, 189);
   background-color: rgb(238, 238, 238);
@@ -1050,7 +1097,7 @@
   width: 100%;
   padding: 1rem 0 1rem 0;
 }
-#payment-section > .pay-sec-container > .agree > div.agree-div1 {
+#payment-section > .pay-form > .agree > div.agree-div1 {
   width: 23.15rem;
   display: flex;
   flex-direction: column;
@@ -1061,11 +1108,11 @@
   font-size: 0.75rem;
   font-weight: 400;
 }
-#payment-section > .pay-sec-container > .agree > div.agree-div1 > .agree-first {
+#payment-section > .pay-form > .agree > div.agree-div1 > .agree-all {
   font-weight: 700;
   padding-bottom: 0.2rem;
 }
-#payment-section > .pay-sec-container > .agree > div.agree-div2 {
+#payment-section > .pay-form > .agree > div.agree-div2 {
   width: 6.475rem;
   display: flex;
   flex-direction: column;
@@ -1075,10 +1122,10 @@
   border-right: 0.1rem solid rgb(190, 190, 189);
   gap: 0.3rem;
 }
-#payment-section > .pay-sec-container > .agree > div.agree-div2 > span {
+#payment-section > .pay-form > .agree > div.agree-div2 > span {
   height: 0.95rem;
 }
-#payment-section > .pay-sec-container > .agree > div.agree-div3 {
+#payment-section > .pay-form > .agree > div.agree-div3 {
   margin-left: 2rem;
   width: 31.75rem;
   display: flex;
@@ -1088,14 +1135,14 @@
   font-size: 0.75rem;
   font-weight: 700;
 }
-#payment-section > .pay-sec-container > .agree > div > label {
+#payment-section > .pay-form > .agree > div > label {
   display: flex;
   flex-direction: row;
 }
-#payment-section > .pay-sec-container > .agree > div > label.agree-label {
+#payment-section > .pay-form > .agree > div > label.agree-label {
   margin-left: 0.5rem;
 }
-#payment-section > .pay-sec-container > .agree > div > a {
+#payment-section > .pay-form > .agree > div > a {
   color: rgb(32, 124, 202);
   text-decoration-line: underline;
   text-decoration-color: rgb(32, 124, 202);
@@ -1104,13 +1151,13 @@
   font-size: 0.75rem;
 }
 
-#pay-form {
+#pay-button {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 }
-#pay-form > .real-pay {
+#pay-button > .real-pay {
   width: 8.125rem;
   height: 2.8125rem;
   background-color: red;
@@ -1119,7 +1166,7 @@
   border: 0.1rem solid white;
   border-radius: 0.2rem;
 }
-#pay-form > .real-cancel {
+#pay-button > .real-cancel {
   height: 2.8125rem;
   width: 4.6785rem;
   border: 0.1rem solid rgb(51, 51, 51);
@@ -1130,121 +1177,132 @@
   width: 100vw;
   background-color: rgb(29, 29, 28);
   height: 7.5rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
   box-sizing: border-box;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
-.control-bar > .space {
-  max-width: 62.5rem;
-  width: 62.5rem;
+.control-bar > .container {
+  width: 980px;
+  max-width: 980px;
+  min-width: 980px;
   height: 100%;
-  background-color: rgb(29, 29, 28);
-  box-sizing: border-box;
+  padding: 10px 0;
+  position: relative;
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-}
-.control-bar > .space > .icon-box {
-  height: 5rem;
-  width: 5rem;
-  background-color: rgb(51, 51, 51);
-  border: 0.1rem solid #d4d3c9;
-  border-radius: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-  cursor: pointer;
-  color: #cccccc;
-}
-.control-bar > .space > .icon-box > .arrows {
-  box-sizing: border-box;
-  height: 3rem;
-  width: 3rem;
-}
-.control-bar > .space > .icon-box > .arrows .seat-right-text {
-  color: #cccccc;
-  font-weight: 700;
-}
-.control-bar > .space > .payment-button {
-  width: 13.75rem;
-  height: 6.75rem;
-  border-radius: 1rem;
-  background-color: red;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-  cursor: pointer;
-  border: 0.1rem solid red;
-}
-.control-bar > .space > .payment-button > .check-image {
-  box-sizing: border-box;
-  width: 3rem;
-  height: 3rem;
-}
-.control-bar > .space > .payment-button > .payment-check {
-  color: #ffffff;
-  font-weight: 7000;
-  font-size: 1.5rem;
-}
-.control-bar > .space > div {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-start;
-  gap: 0.2rem;
-  padding: 0.5rem 0;
+  align-items: center;
+}
+.control-bar > .container > .movie-container {
+  width: 210px;
   height: 100%;
-  font-size: 0.75rem;
-  font-weight: 400;
-  text-align: left;
+  background-image: url("https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/tnb/tnb_steps.png");
+  background-repeat: no-repeat;
+  background-position: 50% 40px;
 }
-.control-bar > .space > div.title {
-  width: 7.5rem;
-  border-right: 0.1rem solid rgb(51, 51, 51);
+.control-bar > .container > .movie-container.hidden {
+  display: none;
 }
-.control-bar > .space > div.theater-title {
-  width: 2.5rem;
-}
-.control-bar > .space > div.theater-content {
-  width: 9.125rem;
-  border-right: 0.1rem solid rgb(51, 51, 51);
-}
-.control-bar > .space > div.seat-title {
-  width: 3rem;
-}
-.control-bar > .space > div.seat-content {
-  width: 9.125rem;
-  border-right: 0.1rem solid rgb(51, 51, 51);
-}
-.control-bar > .space > div.price-title {
-  width: 2.5rem;
-}
-.control-bar > .space > div.price-content {
-  width: 9.125rem;
-}
-.control-bar > .space > div > span {
-  text-decoration: none;
-  text-overflow: ellipsis;
-  color: #cccccc;
-  height: 1.5rem;
-  text-decoration-color: rgb(204, 204, 204);
-  font-weight: 700;
-  font-size: 0.75rem;
-}
-.control-bar > .space > div > span.poster {
-  height: 6.5rem;
-  width: 4.625rem;
+.control-bar > .container > .poster-container {
+  width: 210px;
+  height: 100%;
+  box-sizing: border-box;
+  align-items: center;
   display: flex;
-  background-color: white;
+  flex-direction: row;
+}
+.control-bar > .container > .poster-container > .poster > .movie {
+  width: 74px;
+  height: 100%;
+}
+.control-bar > .container > .poster-container > .movie-info {
+  height: 100%;
+  padding: 1rem 0 1rem 1rem;
+  color: #cccccc;
+  box-sizing: border-box;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+}
+.control-bar > .container > .theater-container {
+  width: 185px;
+  height: 100%;
+  background-image: url("https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/tnb/tnb_steps.png");
+  background-repeat: no-repeat;
+  background-position: 50% -68px;
+}
+.control-bar > .container > .theater-container.hidden {
+  display: none;
+}
+.control-bar > .container > .seat-container {
+  width: 111px;
+  height: 100%;
+  margin: 2rem 0 0 1.5rem;
+  background-image: url("https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/tnb/tnb_steps.png");
+  background-repeat: no-repeat;
+  background-position: 50% -190px;
+}
+.control-bar > .container > .seat-container.hidden {
+  display: none;
+}
+.control-bar > .container > .payment-container {
+  width: 71px;
+  height: 100%;
+  margin: 2rem 0 0 1.5rem;
+  background-image: url("https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/tnb/tnb_steps.png");
+  background-repeat: no-repeat;
+  background-position: 50% -298px;
+}
+.control-bar > .container > .payment-container.hidden {
+  display: none;
+}
+.control-bar > .container .left-button {
+  width: 106px;
+  height: 108px;
+  cursor: pointer;
+  margin-right: 1rem;
+  background-image: url("http://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/tnb/tnb_buttons.png");
+  background-repeat: no-repeat;
+}
+.control-bar > .container .left-button.hidden {
+  display: none;
+}
+.control-bar > .container .left-button.first {
+  background-position: 0 0;
+}
+.control-bar > .container .left-button.second {
+  background-position: 0 -110px;
+}
+.control-bar > .container .right-button {
+  right: 0;
+  width: 106px;
+  height: 108px;
+  position: absolute;
+  cursor: pointer;
+  background-image: url("http://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/tnb/tnb_buttons.png");
+  background-repeat: no-repeat;
+}
+.control-bar > .container .right-button.hidden {
+  display: none;
+}
+.control-bar > .container .right-button.first {
+  background-position: 0 -220px;
+}
+.control-bar > .container .right-button.first.after {
+  background-position: -150px -220px;
+}
+.control-bar > .container .right-button.second {
+  background-position: 0 -330px;
+}
+.control-bar > .container .right-button.second.after {
+  background-position: -150px -330px;
+}
+.control-bar > .container .right-button.third {
+  width: 220px;
+  background-position: 0 -550px;
 }
 
 .add {
@@ -1255,7 +1313,7 @@
   height: 13rem;
 }
 .add .image {
-  width: 62.5rem;
+  width: 61.25rem;
   height: 8.75rem;
 }
 
