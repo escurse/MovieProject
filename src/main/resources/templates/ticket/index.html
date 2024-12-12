@@ -43,58 +43,14 @@
                         <ul class="movie">
                             <li class="item-container select">
                                 <div class="text">
-                                    <img src="data:image/svg+xml;charset=UTF-8, %3csvg width='20' height='20' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cg clip-path='url(%23age15)'%3e%3cpath d='M17.745 20H2.255A2.256 2.256 0 0 1 0 17.745V2.255A2.255 2.255 0 0 1 2.255 0h15.49A2.253 2.253 0 0 1 20 2.255v15.49A2.254 2.254 0 0 1 17.745 20Z' fill='%23DD742F'/%3e%3cpath d='M4.318 16.891v-9.94H3.217L4.643 3.11h2.761V16.89H4.318ZM16.313 7.815h-4.834v-2.02h5.052V3.107H8.45v7.342h5.177v3.85h-2.183v-1.812H8.45v4.095a.306.306 0 0 0 .307.308h7.556a.306.306 0 0 0 .308-.308V8.125a.307.307 0 0 0-.308-.31Z' fill='%23fff'/%3e%3c/g%3e%3cdefs%3e%3cclipPath id='age15'%3e%3cpath fill='%23fff' d='M0 0h20v20H0z'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
-                                         alt="15" class="rating">
+                                    <div class="nineteen rating"></div>
                                     <span class="name">하얼빈</span>
                                 </div>
                             </li>
-                            <li class="item-container">
+                            <li class="item-container" th:each="movie : ${movies}">
                                 <div class="text">
-                                    <img src="data:image/svg+xml;charset=UTF-8, %3csvg width='20' height='20' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cg clip-path='url(%23age15)'%3e%3cpath d='M17.745 20H2.255A2.256 2.256 0 0 1 0 17.745V2.255A2.255 2.255 0 0 1 2.255 0h15.49A2.253 2.253 0 0 1 20 2.255v15.49A2.254 2.254 0 0 1 17.745 20Z' fill='%23DD742F'/%3e%3cpath d='M4.318 16.891v-9.94H3.217L4.643 3.11h2.761V16.89H4.318ZM16.313 7.815h-4.834v-2.02h5.052V3.107H8.45v7.342h5.177v3.85h-2.183v-1.812H8.45v4.095a.306.306 0 0 0 .307.308h7.556a.306.306 0 0 0 .308-.308V8.125a.307.307 0 0 0-.308-.31Z' fill='%23fff'/%3e%3c/g%3e%3cdefs%3e%3cclipPath id='age15'%3e%3cpath fill='%23fff' d='M0 0h20v20H0z'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
-                                         alt="15" class="rating">
-                                    <span class="name">하얼빈</span>
-                                </div>
-                            </li>
-                            <li class="item-container">
-                                <div class="text">
-                                    <img src="data:image/svg+xml;charset=UTF-8, %3csvg width='20' height='20' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cg clip-path='url(%23age15)'%3e%3cpath d='M17.745 20H2.255A2.256 2.256 0 0 1 0 17.745V2.255A2.255 2.255 0 0 1 2.255 0h15.49A2.253 2.253 0 0 1 20 2.255v15.49A2.254 2.254 0 0 1 17.745 20Z' fill='%23DD742F'/%3e%3cpath d='M4.318 16.891v-9.94H3.217L4.643 3.11h2.761V16.89H4.318ZM16.313 7.815h-4.834v-2.02h5.052V3.107H8.45v7.342h5.177v3.85h-2.183v-1.812H8.45v4.095a.306.306 0 0 0 .307.308h7.556a.306.306 0 0 0 .308-.308V8.125a.307.307 0 0 0-.308-.31Z' fill='%23fff'/%3e%3c/g%3e%3cdefs%3e%3cclipPath id='age15'%3e%3cpath fill='%23fff' d='M0 0h20v20H0z'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
-                                         alt="15" class="rating">
-                                    <span class="name">하얼빈</span>
-                                </div>
-                            </li>
-                            <li class="item-container">
-                                <div class="text">
-                                    <img src="data:image/svg+xml;charset=UTF-8, %3csvg width='20' height='20' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cg clip-path='url(%23age15)'%3e%3cpath d='M17.745 20H2.255A2.256 2.256 0 0 1 0 17.745V2.255A2.255 2.255 0 0 1 2.255 0h15.49A2.253 2.253 0 0 1 20 2.255v15.49A2.254 2.254 0 0 1 17.745 20Z' fill='%23DD742F'/%3e%3cpath d='M4.318 16.891v-9.94H3.217L4.643 3.11h2.761V16.89H4.318ZM16.313 7.815h-4.834v-2.02h5.052V3.107H8.45v7.342h5.177v3.85h-2.183v-1.812H8.45v4.095a.306.306 0 0 0 .307.308h7.556a.306.306 0 0 0 .308-.308V8.125a.307.307 0 0 0-.308-.31Z' fill='%23fff'/%3e%3c/g%3e%3cdefs%3e%3cclipPath id='age15'%3e%3cpath fill='%23fff' d='M0 0h20v20H0z'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
-                                         alt="15" class="rating">
-                                    <span class="name">하얼빈</span>
-                                </div>
-                            </li>
-                            <li class="item-container">
-                                <div class="text">
-                                    <img src="data:image/svg+xml;charset=UTF-8, %3csvg width='20' height='20' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cg clip-path='url(%23age15)'%3e%3cpath d='M17.745 20H2.255A2.256 2.256 0 0 1 0 17.745V2.255A2.255 2.255 0 0 1 2.255 0h15.49A2.253 2.253 0 0 1 20 2.255v15.49A2.254 2.254 0 0 1 17.745 20Z' fill='%23DD742F'/%3e%3cpath d='M4.318 16.891v-9.94H3.217L4.643 3.11h2.761V16.89H4.318ZM16.313 7.815h-4.834v-2.02h5.052V3.107H8.45v7.342h5.177v3.85h-2.183v-1.812H8.45v4.095a.306.306 0 0 0 .307.308h7.556a.306.306 0 0 0 .308-.308V8.125a.307.307 0 0 0-.308-.31Z' fill='%23fff'/%3e%3c/g%3e%3cdefs%3e%3cclipPath id='age15'%3e%3cpath fill='%23fff' d='M0 0h20v20H0z'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
-                                         alt="15" class="rating">
-                                    <span class="name">하얼빈</span>
-                                </div>
-                            </li>
-                            <li class="item-container">
-                                <div class="text">
-                                    <img src="data:image/svg+xml;charset=UTF-8, %3csvg width='20' height='20' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cg clip-path='url(%23age15)'%3e%3cpath d='M17.745 20H2.255A2.256 2.256 0 0 1 0 17.745V2.255A2.255 2.255 0 0 1 2.255 0h15.49A2.253 2.253 0 0 1 20 2.255v15.49A2.254 2.254 0 0 1 17.745 20Z' fill='%23DD742F'/%3e%3cpath d='M4.318 16.891v-9.94H3.217L4.643 3.11h2.761V16.89H4.318ZM16.313 7.815h-4.834v-2.02h5.052V3.107H8.45v7.342h5.177v3.85h-2.183v-1.812H8.45v4.095a.306.306 0 0 0 .307.308h7.556a.306.306 0 0 0 .308-.308V8.125a.307.307 0 0 0-.308-.31Z' fill='%23fff'/%3e%3c/g%3e%3cdefs%3e%3cclipPath id='age15'%3e%3cpath fill='%23fff' d='M0 0h20v20H0z'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
-                                         alt="15" class="rating">
-                                    <span class="name">하얼빈</span>
-                                </div>
-                            </li>
-                            <li class="item-container">
-                                <div class="text">
-                                    <img src="data:image/svg+xml;charset=UTF-8, %3csvg width='20' height='20' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cg clip-path='url(%23age15)'%3e%3cpath d='M17.745 20H2.255A2.256 2.256 0 0 1 0 17.745V2.255A2.255 2.255 0 0 1 2.255 0h15.49A2.253 2.253 0 0 1 20 2.255v15.49A2.254 2.254 0 0 1 17.745 20Z' fill='%23DD742F'/%3e%3cpath d='M4.318 16.891v-9.94H3.217L4.643 3.11h2.761V16.89H4.318ZM16.313 7.815h-4.834v-2.02h5.052V3.107H8.45v7.342h5.177v3.85h-2.183v-1.812H8.45v4.095a.306.306 0 0 0 .307.308h7.556a.306.306 0 0 0 .308-.308V8.125a.307.307 0 0 0-.308-.31Z' fill='%23fff'/%3e%3c/g%3e%3cdefs%3e%3cclipPath id='age15'%3e%3cpath fill='%23fff' d='M0 0h20v20H0z'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
-                                         alt="15" class="rating">
-                                    <span class="name">하얼빈</span>
-                                </div>
-                            </li>
-                            <li class="item-container">
-                                <div class="text">
-                                    <img src="data:image/svg+xml;charset=UTF-8, %3csvg width='20' height='20' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cg clip-path='url(%23age15)'%3e%3cpath d='M17.745 20H2.255A2.256 2.256 0 0 1 0 17.745V2.255A2.255 2.255 0 0 1 2.255 0h15.49A2.253 2.253 0 0 1 20 2.255v15.49A2.254 2.254 0 0 1 17.745 20Z' fill='%23DD742F'/%3e%3cpath d='M4.318 16.891v-9.94H3.217L4.643 3.11h2.761V16.89H4.318ZM16.313 7.815h-4.834v-2.02h5.052V3.107H8.45v7.342h5.177v3.85h-2.183v-1.812H8.45v4.095a.306.306 0 0 0 .307.308h7.556a.306.306 0 0 0 .308-.308V8.125a.307.307 0 0 0-.308-.31Z' fill='%23fff'/%3e%3c/g%3e%3cdefs%3e%3cclipPath id='age15'%3e%3cpath fill='%23fff' d='M0 0h20v20H0z'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
-                                         alt="15" class="rating">
-                                    <span class="name">하얼빈</span>
+                                    <div th:class="${movie.getRaGrade() + ' rating'}"></div>
+                                    <span th:text="${movie.getMoTitle()}" class="name"></span>
                                 </div>
                             </li>
                         </ul>
@@ -109,8 +65,9 @@
                     <div class="content">
                         <ul class="region-container">
                             <li class="region select">서울(31)</li>
-                            <li class="region">대구(9)</li>
-                            <li class="region">대구(9)</li>
+                            <li th:each="region : ${regions}"
+                                th:text="${region.getRegName() + '(' + region.getTheaterCount() + ')'}"
+                                class="region"></li>
                         </ul>
                         <ul class="theater-container">
                             <li class="theater select">
@@ -131,8 +88,8 @@
                     <div class="content">
                         <ul class="day-container">
                             <li class="title">
-                                <span class="year">2024</span>
-                                <span class="month">12</span>
+                                <span class="year"></span>
+                                <span class="month"></span>
                             </li>
                             <li class="day select">
                                 <div class="day-container">
@@ -143,142 +100,9 @@
                             </li>
                             <li class="day">
                                 <div class="day-container">
-                                    <span class="week">월</span>
+                                    <span class="week"></span>
                                     <span class="stretch"></span>
-                                    <span class="date">9</span>
-                                </div>
-                            </li>
-                            <li class="day">
-                                <div class="day-container">
-                                    <span class="week">월</span>
-                                    <span class="stretch"></span>
-                                    <span class="date">9</span>
-                                </div>
-                            </li>
-                            <li class="day">
-                                <div class="day-container">
-                                    <span class="week">월</span>
-                                    <span class="stretch"></span>
-                                    <span class="date">9</span>
-                                </div>
-                            </li>
-                            <li class="day">
-                                <div class="day-container">
-                                    <span class="week">월</span>
-                                    <span class="stretch"></span>
-                                    <span class="date">9</span>
-                                </div>
-                            </li>
-                            <li class="day">
-                                <div class="day-container">
-                                    <span class="week">월</span>
-                                    <span class="stretch"></span>
-                                    <span class="date">9</span>
-                                </div>
-                            </li>
-                            <li class="day">
-                                <div class="day-container">
-                                    <span class="week">월</span>
-                                    <span class="stretch"></span>
-                                    <span class="date">9</span>
-                                </div>
-                            </li>
-                            <li class="day">
-                                <div class="day-container">
-                                    <span class="week">월</span>
-                                    <span class="stretch"></span>
-                                    <span class="date">9</span>
-                                </div>
-                            </li>
-                            <li class="day">
-                                <div class="day-container">
-                                    <span class="week">월</span>
-                                    <span class="stretch"></span>
-                                    <span class="date">9</span>
-                                </div>
-                            </li>
-                            <li class="day">
-                                <div class="day-container">
-                                    <span class="week">월</span>
-                                    <span class="stretch"></span>
-                                    <span class="date">9</span>
-                                </div>
-                            </li>
-                            <li class="day">
-                                <div class="day-container">
-                                    <span class="week">월</span>
-                                    <span class="stretch"></span>
-                                    <span class="date">9</span>
-                                </div>
-                            </li>
-                            <li class="day">
-                                <div class="day-container">
-                                    <span class="week">월</span>
-                                    <span class="stretch"></span>
-                                    <span class="date">9</span>
-                                </div>
-                            </li>
-                            <li class="day">
-                                <div class="day-container">
-                                    <span class="week">월</span>
-                                    <span class="stretch"></span>
-                                    <span class="date">9</span>
-                                </div>
-                            </li>
-                            <li class="day">
-                                <div class="day-container">
-                                    <span class="week">월</span>
-                                    <span class="stretch"></span>
-                                    <span class="date">9</span>
-                                </div>
-                            </li>
-                            <li class="day">
-                                <div class="day-container">
-                                    <span class="week">월</span>
-                                    <span class="stretch"></span>
-                                    <span class="date">9</span>
-                                </div>
-                            </li>
-                            <li class="day">
-                                <div class="day-container">
-                                    <span class="week">월</span>
-                                    <span class="stretch"></span>
-                                    <span class="date">9</span>
-                                </div>
-                            </li>
-                            <li class="day">
-                                <div class="day-container">
-                                    <span class="week">월</span>
-                                    <span class="stretch"></span>
-                                    <span class="date">9</span>
-                                </div>
-                            </li>
-                            <li class="day">
-                                <div class="day-container">
-                                    <span class="week">월</span>
-                                    <span class="stretch"></span>
-                                    <span class="date">9</span>
-                                </div>
-                            </li>
-                            <li class="day">
-                                <div class="day-container">
-                                    <span class="week">월</span>
-                                    <span class="stretch"></span>
-                                    <span class="date">9</span>
-                                </div>
-                            </li>
-                            <li class="day">
-                                <div class="day-container">
-                                    <span class="week">월</span>
-                                    <span class="stretch"></span>
-                                    <span class="date">9</span>
-                                </div>
-                            </li>
-                            <li class="day">
-                                <div class="day-container">
-                                    <span class="week">월</span>
-                                    <span class="stretch"></span>
-                                    <span class="date">9</span>
+                                    <span class="date"></span>
                                 </div>
                             </li>
                         </ul>
@@ -296,11 +120,11 @@
                 </div>
             </div>
         </div>
-        <div class="mains main-seat hidden" id="main-seat" data-id="main-seat">
+        <div id="main-seat" class="mains hidden" data-id="main-seat">
             <div class="seat-div">
                 <div class="content">인원/좌석</div>
                 <div class="screen-container">
-                    <div class="infor-container" id="nopContainer">
+                    <div class="info-container" id="nopContainer">
                         <span id="maximum_people">* 최대 8명 선택 가능</span>
                         <div class="title-container">
                             <span class="title">일반</span>
@@ -344,11 +168,11 @@
                             </label>
                         </div>
                     </div>
-                    <div class="infor-container title-right-box">
+                    <div class="info-container title-right-box">
                         <div class="title-container">
-                            <span class="text">대구 CGV</span>
-                            <span class="text center">2관 5층</span>
-                            <span class="text">남은 좌석 <b class="seat-color">000</b>/110</span>
+                            <span class="text">CGV대구</span>
+                            <span class="text center">2관</span>
+                            <span class="text seat-text">남은 좌석 <b id="seat-color" class="seat-color">00</b>/40</span>
                         </div>
                         <div class="title-container">
                             <b class="big-text data">0000.00.00</b>
@@ -371,7 +195,8 @@
                 </div>
             </div>
         </div>
-        <div class="mains main-payment hidden" id="main-payment" data-id="main-payment">
+        <!------------------------------------------------------------------------------------>
+        <div id="main-payment" class="mains hidden" data-id="main-payment">
             <div class="left-container">
                 <div class="payment-bar">결제 수단</div>
                 <div class="payment-container" id="payment-container">
@@ -379,31 +204,31 @@
                         <label class="payment-label">
                             <input class="payment-check card-check" name="payment-check" type="radio" value="card"
                                    checked>
-                            신용카드
+                            <span>신용카드</span>
                         </label>
                         <label class="payment-label">
                             <input class="payment-check" id="cellphone" name="payment-check" type="radio"
                                    value="cellPhone">
-                            휴대폰 결제
+                            <span>휴대폰 결제</span>
                         </label>
                         <label class="payment-label">
                             <input class="payment-check" id="simple-pay" name="payment-check" type="radio"
                                    value="simple-pay">
-                            간편결제
+                            <span>간편결제</span>
                         </label>
                         <label class="payment-label">
                             <input class="payment-check" id="credit" name="payment-check" type="radio" value="credit">
-                            내통장결제
+                            <span>내통장결제</span>
                         </label>
                         <label class="payment-label">
                             <input class="payment-check" id="toss" name="payment-check" type="radio" value="toss">
-                            토스
+                            <span>토스</span>
                         </label>
                     </label>
                 </div>
                 <div class="card-container pay-containers">
                     <div class="card-content">
-                        카드종류
+                        <span>카드종류</span>
                         <label class="card-label">
                             <select name="card">
                                 <option disabled selected>카드를 선택해주세요.</option>
@@ -430,11 +255,11 @@
                         <span class=" text">(삼성U포인트, OK캐쉬백, 신셰게 포인트는 포인트 중복 적립 불가) </span>
                     </div>
                 </div>
-                <div class="cellphone-container pay-containers" style="display: none">
+                <div class="cellphone-container  pay-containers" style="display: none">
                     <div class="cellphone-content">
                 <span class="text">
                     <span class="text">결제금액</span>
-                    <span class="cellphone-pay">25,000</span>
+                    <span class="cellphone-pay" id="pay-price-won6"></span>
                     <span class="text">원</span>
                 </span>
                         <span class="text">
@@ -485,7 +310,6 @@
                         </label>
                         <div class="simple-pay-on-text">
                             <h4>네이버페이 결제 순서</h4>
-                            <span class="text-space"></span>
                             <span class="text">1. 우측 하단에 있는 "결제하기" 버튼을 클릭해주세요.</span>
                             <span class="text">2. 예매내역 확인 후 결제하기 버튼 클릭 시 '네이버페이'결제 인증창이 뜹니다.</span>
                             <span class="text">3. '네이버페이'결제 인증창에서 정보를 입력하신 후 결제해주세요.</span>
@@ -525,6 +349,8 @@
                             <span class="text">2. 결제내역 확인 후 결제하기 버튼 클릭 시, 팝업창이 뜸</span>
                             <span class="text">3. 해당 '스마일페이' 팝업에서 원하는 카드를 선택 후 정보를 입력하신 후 정보를 입력하시면 됩니다.</span>
                         </div>
+                        <span class="text-space"></span>
+
                         <div class="simple-pay-under-text">
                             <h5>'스마일페이' 결제시, 기본 0.5% 스마일캐시가 적립되며.<br>
                                 스마일카드로 결제 시, 기본 0.5% + 추가 2.0% 적립되어 최대 2.5%적립됩니다.
@@ -541,6 +367,8 @@
                             <span class="text">2. 예매내역 확인 후 결제하기 버튼 클릭 시 'SSGPAY' 결제 인증창이 뜹니다.</span>
                             <span class="text">3. 'SSGPAY' 결제 인증창에서 정보를 입력하신 후 결제해주세요.</span>
                         </div>
+                        <span class="text-space"></span>
+
                         <div class="simple-pay-under-text">
                             <h5>'SSGPAY'는 결제 시 신용카드 선할인과 카드사 포인트는</h5>
                             <h5>이용이 불가능하며, 신용카드 별 청구할인은 이용이 가능합니다.</h5>
@@ -554,6 +382,7 @@
                             <span class="text">2. 예매내역 확인 후 결제하기 버튼 클릭 시 '카카오페이' 결제 인증창이 뜹니다.</span>
                             <span class="text">3. '카카오페이' 결제 인증창에서 정보를 입력하신 후 결제해주세요.</span>
                         </div>
+                        <span class="text-space"></span>
                         <div class="simple-pay-under-text">
                             <h5>* '카카오페이'는 신용카드 선할인과 카드사 포인트는 이용이 불가능하며,</h5>
                             <h5>신용카드별 청구할인은 이용이 가능합니다.</h5>
@@ -566,6 +395,7 @@
                             <span class="text">1. 우측 하단에 있는 '결제하기'버튼을 클릭해주세요.</span>
                             <span class="text">2. 예매내역 확인 후 결제하기 버튼 클릭 시 'PAYCO' 결제 인증창이 뜹니다.</span>
                             <span class="text">3. 'PAYCO' 결제 인증창에서 정보를 입력하신 후 결제해주세요.</span>
+                            <span class="text-space"></span>
                         </div>
                         <div class="simple-pay-under-text">
                             <h5>* 'PAYCO'는 씨티카드와 즉시할인 신용카드, 카드사 포인트는 이용이 불가능하며,</h5>
@@ -612,7 +442,7 @@
                     <div class="pay-box">
                         <div class="pay-text">결제하실 금액</div>
                         <div class="pay-price-box basic-color">
-                            <div class="pay-big-price">30,000</div>
+                            <div class="pay-big-price" id="pay-price-won1"></div>
                             <div class="pay-small-price">원</div>
                         </div>
                     </div>
@@ -628,11 +458,12 @@
                         <div class="pay-title">결제 내역</div>
                         <div class="pay-content">
                             <span class="pay-kind">신용카드</span>
-                            <span class="pay-price">30,000원</span>
+                            <span class="pay-price" id="pay-price-won2"></span>
+                            <span class="pay-price">원</span>
                         </div>
                         <div class="pay-text">남은 결제 금액</div>
                         <div class="pay-price-box yellow-color">
-                            <div class="pay-big-price">30,000</div>
+                            <div class="pay-big-price" id="pay-price-won3"></div>
                             <div class="pay-small-price">원</div>
                         </div>
                     </div>
@@ -647,103 +478,108 @@
             </a>
         </div>
     </div>
-    <div id="payment-section" class="hidden" data-id="payment-section">
-        <h4>예매내역 확인</h4>
-        <div class="pay-sec-container">
-            <div class="title">
-                <div>
+    <!------------------------------------------------------------------------------------>
+</main>
+<section id="payment-section" class="hidden" data-id="payment-section">
+    <h4>예매내역 확인</h4>
+    <form class="pay-form">
+        <div class="title">
+            <div>
                 <span class="title">ㆍ예매정보
                     <span class="small-text">결제하시기 전 예매내역을 다시 한번 확인해주세요.</span>
                 </span>
-                </div>
-                <div>
+            </div>
+            <div>
                 <span class="title title2">ㆍ결제정보
                     <span class="small-text">결제하기 버튼을 클릭하시면 결제가 완료됩니다.</span>
                 </span>
-                </div>
             </div>
-            <div class="table-div">
-                <div>
-                    <img class="img" src="/ticket/assets/images/icon3.png" alt="#">
-                </div>
-                <div class="div-title1">
-                    <span>영화명</span>
-                    <span>극장</span>
-                    <span>상경관</span>
-                    <span>일시</span>
-                    <span>인원</span>
-                    <span>좌석</span>
-                </div>
-                <div class="div-content1">
-                    <span>위키드(자막)</span>
-                    <span>CGV 고양행신</span>
-                    <span>1관 6층</span>
-                    <span>2024년 12월 1일(일) 20:10~23:00</span>
-                    <span>일반 1명</span>
-                    <span>A1</span>
-                </div>
-                <div class="div-title2">
-                    <span>결제금액</span>
-                    <span>결제 수단</span>
-                </div>
-                <div class="div-content2">
+        </div>
+        <div class="table-div">
+            <div>
+                <img class="img" src="/ticket/assets/images/icon3.png" alt="#">
+            </div>
+            <div class="div-title1">
+                <span>영화명</span>
+                <span>극장</span>
+                <span>상경관</span>
+                <span>일시</span>
+                <span>인원</span>
+                <span>좌석</span>
+            </div>
+            <div class="div-content1">
+                <span id="pay-movie">위키드(자막)</span>
+                <span id="pay-theater">CGV대구</span>
+                <span id="pay-cinema">2관</span>
+                <span id="pay-time">2024년 12월 1일 20:10~23:00</span>
+                <span class="pay-human"></span>
+                <span class="pay-seat"></span>
+                <label>
+                    <input type="text" style="display: none">
+                </label>
+            </div>
+            <div class="div-title2">
+                <span>결제금액</span>
+                <span>결제 수단</span>
+            </div>
+            <div class="div-content2">
                 <span>
-                    <span class="big-red">14,000</span>
+                    <span class="big-red" id="pay-price-won4"></span>
                     <span>원</span>
                 </span>
-                    <span>
-                    <span class="big-font">카드 결제</span>
-                    <span class="small-red">14,000</span>
+                <span>
+                    <span class="big-font" id="method"></span>
+                    <span class="small-red" id="pay-price-won5"></span>
                     <span>원</span>
                 </span>
-                </div>
             </div>
-            <div class="cancel">
-                <span>ㆍ인터넷 예매는 온라인상으로 영화상영 시간 20분 전 까지 취소 가능하며 20분 이후에는 현장에서 취소를하셔야합니다.</span>
-                <span>ㆍ현장취소를 하는 경우 상영시간 이전까지만 가능하며 영화 상영 시작 시간 이후 취소/환불/결제수단 변경은 불가합니다.</span>
-                <span>ㆍ입장 지연에 따른 관람 불편을 최소화하기 위해 본 영화는 10분 후 상영이 시작됩니다.</span>
-                <a href="#">> 예약취소 및 환불규정 안내</a>
+        </div>
+        <div class="cancel">
+            <span>ㆍ인터넷 예매는 온라인상으로 영화상영 시간 20분 전 까지 취소 가능하며 20분 이후에는 현장에서 취소를하셔야합니다.</span>
+            <span>ㆍ현장취소를 하는 경우 상영시간 이전까지만 가능하며 영화 상영 시작 시간 이후 취소/환불/결제수단 변경은 불가합니다.</span>
+            <span>ㆍ입장 지연에 따른 관람 불편을 최소화하기 위해 본 영화는 10분 후 상영이 시작됩니다.</span>
+            <button type="button" onclick="ReservationRefundRegulation()">> 예약취소 및 환불규정 안내</button>
+        </div>
+        <div class="agree">
+            <div class="agree-div1">
+                <label class="agree-all">
+                    <input type="checkbox" id="checkbox-agree-all">
+                    <span>결제대행 서비스 약관에 모두 동의</span>
+                </label>
+                <label class="agree-label">
+                    <input type="checkbox" class="checkbox-agree">
+                    <span>전자금융거래 이용약관</span>
+                </label>
+                <label class="agree-label">
+                    <input type="checkbox" class="checkbox-agree">
+                    <span>개인정보 수집 이용약관</span>
+                </label>
+                <label class="agree-label">
+                    <input type="checkbox" class="checkbox-agree">
+                    <span>개인정보 제공 및 위탁 안내 약관</span>
+                </label>
             </div>
-            <div class="agree">
-                <div class="agree-div1">
-                    <label class="agree-first">
-                        <input type="checkbox">
-                        결제대행 서비스 약관에 모두 동의
-                    </label>
-                    <label class="agree-label">
-                        <input type="checkbox">
-                        전자금융거래 이용약관
-                    </label>
-                    <label class="agree-label">
-                        <input type="checkbox">
-                        개인정보 수집 이용약관
-                    </label>
-                    <label class="agree-label">
-                        <input type="checkbox">
-                        개인정보 제공 및 위탁 안내 약관
-                    </label>
-                </div>
-                <div class="agree-div2">
-                    <span></span>
-                    <a href="#">전문확인</a>
-                    <a href="#">전문확인</a>
-                    <a href="#">전문확인</a>
-                </div>
-                <div></div>
-                <div class="agree-div3">
-                    <label>
-                        <input type="checkbox">
-                        상기 결제 내역을 모두 확인했습니다.
-                    </label>
-                </div>
+            <div class="agree-div2">
+                <span></span>
+                <button type="button" onclick="TCUElectronicFinancialTransactions()">전문확인</button>
+                <button type="button" onclick="TCCollectingPersonalInformation()">전문확인</button>
+                <button type="button" onclick="TCPPIC()">전문확인</button>
+
+            </div>
+            <div></div>
+            <div class="agree-div3">
+                <label>
+                    <input type="checkbox" id="checkbox-agree-solo">
+                    상기 결제 내역을 모두 확인했습니다.
+                </label>
             </div>
         </div>
         <span id="pay-button">
-            <button type="submit" name="real-pay" class="real-pay">결제하기</button>
-            <button type="button" name="real-cancel" class="real-cancel">취소</button>
-        </span>
-    </div>
-</main>
+        <button type="submit" name="real-pay" class="real-pay" id="real-pay">결제하기</button>
+        <button type="button" name="real-cancel" class="real-cancel">취소</button>
+    </span>
+    </form>
+</section>
 <section class="control-bar" id="control-bar">
     <div class="container">
         <div class="first left-button button hidden" data-id="main-seat"></div>
@@ -766,29 +602,43 @@
         <div class="theater info">
             <div class="text">
                 <span class="head">극장</span>
-                <a href="#" class="data">CGV 등촌 ></a>
+                <a href="#" class="data" id="theater-theater">CGV대구</a>
             </div>
             <div class="text">
                 <span class="head">일시</span>
-                <span class="data">2024.12.13(금) 10:40</span>
+                <span class="data" id="theater-time">2024.12.13(금) 10:40</span>
             </div>
             <div class="text">
                 <span class="head">상영관</span>
-                <span class="data">5관 7층(Laser)</span>
+                <span class="data" id="theater-cinema">5관</span>
             </div>
-            <div class="text">
+            <div class="text" id="theater-human">
                 <span class="head">인원</span>
-                <span class="data"></span>
             </div>
         </div>
-        <img class="info" src="https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/tnb/split.png" alt="split">
+
+        <img class="info" src="https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/tnb/split.png" alt="split ">
         <div class="seat-container"></div>
+        <div class="seat info">
+            <div class="text seat-title">
+                <span class="head">좌석명</span>
+            </div>
+            <div class="text seat-content">
+                <span class="head">좌석번호</span>
+            </div>
+        </div>
+        <img class="info" src="https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/tnb/split.png" alt="split ">
+        <div class="price info">
+            <div class="text price-title"></div>
+            <div class="text price-content"></div>
+        </div>
         <div class="payment-container"></div>
         <div class="first right-button" data-id="main"></div>
         <div class="second right-button hidden" data-id="main-seat"></div>
         <div class="third right-button hidden" data-id="main-payment"></div>
     </div>
 </section>
+<!------------------------------------------------------------------------------------>
 <a href="#" class="add">
     <img class="image" src="https://adimg.cgv.co.kr/images/202411/MorningCalm/996x140.jpg" alt="">
 </a>

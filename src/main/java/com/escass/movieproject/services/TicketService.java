@@ -5,8 +5,11 @@ import com.escass.movieproject.entities.MovieEntity;
 import com.escass.movieproject.entities.ScreenEntity;
 import com.escass.movieproject.exceptions.TransactionalException;
 import com.escass.movieproject.mappers.TicketMapper;
+import com.escass.movieproject.vos.MovieVo;
+import com.escass.movieproject.vos.RegionVo;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -18,13 +21,129 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.time.format.TextStyle;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class TicketService {
     private final TicketMapper ticketMapper;
 
+    public MovieVo[] selectAllMovies() {
+        MovieVo[] movies = this.ticketMapper.selectAllMovies();
+        for (MovieVo movie : movies) {
+            switch (movie.getRaGrade()) {
+                case "청소년관람불가" -> movie.setRaGrade("nineteen");
+                case "15세이상관람가" -> movie.setRaGrade("fifteen");
+                case "12세이상관람가" -> movie.setRaGrade("twelve");
+                case "전체관람가" -> movie.setRaGrade("all");
+                case "미정" -> movie.setRaGrade("none");
+            }
+        }
+        return movies;
+    }
+
+    public RegionVo[] selectRegionAndTheaterCount() {
+        return this.ticketMapper.selectRegionAndTheaterCount();
+    }
+
+    @Transactional
+    public List<Pair<Pair<String, Integer>, String>> getWeekdays() {
+        // 화면의 시작 날짜들을 가져옴
+        ScreenEntity[] screens = this.ticketMapper.selectAllScreenDates();
+
+        // 고유 날짜를 저장할 Set
+        Set<String> uniqueDates = new HashSet<>();
+
+        // 날짜 리스트를 돌면서 고유 날짜만 저장
+        for (ScreenEntity screen : screens) {
+            uniqueDates.add(screen.getScStartDate().toString().split("T")[0]);
+        }
+
+        // 날짜와 요일을 저장할 리스트
+        List<Pair<Pair<String, Integer>, String>> dateWithWeekday = new ArrayList<>();
+
+        for (String date : uniqueDates) {
+            // 날짜 문자열을 "yyyy-MM-dd" 형식으로 변환 후 LocalDate로 변환
+            LocalDate localDate = LocalDate.parse(date);
+
+            // 연도와 월을 "year-month" 형식으로 묶어서 저장
+            String yearMonth = localDate.getYear() + "-" + localDate.getMonthValue();
+            int day = localDate.getDayOfMonth();
+
+            // 요일을 구하고, 요일 이름을 한글로 저장
+            String weekday = localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN);
+
+            // Pair로 year-month와 day를 묶고, 요일을 저장
+            dateWithWeekday.add(Pair.of(Pair.of(yearMonth, day), weekday));
+        }
+
+        // 결과 반환
+        return dateWithWeekday;
+    }
+
+//    @Transactional
+//    public String getWeekday() {
+//        // 화면의 시작 날짜들을 가져옴
+//        ScreenEntity[] screens = this.ticketMapper.selectAllScreenDates();
+//
+//        // 고유 날짜를 저장할 Set
+//        Set<String> uniqueDates = new HashSet<>();
+//
+//        // 날짜 리스트를 돌면서 고유 날짜만 저장
+//        for (ScreenEntity screen : screens) {
+//            uniqueDates.add(screen.getScStartDate().toString().split("T")[0]);
+//        }
+//
+//        // 가장 마지막 날짜를 기준으로 요일을 계산
+//        LocalDate localDate = null;
+//
+//        for (String date : uniqueDates) {
+//            // 날짜 문자열을 "yyyy-MM-dd" 형식으로 변환 후 LocalDate로 변환
+//            LocalDate tempDate = LocalDate.parse(date);
+//
+//            // 마지막 날짜를 기준으로 요일을 계산
+//            if (localDate == null || tempDate.isAfter(localDate)) {
+//                localDate = tempDate;
+//            }
+//        }
+//
+//        if (localDate == null) {
+//            throw new TransactionalException("No valid date found");
+//        }
+//
+//        // 요일을 구하고, 요일 이름을 한글로 반환
+//        return localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN);
+//
+//
+////        ScreenEntity[] screens = this.ticketMapper.selectAllScreenDates();
+////        Set<String> uniqueDates = new HashSet<>();
+////        List<String> dayList = new ArrayList<>();
+////        LocalDate localDate = null;
+////        for (ScreenEntity screen : screens) {
+////            uniqueDates.add(screen.getScStartDate().toString().split("T")[0]);
+////            for (String date : uniqueDates) {
+////                dayList.add(date.split("-")[2]);
+////                // 리스트를 배열로 변환하고 정렬
+////                String[] dateArray = dayList.toArray(new String[0]);
+////                Arrays.sort(dateArray);
+////
+////                // 정렬된 배열을 리스트로 다시 변환
+////                dayList = Arrays.asList(dateArray);
+////                for (String day : dayList) {
+////                    // 입력된 연도, 월, 일로 날짜 객체 생성
+////                    localDate = LocalDate.of(Integer.parseInt(date.split("-")[0]), Integer.parseInt(date.split("-")[1]), Integer.parseInt(day));
+////                }
+////            }
+////        }
+////        if (localDate == null) {
+////            throw new TransactionalException();
+////        }
+////        // 요일을 구하고, 요일 이름을 한글로 반환
+////        return localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN);
+//    }
+
+    // region 크롤링을 위한 영화관 열거형
     @Getter
     public enum TheaterCode {
         DAEGU("CGV대구", "0345"),
@@ -45,7 +164,9 @@ public class TicketService {
             this.cgvCode = cgvNumber;
         }
     }
+    // endregion
 
+    // region 크롤링을 위한 영화관 타입 열거형
     @Getter
     public enum CinemaCode {
         NORMAL("2D"),
@@ -61,6 +182,7 @@ public class TicketService {
             this.citName = citName;
         }
     }
+    // endregion
 
     // region 열거형 예시
 //    public class EnumExample {
@@ -73,6 +195,7 @@ public class TicketService {
 //    }
     // endregion
 
+    // region 크롤링
     @Transactional
     public void Crawl(ScreenEntity screen) throws TransactionalException {
         // ChromeDriver 경로 설정
@@ -203,4 +326,5 @@ public class TicketService {
             driver.quit();
         }
     }
+    // endregion
 }
