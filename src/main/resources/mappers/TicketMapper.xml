@@ -55,7 +55,7 @@
           AND `mo_num` = #{moNum}
           AND `ci_num` = #{ciNum}
     </select>
-    <select id="selectAllMovies"
+    <select id="selectAllMoviesByRating"
             resultType="com.escass.movieproject.vos.MovieVo">
         SELECT `mo_num` AS `moNum`,
                `mo_title` AS `moTitle`,
@@ -68,6 +68,22 @@
                `ra_grade` AS `raGrade`
         FROM `jgv`.`movie`
                  LEFT JOIN `jgv`.`rating` ra ON movie.ra_num = ra.ra_num
+        ORDER BY `mo_booking_rate` DESC
+    </select>
+    <select id="selectAllMoviesByKorea"
+            resultType="com.escass.movieproject.vos.MovieVo">
+        SELECT `mo_num` AS `moNum`,
+               `mo_title` AS `moTitle`,
+               `mo_date` AS `moDate`,
+               `mo_time` AS `moTime`,
+               `mo_plot` AS `moPlot`,
+               `mo_booking_rate` AS `moBookingRate`,
+               `mo_ending` AS `moEnding`,
+               `movie`.`ra_num` AS `raNum`,
+               `ra_grade` AS `raGrade`
+        FROM `jgv`.`movie`
+                 LEFT JOIN `jgv`.`rating` ra ON movie.ra_num = ra.ra_num
+        ORDER BY `mo_title`
     </select>
     <select id="selectRegionAndTheaterCount"
             resultType="com.escass.movieproject.vos.RegionVo">

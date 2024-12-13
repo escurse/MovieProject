@@ -8,6 +8,23 @@ HTMLElement.prototype.show = function () {
     return this;
 }
 
+class Buttons {
+    // x.onclick = () => {
+//         $rightButtons.forEach((button) => {
+//             button.classList.add('hidden');
+//             if (x.getAttribute('data-id') === 'main' &&
+//                 button.getAttribute('data-id') === 'main-seat') {
+//                 $seatContainer.classList.add('hidden');
+//                 $paymentContainer.classList.add('hidden');
+//                 button.classList.remove('hidden');
+//             }
+//             if (x.getAttribute('data-id') === 'main-seat' &&
+//                 button.getAttribute('data-id') === 'main-payment') {
+//                 button.classList.remove('hidden');
+//             }
+//         })
+}
+
 class Loading {
     /** @type {HTMLElement} */
     static $element;

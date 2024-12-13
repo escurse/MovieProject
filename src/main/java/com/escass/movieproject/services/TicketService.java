@@ -30,7 +30,21 @@ public class TicketService {
     private final TicketMapper ticketMapper;
 
     public MovieVo[] selectAllMovies() {
-        MovieVo[] movies = this.ticketMapper.selectAllMovies();
+        MovieVo[] movies = this.ticketMapper.selectAllMoviesByRating();
+        for (MovieVo movie : movies) {
+            switch (movie.getRaGrade()) {
+                case "청소년관람불가" -> movie.setRaGrade("nineteen");
+                case "15세이상관람가" -> movie.setRaGrade("fifteen");
+                case "12세이상관람가" -> movie.setRaGrade("twelve");
+                case "전체관람가" -> movie.setRaGrade("all");
+                case "미정" -> movie.setRaGrade("none");
+            }
+        }
+        return movies;
+    }
+
+    public MovieVo[] selectAllMoviesByKorea() {
+        MovieVo[] movies = this.ticketMapper.selectAllMoviesByKorea();
         for (MovieVo movie : movies) {
             switch (movie.getRaGrade()) {
                 case "청소년관람불가" -> movie.setRaGrade("nineteen");
@@ -48,100 +62,44 @@ public class TicketService {
     }
 
     @Transactional
-    public List<Pair<Pair<String, Integer>, String>> getWeekdays() {
+    public Map<String, String> getWeekdays() {
         // 화면의 시작 날짜들을 가져옴
         ScreenEntity[] screens = this.ticketMapper.selectAllScreenDates();
 
         // 고유 날짜를 저장할 Set
-        Set<String> uniqueDates = new HashSet<>();
+        SortedSet<String> sortedSet = new TreeSet<>();
 
         // 날짜 리스트를 돌면서 고유 날짜만 저장
         for (ScreenEntity screen : screens) {
-            uniqueDates.add(screen.getScStartDate().toString().split("T")[0]);
+            sortedSet.add(screen.getScStartDate().toString().split("T")[0]);
         }
+        // 결과
+        // [2024-12-11, 2024-12-12, 2024-12-13, 2024-12-14, 2024-12-15, 2024-12-16, 2024-12-17, 2024-12-18, 2024-12-19, 2024-12-20, 2024-12-21, 2024-12-22, 2024-12-23, 2024-12-24, 2024-12-25, 2024-12-26]
 
-        // 날짜와 요일을 저장할 리스트
-        List<Pair<Pair<String, Integer>, String>> dateWithWeekday = new ArrayList<>();
-
-        for (String date : uniqueDates) {
-            // 날짜 문자열을 "yyyy-MM-dd" 형식으로 변환 후 LocalDate로 변환
-            LocalDate localDate = LocalDate.parse(date);
-
-            // 연도와 월을 "year-month" 형식으로 묶어서 저장
-            String yearMonth = localDate.getYear() + "-" + localDate.getMonthValue();
-            int day = localDate.getDayOfMonth();
-
-            // 요일을 구하고, 요일 이름을 한글로 저장
-            String weekday = localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN);
-
-            // Pair로 year-month와 day를 묶고, 요일을 저장
-            dateWithWeekday.add(Pair.of(Pair.of(yearMonth, day), weekday));
+        SortedSet<String> sortSet = new TreeSet<>();
+        for (String sort : sortedSet) {
+            sortSet.add(sort.substring(0, 7));
         }
+        // 결과
+        // [2024-12]
+
+        Map<String, String> map = new HashMap<>();
+        for (String title : sortSet) {
+            List<String> list = new ArrayList<>();
+            for (String day : sortedSet) {
+                if (day.contains(title)) {
+                    LocalDate localDate = LocalDate.parse(day, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    list.add(day.split("-")[2] + "-" + localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN).split("요일")[0]);
+                }
+            }
+            map.put(title, list.toString().replace('[', ' ').replace(']', ' '));
+        }
+        // 결과
+        // 2024-12 [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
 
         // 결과 반환
-        return dateWithWeekday;
+        return map;
     }
-
-//    @Transactional
-//    public String getWeekday() {
-//        // 화면의 시작 날짜들을 가져옴
-//        ScreenEntity[] screens = this.ticketMapper.selectAllScreenDates();
-//
-//        // 고유 날짜를 저장할 Set
-//        Set<String> uniqueDates = new HashSet<>();
-//
-//        // 날짜 리스트를 돌면서 고유 날짜만 저장
-//        for (ScreenEntity screen : screens) {
-//            uniqueDates.add(screen.getScStartDate().toString().split("T")[0]);
-//        }
-//
-//        // 가장 마지막 날짜를 기준으로 요일을 계산
-//        LocalDate localDate = null;
-//
-//        for (String date : uniqueDates) {
-//            // 날짜 문자열을 "yyyy-MM-dd" 형식으로 변환 후 LocalDate로 변환
-//            LocalDate tempDate = LocalDate.parse(date);
-//
-//            // 마지막 날짜를 기준으로 요일을 계산
-//            if (localDate == null || tempDate.isAfter(localDate)) {
-//                localDate = tempDate;
-//            }
-//        }
-//
-//        if (localDate == null) {
-//            throw new TransactionalException("No valid date found");
-//        }
-//
-//        // 요일을 구하고, 요일 이름을 한글로 반환
-//        return localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN);
-//
-//
-////        ScreenEntity[] screens = this.ticketMapper.selectAllScreenDates();
-////        Set<String> uniqueDates = new HashSet<>();
-////        List<String> dayList = new ArrayList<>();
-////        LocalDate localDate = null;
-////        for (ScreenEntity screen : screens) {
-////            uniqueDates.add(screen.getScStartDate().toString().split("T")[0]);
-////            for (String date : uniqueDates) {
-////                dayList.add(date.split("-")[2]);
-////                // 리스트를 배열로 변환하고 정렬
-////                String[] dateArray = dayList.toArray(new String[0]);
-////                Arrays.sort(dateArray);
-////
-////                // 정렬된 배열을 리스트로 다시 변환
-////                dayList = Arrays.asList(dateArray);
-////                for (String day : dayList) {
-////                    // 입력된 연도, 월, 일로 날짜 객체 생성
-////                    localDate = LocalDate.of(Integer.parseInt(date.split("-")[0]), Integer.parseInt(date.split("-")[1]), Integer.parseInt(day));
-////                }
-////            }
-////        }
-////        if (localDate == null) {
-////            throw new TransactionalException();
-////        }
-////        // 요일을 구하고, 요일 이름을 한글로 반환
-////        return localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN);
-//    }
 
     // region 크롤링을 위한 영화관 열거형
     @Getter
