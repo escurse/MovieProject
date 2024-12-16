@@ -8,6 +8,24 @@ HTMLElement.prototype.show = function () {
     return this;
 }
 
+// function toggleSelectClass(x, items) {
+//     items.forEach((item) => {
+//         item.classList.remove('select');
+//         if (x === item) {
+//             item.classList.add('select');
+//         }
+//     });
+// }
+//
+// function initTheaterItems($theaterItems) {
+//     $theaterItems.forEach((item) => {
+//         item.onclick = () => toggleSelectClass(item, $theaterItems);
+//     });
+// }
+//
+// // 예시 사용법
+// initTheaterItems($theaterItems);
+
 class Buttons {
     // x.onclick = () => {
 //         $rightButtons.forEach((button) => {

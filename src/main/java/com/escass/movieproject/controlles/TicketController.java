@@ -27,11 +27,13 @@ public class TicketController {
     public ModelAndView getIndex(@RequestParam(value = "region", required = false) String region,
                                  @RequestParam(value = "moTitle", required = false) String moTitle) {
         ModelAndView modelAndView = new ModelAndView();
-        MovieVo[] movies = this.ticketService.selectAllMovies();
+        MovieVo[] movies = this.ticketService.selectAllMoviesByRating();
+        MovieVo[] movieVos = this.ticketService.selectAllMovies(moTitle);
         RegionVo[] regions = this.ticketService.selectRegionAndTheaterCount();
         TheaterEntity[] theaters = this.theaterService.getTheatersByRegion(region);
         Map<String, String> maps = this.ticketService.getWeekdays();
         modelAndView.addObject("movies", movies);
+        modelAndView.addObject("movieVos", movieVos);
         modelAndView.addObject("regions", regions);
         modelAndView.addObject("theaters", theaters);
         modelAndView.addObject("maps", maps);

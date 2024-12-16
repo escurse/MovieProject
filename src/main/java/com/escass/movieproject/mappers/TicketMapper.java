@@ -3,6 +3,7 @@ package com.escass.movieproject.mappers;
 import com.escass.movieproject.entities.CinemaEntity;
 import com.escass.movieproject.entities.MovieEntity;
 import com.escass.movieproject.entities.ScreenEntity;
+import com.escass.movieproject.entities.TheaterEntity;
 import com.escass.movieproject.vos.MovieVo;
 import com.escass.movieproject.vos.RegionVo;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,6 +18,8 @@ public interface TicketMapper {
     ScreenEntity[] selectAllScreenDates();
 
     RegionVo[] selectRegionAndTheaterCount();
+
+    MovieVo[] selectAllMoviesByMoTitle(@Param(value = "moTitle") String moTitle);
 
     MovieVo[] selectAllMoviesByRating();
 
