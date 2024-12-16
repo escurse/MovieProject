@@ -72,7 +72,6 @@ public class TicketService {
         return this.ticketMapper.selectRegionAndTheaterCount();
     }
 
-    @Transactional
     public Map<String, String> getWeekdays() {
         // 화면의 시작 날짜들을 가져옴
         ScreenEntity[] screens = this.ticketMapper.selectAllScreenDates();

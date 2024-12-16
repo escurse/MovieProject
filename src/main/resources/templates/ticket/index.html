@@ -600,9 +600,9 @@
                      th:each="vo : ${movieVos}"
                      class="movie-info">
                     <div th:text="${vo.getMoTitle()}" class="title"></div>
-                    <!--                <div class="stretch"></div>-->
-                    <!--                <div class="genre">2D</div>-->
-                    <!--                <div class="rating">12세 관람가</div>-->
+                    <div class="stretch"></div>
+                    <div class="genre"></div>
+                    <div th:text="${vo.getRaGrade()}" class="rating"></div>
                 </div>
             </div>
         </div>
