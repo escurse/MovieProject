@@ -20,7 +20,7 @@
 <main id="main">
     <div class="button-container">
         <a class="content-bar-timetable" href="#"></a>
-        <a class="content-bar-retry" href="#"></a>
+        <a class="content-bar-retry" th:href="@{./}" target="_self"></a>
     </div>
     <div class="main-container">
         <div class="advertisement-container">
@@ -117,8 +117,25 @@
                     <div class="time"></div>
                 </div>
                 <div class="body time">
-                    <div class="content">
+                    <div class="content hidden">
                         <div class="notice">영화,극장,날짜를 선택해 주세요.</div>
+                    </div>
+                    <div class="time-container">
+                        <div class="time-table" th:each="time : ${times}">
+                            <div class="title">
+                                <span th:text="${time.key[0]}" class="cinema-type"></span>
+                                <span th:text="${time.key[1]}" class="cinema"></span>
+                                <span th:text="${time.key[2]}" class="seat"></span>
+                            </div>
+                            <ul class="times">
+                                <li class="item" th:each="day : ${time.getValue()}">
+                                    <span class="time">
+                                        <span th:text="${#temporals.format(day[0], 'HH:mm')}" class="text"></span>
+                                    </span>
+                                    <span th:text="${day[1]}" class="seat"></span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -601,8 +618,8 @@
                      class="movie-info">
                     <div th:text="${vo.getMoTitle()}" class="title"></div>
                     <div class="stretch"></div>
-                    <div class="genre"></div>
-                    <div th:text="${vo.getRaGrade()}" class="rating"></div>
+                    <!--                    <div class="cinema-type"></div>-->
+                    <!--                    <div th:text="${vo.getRaGrade()}" class="rating"></div>-->
                 </div>
             </div>
         </div>

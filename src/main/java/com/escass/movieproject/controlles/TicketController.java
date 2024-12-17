@@ -6,6 +6,7 @@ import com.escass.movieproject.services.TheaterService;
 import com.escass.movieproject.services.TicketService;
 import com.escass.movieproject.vos.MovieVo;
 import com.escass.movieproject.vos.RegionVo;
+import com.escass.movieproject.vos.ScreenVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -25,13 +29,36 @@ public class TicketController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView getIndex(@RequestParam(value = "region", required = false) String region,
-                                 @RequestParam(value = "moTitle", required = false) String moTitle) {
+                                 @RequestParam(value = "moTitle", required = false) String moTitle,
+                                 @RequestParam(value = "thName", required = false) String thName,
+                                 @RequestParam(value = "scStartDate", required = false) String scStartDate) {
         ModelAndView modelAndView = new ModelAndView();
         MovieVo[] movies = this.ticketService.selectAllMoviesByRating();
         MovieVo[] movieVos = this.ticketService.selectAllMovies(moTitle);
         RegionVo[] regions = this.ticketService.selectRegionAndTheaterCount();
         TheaterEntity[] theaters = this.theaterService.getTheatersByRegion(region);
         Map<String, String> maps = this.ticketService.getWeekdays();
+        if (moTitle != null && thName != null && scStartDate != null) {
+            ScreenVo[] screens = this.ticketService.selectScreenDatesByMovieAndTheaterAndDate(moTitle, thName, scStartDate);
+            List<List<String>> contentLists = new ArrayList<>();
+            Map<List<String>, List<List<String>>> times = new HashMap<>();
+            for (ScreenVo screen : screens) {
+                List<String> keys = new ArrayList<>();
+                List<String> contents = new ArrayList<>();
+                keys.add(screen.getCitName());
+                // 2D
+                keys.add(screen.getCiName());
+                // 5관
+                keys.add(String.valueOf(screen.getSeatCount()));
+                // 40석
+                contents.add(String.valueOf(screen.getScStartDate()));
+                contents.add(String.valueOf(screen.getSeatCount()));
+                contentLists.add(contents);
+                times.computeIfAbsent(keys, k -> new ArrayList<>()).add(contents);
+            }
+            System.out.println(times);
+            modelAndView.addObject("times", times);
+        }
         modelAndView.addObject("movies", movies);
         modelAndView.addObject("movieVos", movieVos);
         modelAndView.addObject("regions", regions);

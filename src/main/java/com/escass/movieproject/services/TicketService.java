@@ -3,10 +3,13 @@ package com.escass.movieproject.services;
 import com.escass.movieproject.entities.CinemaEntity;
 import com.escass.movieproject.entities.MovieEntity;
 import com.escass.movieproject.entities.ScreenEntity;
+import com.escass.movieproject.entities.TheaterEntity;
 import com.escass.movieproject.exceptions.TransactionalException;
+import com.escass.movieproject.mappers.TheaterMapper;
 import com.escass.movieproject.mappers.TicketMapper;
 import com.escass.movieproject.vos.MovieVo;
 import com.escass.movieproject.vos.RegionVo;
+import com.escass.movieproject.vos.ScreenVo;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
@@ -32,6 +35,13 @@ import java.util.*;
 @RequiredArgsConstructor
 public class TicketService {
     private final TicketMapper ticketMapper;
+
+    // 시간 정보를 찾아오는 것.
+    public ScreenVo[] selectScreenDatesByMovieAndTheaterAndDate(String moTitle, String thName, String scStartDate) {
+        TheaterEntity theater = this.ticketMapper.selectTheater(thName);
+        MovieEntity movie = this.ticketMapper.selectMovieNumByMovieTitle(moTitle);
+        return this.ticketMapper.selectScreenDatesByMovieAndTheaterAndDate(movie.getMoNum(), theater.getThNum(), scStartDate);
+    }
 
     public MovieVo[] selectAllMovies(String moTitle) {
         if (moTitle == null || moTitle.isEmpty()) {

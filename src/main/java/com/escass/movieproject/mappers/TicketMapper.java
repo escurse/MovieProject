@@ -6,6 +6,7 @@ import com.escass.movieproject.entities.ScreenEntity;
 import com.escass.movieproject.entities.TheaterEntity;
 import com.escass.movieproject.vos.MovieVo;
 import com.escass.movieproject.vos.RegionVo;
+import com.escass.movieproject.vos.ScreenVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,6 +15,12 @@ import java.time.LocalDateTime;
 @Mapper
 public interface TicketMapper {
     int insertScreen(ScreenEntity screen);
+
+    TheaterEntity selectTheater(@Param("thName") String thName);
+
+    ScreenVo[] selectScreenDatesByMovieAndTheaterAndDate(@Param("movie") int moNum,
+                                                         @Param("theater") int thNum,
+                                                         @Param("date") String scStartDate);
 
     ScreenEntity[] selectAllScreenDates();
 
