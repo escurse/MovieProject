@@ -40,7 +40,6 @@ public class TicketController {
         Map<String, String> maps = this.ticketService.getWeekdays();
         if (moTitle != null && thName != null && scStartDate != null) {
             ScreenVo[] screens = this.ticketService.selectScreenDatesByMovieAndTheaterAndDate(moTitle, thName, scStartDate);
-            List<List<String>> contentLists = new ArrayList<>();
             Map<List<String>, List<List<String>>> times = new HashMap<>();
             for (ScreenVo screen : screens) {
                 List<String> keys = new ArrayList<>();
@@ -53,10 +52,8 @@ public class TicketController {
                 // 40석
                 contents.add(String.valueOf(screen.getScStartDate()));
                 contents.add(String.valueOf(screen.getSeatCount()));
-                contentLists.add(contents);
                 times.computeIfAbsent(keys, k -> new ArrayList<>()).add(contents);
             }
-            System.out.println(times);
             modelAndView.addObject("times", times);
         }
         modelAndView.addObject("movies", movies);

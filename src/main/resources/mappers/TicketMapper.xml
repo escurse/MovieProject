@@ -111,9 +111,11 @@
                `mo_plot`         AS `moPlot`,
                `mo_booking_rate` AS `moBookingRate`,
                `mo_ending`       AS `moEnding`,
-               `m_img_url`       AS `mImgUrl`
+               `m_img_url`       AS `mImgUrl`,
+               `ra_grade` AS `raGrade`
         FROM `jgv`.`movie`
                  LEFT JOIN `jgv`.`movie_image` mi ON `movie`.`mo_num` = `mi`.`mo_num`
+        LEFT JOIN `jgv`.`rating` ON `movie`.`ra_num` = `rating`.`ra_num`
         WHERE `mo_title` = #{moTitle}
     </select>
     <select id="selectScreenDatesByMovieAndTheaterAndDate"

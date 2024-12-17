@@ -1724,6 +1724,12 @@
               text-decoration: underline;
             }
           }
+
+          > .rating {
+            &.hidden {
+              display: none;
+            }
+          }
         }
       }
     }

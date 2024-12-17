@@ -1434,6 +1434,9 @@
   cursor: pointer;
   text-decoration: underline;
 }
+.control-bar > .container > .containers > .posters > .movie-info > .rating.hidden {
+  display: none;
+}
 .control-bar > .container > .theater-container {
   width: 185px;
   height: 100%;

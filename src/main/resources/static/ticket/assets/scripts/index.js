@@ -16,6 +16,8 @@ const $theaterTheater = document.getElementById('theater-theater');
 const $theaterInfo = $controlBar.querySelectorAll(':scope > .container > [data-id="theaterInfo"]')
 const $theaterTime = document.getElementById('theater-time');
 const $timeContainer = $mainContent.querySelector(':scope > .time > .time > .time-container');
+const $firstButton = $controlBar.querySelector(':scope > .container > [data-id="main"]')
+const $theaterCinema = document.getElementById('theater-cinema');
 
 // 지정한 데이터
 const $data = {
@@ -42,11 +44,37 @@ function checkScreen() {
                 alert('오류 발생');
                 return;
             }
+            $firstButton.classList.remove('after');
+            const $oldText = $theaterTime.innerText;
+            $theaterCinema.innerText = '';
             const $screen = Array.from(new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelectorAll('.time-table'));
+            const $cinemaType = document.getElementById('cinema-type');
+            const $rating = document.getElementById('rating');
+            $rating.classList.add('hidden');
+            $cinemaType.innerText = '';
             $timeContainer.innerHTML = '';
             $screen.forEach((screen) => {
-                console.log(screen);
                 $timeContainer.append(screen);
+                const $times = Array.from(screen.querySelectorAll(':scope > .times'))
+                $times.forEach((time) => {
+                    const $items = Array.from(time.querySelectorAll(':scope > .item'));
+                    $items.forEach((item) => {
+                        item.onclick = () => {
+                            const $cinema = screen.querySelector(':scope > .title > .cinema');
+                            const $type = screen.querySelector(':scope > .title > .cinema-type');
+                            const $text = item.querySelector(':scope > .time > .text');
+                            document.querySelectorAll('.item.select').forEach((selectedItem) => {
+                                selectedItem.classList.remove('select');
+                            });
+                            item.classList.add('select');
+                            $theaterCinema.innerText = $cinema.innerText;
+                            $cinemaType.innerText = $type.innerText;
+                            $theaterTime.innerText = $oldText + $text.innerText;
+                            $rating.classList.remove('hidden');
+                            $firstButton.classList.add('after');
+                        }
+                    })
+                })
             })
         };
         xhr.open('GET', url.toString());
@@ -205,11 +233,10 @@ $regionItems.forEach((x) => {
                                     if (theater.classList.contains('theater')) {
                                         theater.classList.remove('hidden');
                                     }
-                                    $theaterTheater.innerText = x.innerText;
+                                    $theaterTheater.innerText = 'CGV' + x.innerText;
                                 })
                             })
-                            $data.theater = x.innerText;
-                            $data.theater = 'CGV' + $data.theater;
+                            $data.theater = $theaterTheater.innerText;
                             checkScreen();
                         }
                     })
@@ -328,7 +355,6 @@ const $payTheater = document.getElementById('pay-theater')
 const $payCinema = document.getElementById('pay-cinema')
 const $payTime = document.getElementById('pay-time')
 const $theaterDay = document.getElementById('theater-day');
-const $theaterCinema = document.getElementById('theater-cinema');
 
 const $checkboxAgreeAll = document.getElementById('checkbox-agree-all');
 const $checkboxAgreeSolo = document.getElementById('checkbox-agree-solo');

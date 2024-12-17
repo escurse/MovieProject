@@ -125,14 +125,14 @@
                             <div class="title">
                                 <span th:text="${time.key[0]}" class="cinema-type"></span>
                                 <span th:text="${time.key[1]}" class="cinema"></span>
-                                <span th:text="${time.key[2]}" class="seat"></span>
+                                <span th:text="${'(총 ' + time.key[2] + '석)'}" class="seat"></span>
                             </div>
                             <ul class="times">
                                 <li class="item" th:each="day : ${time.getValue()}">
                                     <span class="time">
-                                        <span th:text="${#temporals.format(day[0], 'HH:mm')}" class="text"></span>
+                                        <span th:text="${day[0].split('T')[1]}" class="text"></span>
                                     </span>
-                                    <span th:text="${day[1]}" class="seat"></span>
+                                    <span th:text="${day[1] + '석'}" class="seat"></span>
                                 </li>
                             </ul>
                         </div>
@@ -618,8 +618,8 @@
                      class="movie-info">
                     <div th:text="${vo.getMoTitle()}" class="title"></div>
                     <div class="stretch"></div>
-                    <!--                    <div class="cinema-type"></div>-->
-                    <!--                    <div th:text="${vo.getRaGrade()}" class="rating"></div>-->
+                    <div id="cinema-type" class="cinema-type"></div>
+                    <div id="rating" th:text="${vo.getRaGrade()}" class="rating hidden"></div>
                 </div>
             </div>
         </div>
