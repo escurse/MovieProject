@@ -7,7 +7,8 @@ const $orderItems = Array.from($mainContent.querySelectorAll(':scope > .movie > 
 const $region = $mainContent.querySelector(':scope > .theater > .body > .content > .region-container')
 const $regionItems = Array.from($region.querySelectorAll(':scope > .region'));
 const $theater = $mainContent.querySelector(':scope > .theater > .body > .content > .theater-container')
-const $dayContainer = $mainContent.querySelector(':scope > .day > .body > .content > .day-container')
+const $contentContainer = $mainContent.querySelector(':scope > .day > .body > .content > .content-container')
+const $dayContainer = $contentContainer.querySelector(':scope > .day-container')
 const $dayTitle = Array.from($dayContainer.querySelectorAll(':scope > .title'))
 const $dayItems = Array.from($dayContainer.querySelectorAll(':scope > .day'));
 const $controlBar = document.getElementById('control-bar');
@@ -19,6 +20,17 @@ const $timeContainer = $mainContent.querySelector(':scope > .time > .time > .tim
 const $firstButton = $controlBar.querySelector(':scope > .container > [data-id="main"]')
 const $theaterCinema = document.getElementById('theater-cinema');
 
+{
+    window.onload = () => {
+        const $regions = Array.from(document.querySelectorAll('[data-id="region"]'));
+        $regions.forEach((region) => {
+            if (region.innerText.includes('대구')) {
+                region.click();
+            }
+        })
+    }
+}
+
 // 지정한 데이터
 const $data = {
     movie: null,   // 선택된 영화
@@ -29,6 +41,191 @@ const $data = {
 // 상영 정보를 찾아오는 함수
 function checkScreen() {
     const {movie, theater, date} = $data;
+    if (movie && !theater && !date) {
+        const xhr = new XMLHttpRequest();
+        const url = new URL(location.href);
+        url.searchParams.set('moTitle', movie);
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState !== XMLHttpRequest.DONE) {
+                return;
+            }
+            Loading.hide();
+            if (xhr.status < 200 || xhr.status >= 300) {
+                alert('오류 발생');
+                return;
+            }
+            $theater.innerHTML = "";
+            $contentContainer.innerHTML = '';
+            const $days = Array.from((new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelectorAll('.day > .body > .content > .content-container > .day-container')));
+            $days.forEach((x) => {
+                $contentContainer.append(x);
+                const $day = Array.from(x.querySelectorAll(':scope > .day'));
+                $day.forEach((item) => {
+                    item.onclick = () => {
+                        document.querySelectorAll('.day.select').forEach((selectedItem) => {
+                            selectedItem.classList.remove('select');
+                        })
+                        item.classList.add('select');
+                        let array = item.innerText.split('\n');
+                        $theaterInfo.forEach((theater) => {
+                            theater.classList.add('hidden');
+                            if (theater.classList.contains('theater')) {
+                                theater.classList.remove('hidden');
+                            }
+                            $dayTitle.forEach((day) => {
+                                const $year = day.querySelector('.year');
+                                const $month = day.querySelector('.month');
+                                $theaterTime.innerText = $year.innerText + '.' + $month.innerText + '.' + array[1] + '(' + array[0] + ')';
+                            })
+                        })
+                        $data.date = $theaterTime.innerText;
+                        $data.date = $data.date.split('(')[0].replaceAll('.', '-');
+                        checkScreen();
+                    }
+                })
+            })
+            // $dayItems.forEach((x) => {
+            //     x.onclick = () => {
+            //         $dayItems.forEach((item) => {
+            //             item.classList.remove('select');
+            //             if (x === item) {
+            //                 item.classList.add('select');
+            //             }
+            //             let array = x.innerText.split('\n');
+            //             $theaterInfo.forEach((theater) => {
+            //                 theater.classList.add('hidden');
+            //                 if (theater.classList.contains('theater')) {
+            //                     theater.classList.remove('hidden');
+            //                 }
+            //                 $dayTitle.forEach((day) => {
+            //                     const $year = day.querySelector('.year');
+            //                     const $month = day.querySelector('.month');
+            //                     $theaterTime.innerText = $year.innerText + '.' + $month.innerText + '.' + array[1] + '(' + array[0] + ')';
+            //                 })
+            //             })
+            //         })
+            //         $data.date = $theaterTime.innerText;
+            //         $data.date = $data.date.split('(')[0].replaceAll('.', '-');
+            //         checkScreen();
+            //     }
+            // })
+            const $theaterItem = Array.from(new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelectorAll('.theater > .body > .content > .theater-container > .theater'));
+            $theaterItem.forEach((x) => {
+                $theater.append(x);
+                x.onclick = () => {
+                    $theaterItem.forEach((item) => {
+                        item.classList.remove('select');
+                        if (x === item) {
+                            item.classList.add('select');
+                        }
+                        $theaterInfo.forEach((theater) => {
+                            theater.classList.add('hidden');
+                            if (theater.classList.contains('theater')) {
+                                theater.classList.remove('hidden');
+                            }
+                            $theaterTheater.innerText = 'CGV' + x.innerText;
+                        })
+                    })
+                    $data.theater = $theaterTheater.innerText;
+                    checkScreen();
+                }
+            })
+        };
+        xhr.open('GET', url.toString());
+        xhr.send();
+        Loading.show(0);
+    }
+    // if (!movie && theater && !date) {
+    //     const xhr = new XMLHttpRequest();
+    //     const url = new URL(location.href);
+    //     url.searchParams.set('thName', theater);
+    //     xhr.onreadystatechange = () => {
+    //         if (xhr.readyState !== XMLHttpRequest.DONE) {
+    //             return;
+    //         }
+    //         Loading.hide();
+    //         if (xhr.status < 200 || xhr.status >= 300) {
+    //             alert('오류 발생');
+    //             return;
+    //         }
+    //     };
+    //     xhr.open('GET', url.toString());
+    //     xhr.send();
+    //     Loading.show(0);
+    // }
+    // if (!movie && !theater && date) {
+    //     const xhr = new XMLHttpRequest();
+    //     const url = new URL(location.href);
+    //     url.searchParams.set('scStartDate', date);
+    //     xhr.onreadystatechange = () => {
+    //         if (xhr.readyState !== XMLHttpRequest.DONE) {
+    //             return;
+    //         }
+    //         Loading.hide();
+    //         if (xhr.status < 200 || xhr.status >= 300) {
+    //             alert('오류 발생');
+    //             return;
+    //         }
+    //     };
+    //     xhr.open('GET', url.toString());
+    //     xhr.send();
+    //     Loading.show(0);
+    // }
+    // if (movie && theater && !date) {
+    //     const xhr = new XMLHttpRequest();
+    //     const url = new URL(location.href);
+    //     url.searchParams.set('moTitle', movie);
+    //     url.searchParams.set('thName', theater);
+    //     xhr.onreadystatechange = () => {
+    //         if (xhr.readyState !== XMLHttpRequest.DONE) {
+    //             return;
+    //         }
+    //         Loading.hide();
+    //         if (xhr.status < 200 || xhr.status >= 300) {
+    //             alert('오류 발생');
+    //             return;
+    //         }
+    //     };
+    //     xhr.open('GET', url.toString());
+    //     xhr.send();
+    //     Loading.show(0);
+    // }
+    // if (movie && !theater && date) {
+    //     const xhr = new XMLHttpRequest();
+    //     const url = new URL(location.href);
+    //     url.searchParams.set('moTitle', movie);
+    //     url.searchParams.set('scStartDate', date);
+    //     xhr.onreadystatechange = () => {
+    //         if (xhr.readyState !== XMLHttpRequest.DONE) {
+    //             return;
+    //         }
+    //         if (xhr.status < 200 || xhr.status >= 300) {
+    //             alert('오류 발생');
+    //             return;
+    //         }
+    //     };
+    //     xhr.open('GET', url.toString());
+    //     xhr.send();
+    // }
+    // if (!movie && theater && date) {
+    //     const xhr = new XMLHttpRequest();
+    //     const url = new URL(location.href);
+    //     url.searchParams.set('thName', theater);
+    //     url.searchParams.set('scStartDate', date);
+    //     xhr.onreadystatechange = () => {
+    //         if (xhr.readyState !== XMLHttpRequest.DONE) {
+    //             return;
+    //         }
+    //         Loading.hide();
+    //         if (xhr.status < 200 || xhr.status >= 300) {
+    //             alert('오류 발생');
+    //             return;
+    //         }
+    //     };
+    //     xhr.open('GET', url.toString());
+    //     xhr.send();
+    //     Loading.show(0);
+    // }
     if (movie && theater && date) {
         const xhr = new XMLHttpRequest();
         const url = new URL(location.href);
@@ -82,6 +279,62 @@ function checkScreen() {
         Loading.show(0);
     }
 }
+
+// function checkScreen() {
+//     const {movie, theater, date} = $data;
+//     if (movie && theater && date) {
+//         const xhr = new XMLHttpRequest();
+//         const url = new URL(location.href);
+//         url.searchParams.set('moTitle', movie);
+//         url.searchParams.set('thName', theater);
+//         url.searchParams.set('scStartDate', date);
+//         xhr.onreadystatechange = () => {
+//             if (xhr.readyState !== XMLHttpRequest.DONE) {
+//                 return;
+//             }
+//             Loading.hide();
+//             if (xhr.status < 200 || xhr.status >= 300) {
+//                 alert('오류 발생');
+//                 return;
+//             }
+//             $firstButton.classList.remove('after');
+//             const $oldText = $theaterTime.innerText;
+//             $theaterCinema.innerText = '';
+//             const $screen = Array.from(new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelectorAll('.time-table'));
+//             const $cinemaType = document.getElementById('cinema-type');
+//             const $rating = document.getElementById('rating');
+//             $rating.classList.add('hidden');
+//             $cinemaType.innerText = '';
+//             $timeContainer.innerHTML = '';
+//             $screen.forEach((screen) => {
+//                 $timeContainer.append(screen);
+//                 const $times = Array.from(screen.querySelectorAll(':scope > .times'))
+//                 $times.forEach((time) => {
+//                     const $items = Array.from(time.querySelectorAll(':scope > .item'));
+//                     $items.forEach((item) => {
+//                         item.onclick = () => {
+//                             const $cinema = screen.querySelector(':scope > .title > .cinema');
+//                             const $type = screen.querySelector(':scope > .title > .cinema-type');
+//                             const $text = item.querySelector(':scope > .time > .text');
+//                             document.querySelectorAll('.item.select').forEach((selectedItem) => {
+//                                 selectedItem.classList.remove('select');
+//                             });
+//                             item.classList.add('select');
+//                             $theaterCinema.innerText = $cinema.innerText;
+//                             $cinemaType.innerText = $type.innerText;
+//                             $theaterTime.innerText = $oldText + $text.innerText;
+//                             $rating.classList.remove('hidden');
+//                             $firstButton.classList.add('after');
+//                         }
+//                     })
+//                 })
+//             })
+//         };
+//         xhr.open('GET', url.toString());
+//         xhr.send();
+//         Loading.show(0);
+//     }
+// }
 
 // 영화 정보를 불러오는 함수
 function movieItem($movieItems) {

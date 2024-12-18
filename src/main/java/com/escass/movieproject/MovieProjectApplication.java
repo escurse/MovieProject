@@ -74,6 +74,15 @@ public class MovieProjectApplication {
 //             iframe 요소 찾기 및 전환
 //            WebElement iframe = driver.findElement(By.id("ifrm_movie_time_table"));
 //            driver.switchTo().frame(iframe);
+
+//            WebElement movies = driver.findElement(By.cssSelector("#menu > .last"));
+//            movies.click();
+//            List<WebElement> info = driver.findElements(By.cssSelector(".info-contents"));
+//            int i = 1;
+//            for (WebElement infoElement : info) {
+//            System.out.println(i + "번째 하는 중: " + infoElement.getText());
+//            i++;
+//            }
 //
 //            // 영화 시간표 요소 가져오기
 //            List<WebElement> movieElements = driver.findElements(By.cssSelector("#slider > .item-wrap.on > .item > li"));
@@ -236,4 +245,3 @@ public class MovieProjectApplication {
 //        System.out.println(element);
 //        System.out.println(doc);
 // div class="info-alert"
-

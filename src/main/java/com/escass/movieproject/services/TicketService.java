@@ -103,7 +103,7 @@ public class TicketService {
         // 결과
         // [2024-12]
 
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new TreeMap<>();
         for (String title : sortSet) {
             List<String> list = new ArrayList<>();
             for (String day : sortedSet) {
@@ -137,9 +137,9 @@ public class TicketService {
         private final String cgvName;
         private final String cgvCode;
 
-        TheaterCode(String cgvName, String cgvNumber) {
+        TheaterCode(String cgvName, String cgvCode) {
             this.cgvName = cgvName;
-            this.cgvCode = cgvNumber;
+            this.cgvCode = cgvCode;
         }
     }
     // endregion
@@ -234,18 +234,13 @@ public class TicketService {
 
                     // date 출력
                     if (date != null) {
-                        System.out.println(date);  // 예: 20241216
                         dates.add(date);
                     }
-
-                    // movie URL 출력
-                    System.out.println(movie);
-
                 }
                 System.out.println(dates);
                 System.out.println(theater.cgvName);
 
-                // 15일 간의 날짜를 반복하며 크롤링
+                // 오늘을 기준으로 해당 영화관에 존재하는 날짜만 크롤링
                 for (int i = 0; i < dates.toArray().length; i++) {
                     String date = dates.toArray()[i].toString(); // YYYYMMDD 형식의 날짜
                     System.out.println("상영일: " + date);

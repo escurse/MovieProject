@@ -303,7 +303,10 @@
                 <span class="stretch"></span>
                 <a href="#" class="find">실시간 빠른 길 찾기</a>
             </div>
-            <div class="bus detail">
+            <div class="bus detail"
+                 th:each="map : ${maps}"
+                 th:if="${map.key == 'CGV대구'}"
+                 th:utext="${map.value[0]}">
                 <p>1) 지하철&nbsp;: 3호선-북구청역 1번 출구에서 약 750M</p>
                 <p>2) 버스</p>
                 <p>-이마트칠성점앞 : 300, 349, 836, 동구2, 칠곡2</p>
@@ -315,7 +318,10 @@
                 <span class="text">주차안내</span>
                 <span class="stretch"></span>
             </div>
-            <div class="car detail">
+            <div class="car detail"
+                 th:each="map : ${maps}"
+                 th:if="${map.key == 'CGV대구'}"
+                 th:utext="${map.value[1]}">
                 <p>
                     '■ 주차 안내<br>
                     &nbsp;- 스펙트럼시티 지하 4층, 5층 이용 시, 무료주차 가능<br>

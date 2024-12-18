@@ -57,16 +57,33 @@
                 </div>
                 <div class="body theater">
                     <div class="content">
-                        <ul class="region-container">
+                        <ul class="region-container"
+                            th:if="${movieVos == null}">
                             <li th:each="region : ${regions}"
                                 th:text="${region.getRegName() + '(' + region.getTheaterCount() + ')'}"
-                                class="region"></li>
+                                class="region" data-id="region"></li>
                         </ul>
-                        <ul class="theater-container">
+                        <ul class="region-container"
+                            th:if="${movieVos != null}"
+                            th:each="vos : ${movieVos}">
+                            <li th:text="${vos.key[4] + '(' + vos.key[3] + ')'}"
+                                class="region" data-id="region"></li>
+                        </ul>
+                        <ul class="theater-container"
+                            th:if="${movieVos == null}">
                             <li class="theater"
                                 th:if="theaters != null"
                                 th:each="theater : ${theaters}">
                                 <span th:text="${theater.getThName().substring(3, theater.getThName().length())}"
+                                      class="text"></span>
+                            </li>
+                        </ul>
+                        <ul class="theater-container"
+                            th:if="${movieVos != null}"
+                            th:each="vos : ${movieVos}">
+                            <li class="theater"
+                                th:each="vo : ${vos.value}">
+                                <span th:text="${vo.key.substring(3, vo.key.length())}"
                                       class="text"></span>
                             </li>
                         </ul>
@@ -78,37 +95,77 @@
                     <div class="day"></div>
                 </div>
                 <div class="body day">
-                    <div class="content">
-                        <ul class="day-container" th:each="map : ${maps}">
-                            <li class="title">
-                                <span class="year" th:text="${map.getKey().split('-')[0]}"></span>
-                                <span class="month" th:text="${map.getKey().split('-')[1]}"></span>
-                            </li>
-                            <li class="day" th:each="maps : ${map.getValue().split(',')}">
-                                <div class="day-container"
-                                     th:each="weekday : ${maps}">
+                    <div class="content" th:if="${movieVos == null}">
+                        <div class="content-container">
+                            <ul class="day-container" th:each="map : ${maps}">
+                                <li class="title">
+                                    <span class="year" th:text="${map.getKey().split('-')[0]}"></span>
+                                    <span class="month" th:text="${map.getKey().split('-')[1]}"></span>
+                                </li>
+                                <li class="day" th:each="maps : ${map.getValue().split(',')}">
+                                    <div class="day-container"
+                                         th:each="weekday : ${maps}">
                                     <span class="week"
                                           th:if="${!weekday.split('-')[1].equals('토') && !weekday.split('-')[1].equals('일')}"
                                           th:text="${weekday.split('-')[1]}"></span>
-                                    <span class="week saturday"
-                                          th:if="${weekday.split('-')[1].equals('토')}"
-                                          th:text="${weekday.split('-')[1]}"></span>
-                                    <span class="week sunday"
-                                          th:if="${weekday.split('-')[1].equals('일')}"
-                                          th:text="${weekday.split('-')[1]}"></span>
-                                    <span class="stretch"></span>
-                                    <span class="date"
-                                          th:if="${!weekday.split('-')[1].equals('토') && !weekday.split('-')[1].equals('일')}"
-                                          th:text="${weekday.split('-')[0]}"></span>
-                                    <span class="date saturday"
-                                          th:if="${weekday.split('-')[1].equals('토')}"
-                                          th:text="${weekday.split('-')[0]}"></span>
-                                    <span class="date sunday"
-                                          th:if="${weekday.split('-')[1].equals('일')}"
-                                          th:text="${weekday.split('-')[0]}"></span>
-                                </div>
-                            </li>
-                        </ul>
+                                        <span class="week saturday"
+                                              th:if="${weekday.split('-')[1].equals('토')}"
+                                              th:text="${weekday.split('-')[1]}"></span>
+                                        <span class="week sunday"
+                                              th:if="${weekday.split('-')[1].equals('일')}"
+                                              th:text="${weekday.split('-')[1]}"></span>
+                                        <span class="stretch"></span>
+                                        <span class="date"
+                                              th:if="${!weekday.split('-')[1].equals('토') && !weekday.split('-')[1].equals('일')}"
+                                              th:text="${weekday.split('-')[0]}"></span>
+                                        <span class="date saturday"
+                                              th:if="${weekday.split('-')[1].equals('토')}"
+                                              th:text="${weekday.split('-')[0]}"></span>
+                                        <span class="date sunday"
+                                              th:if="${weekday.split('-')[1].equals('일')}"
+                                              th:text="${weekday.split('-')[0]}"></span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="content"
+                         th:if="${movieVos != null}"
+                         th:each="vos : ${movieVos}">
+                        <div th:each="days : ${vos.value}" class="content-container">
+                            <ul class="day-container"
+                                th:each="day : ${days.getValue()}">
+                                <li class="title">
+                                <span class="year"
+                                      th:text="${day.key.split('-')[0]}"></span>
+                                    <span class="month" th:text="${day.key.split('-')[1]}"></span>
+                                </li>
+                                <li class="day" th:each="maps : ${day.value.split(',')}">
+                                    <div class="day-container"
+                                         th:each="weekday : ${maps}">
+                                        <span class="week"
+                                              th:if="${!weekday.split('-')[1].equals('토') && !weekday.split('-')[1].equals('일')}"
+                                              th:text="${weekday.split('-')[1]}"></span>
+                                        <span class="week saturday"
+                                              th:if="${weekday.split('-')[1].equals('토')}"
+                                              th:text="${weekday.split('-')[1]}"></span>
+                                        <span class="week sunday"
+                                              th:if="${weekday.split('-')[1].equals('일')}"
+                                              th:text="${weekday.split('-')[1]}"></span>
+                                        <span class="stretch"></span>
+                                        <span class="date"
+                                              th:if="${!weekday.split('-')[1].equals('토') && !weekday.split('-')[1].equals('일')}"
+                                              th:text="${weekday.split('-')[0]}"></span>
+                                        <span class="date saturday"
+                                              th:if="${weekday.split('-')[1].equals('토')}"
+                                              th:text="${weekday.split('-')[0]}"></span>
+                                        <span class="date sunday"
+                                              th:if="${weekday.split('-')[1].equals('일')}"
+                                              th:text="${weekday.split('-')[0]}"></span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -607,19 +664,17 @@
         <div class="containers">
             <div class="movie-container" data-id="movieInfo"></div>
             <div class="posters info hidden" data-id="movieInfo">
-                <div th:if="${movieVos != null}"
-                     th:each="vo : ${movieVos}"
+                <div th:each="vo : ${movieVos}"
                      class="poster">
-                    <img class="movie" th:src="${vo.getMImgUrl()}"
+                    <img class="movie" th:src="${vo.key[1]}"
                          alt="포스터">
                 </div>
-                <div th:if="${movieVos != null}"
-                     th:each="vo : ${movieVos}"
+                <div th:each="vo : ${movieVos}"
                      class="movie-info">
-                    <div th:text="${vo.getMoTitle()}" class="title"></div>
+                    <a href="#" th:text="${vo.key[0]}" class="title"></a>
                     <div class="stretch"></div>
                     <div id="cinema-type" class="cinema-type"></div>
-                    <div id="rating" th:text="${vo.getRaGrade()}" class="rating hidden"></div>
+                    <div id="rating" th:text="${vo.key[2]}" class="rating hidden"></div>
                 </div>
             </div>
         </div>

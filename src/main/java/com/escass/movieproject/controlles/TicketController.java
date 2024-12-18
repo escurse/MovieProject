@@ -15,10 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/ticket")
@@ -34,10 +31,47 @@ public class TicketController {
                                  @RequestParam(value = "scStartDate", required = false) String scStartDate) {
         ModelAndView modelAndView = new ModelAndView();
         MovieVo[] movies = this.ticketService.selectAllMoviesByRating();
-        MovieVo[] movieVos = this.ticketService.selectAllMovies(moTitle);
         RegionVo[] regions = this.ticketService.selectRegionAndTheaterCount();
         TheaterEntity[] theaters = this.theaterService.getTheatersByRegion(region);
         Map<String, String> maps = this.ticketService.getWeekdays();
+        if (moTitle != null && thName == null && scStartDate == null) {
+            MovieVo[] movieVos = this.ticketService.selectAllMovies(moTitle);
+            Map<List<String>, Map<String, Map<String, String>>> vos = new HashMap<>();
+            for (MovieVo vo : movieVos) {
+                List<String> keys = new ArrayList<>();
+                Map<String, Map<String, String>> contents = new HashMap<>();
+                keys.add(vo.getMoTitle());
+                // 영화제목
+                keys.add(vo.getMImgUrl());
+                // 포스터 이미지
+                keys.add(vo.getRaGrade());
+                // 등급
+                keys.add(String.valueOf(vo.getTheaterCount()));
+                // 영화관 갯수
+                keys.add(vo.getRegName());
+                // 지역 이름
+                contents.computeIfAbsent(vo.getThName(), k -> new HashMap<>());
+                contents.put(vo.getThName(), maps);
+                vos.computeIfAbsent(keys, k -> new HashMap<>());
+                vos.put(keys, contents);
+            }
+            modelAndView.addObject("movieVos", vos);
+        }
+        if (moTitle == null && thName != null && scStartDate == null) {
+
+        }
+        if (moTitle == null && thName == null && scStartDate != null) {
+
+        }
+        if (moTitle != null && thName != null && scStartDate == null) {
+
+        }
+        if (moTitle != null && thName == null && scStartDate != null) {
+
+        }
+        if (moTitle == null && thName != null && scStartDate != null) {
+
+        }
         if (moTitle != null && thName != null && scStartDate != null) {
             ScreenVo[] screens = this.ticketService.selectScreenDatesByMovieAndTheaterAndDate(moTitle, thName, scStartDate);
             Map<List<String>, List<List<String>>> times = new HashMap<>();
@@ -57,7 +91,6 @@ public class TicketController {
             modelAndView.addObject("times", times);
         }
         modelAndView.addObject("movies", movies);
-        modelAndView.addObject("movieVos", movieVos);
         modelAndView.addObject("regions", regions);
         modelAndView.addObject("theaters", theaters);
         modelAndView.addObject("maps", maps);
@@ -75,7 +108,7 @@ public class TicketController {
     }
 
     @RequestMapping(value = "/crawling", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView Crawl(ScreenEntity screen) {
+    public ModelAndView Crawling(ScreenEntity screen) {
         ModelAndView modelAndView = new ModelAndView();
         this.ticketService.Crawl(screen);
         modelAndView.setViewName("ticket/crawling");

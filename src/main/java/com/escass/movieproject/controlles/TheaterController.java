@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+import java.util.Map;
+
 @Slf4j
 @Controller
 @RequestMapping(value = "/theater")
@@ -23,16 +26,13 @@ import org.springframework.web.servlet.ModelAndView;
 public class TheaterController {
     private final TheaterService theaterService;
 
-//    @Scheduled(cron = "0 0 0 * * *")
-//    public void doCrawl() {
-//         상영 일정을 크롤링 한다.
-//    }
-
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView getIndex() {
         ModelAndView modelAndView = new ModelAndView();
         RegionEntity[] regions = this.theaterService.findRegionAll();
+        Map<String, List<String>> maps = this.theaterService.Crawl();
         modelAndView.addObject("regions", regions);
+        modelAndView.addObject("maps", maps);
         modelAndView.setViewName("theater/index");
         return modelAndView;
     }
