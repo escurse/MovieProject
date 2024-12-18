@@ -28,6 +28,10 @@ public interface TicketMapper {
 
     MovieVo[] selectAllMoviesByMoTitle(@Param(value = "moTitle") String moTitle);
 
+    MovieVo[] selectAllMoviesByThName(@Param(value = "thName") String thName);
+
+    MovieVo[] selectAllMoviesByscStartDate(@Param(value = "scStartDate") String scStartDate);
+
     MovieVo[] selectAllMoviesByRating();
 
     MovieVo[] selectAllMoviesByKorea();

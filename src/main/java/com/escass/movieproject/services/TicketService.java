@@ -50,6 +50,20 @@ public class TicketService {
         return this.ticketMapper.selectAllMoviesByMoTitle(moTitle);
     }
 
+    public MovieVo[] selectAllMoviesByThName(String thName) {
+        if (thName == null || thName.isEmpty()) {
+            return null;
+        }
+        return this.ticketMapper.selectAllMoviesByThName(thName);
+    }
+
+    public MovieVo[] selectAllMoviesByscStartDate(String scStartDate) {
+        if (scStartDate == null || scStartDate.isEmpty()) {
+            return null;
+        }
+        return this.ticketMapper.selectAllMoviesByscStartDate(scStartDate);
+    }
+
     public MovieVo[] selectAllMoviesByRating() {
         MovieVo[] movies = this.ticketMapper.selectAllMoviesByRating();
         for (MovieVo movie : movies) {
@@ -80,6 +94,84 @@ public class TicketService {
 
     public RegionVo[] selectRegionAndTheaterCount() {
         return this.ticketMapper.selectRegionAndTheaterCount();
+    }
+
+    public Map<String, String> getWeekdaysByMoTitle(String moTitle) {
+        // 화면의 시작 날짜들을 가져옴
+        MovieVo[] screens = this.ticketMapper.selectAllMoviesByMoTitle(moTitle);
+
+        // 고유 날짜를 저장할 Set
+        SortedSet<String> sortedSet = new TreeSet<>();
+
+        // 날짜 리스트를 돌면서 고유 날짜만 저장
+        for (MovieVo screen : screens) {
+            sortedSet.add(screen.getScStartDate().toString().split("T")[0]);
+        }
+        // 결과
+        // [2024-12-11, 2024-12-12, 2024-12-13, 2024-12-14, 2024-12-15, 2024-12-16, 2024-12-17, 2024-12-18, 2024-12-19, 2024-12-20, 2024-12-21, 2024-12-22, 2024-12-23, 2024-12-24, 2024-12-25, 2024-12-26]
+
+        SortedSet<String> sortSet = new TreeSet<>();
+        for (String sort : sortedSet) {
+            sortSet.add(sort.substring(0, 7));
+        }
+        // 결과
+        // [2024-12]
+
+        Map<String, String> map = new TreeMap<>();
+        for (String title : sortSet) {
+            List<String> list = new ArrayList<>();
+            for (String day : sortedSet) {
+                if (day.contains(title)) {
+                    LocalDate localDate = LocalDate.parse(day, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    list.add(day.split("-")[2] + "-" + localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN).split("요일")[0]);
+                }
+            }
+            map.put(title, list.toString().replace('[', ' ').replace(']', ' '));
+        }
+        // 결과
+        // 2024-12 [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+
+        // 결과 반환
+        return map;
+    }
+
+    public Map<String, String> getWeekdaysByThName(String thName) {
+        // 화면의 시작 날짜들을 가져옴
+        MovieVo[] screens = this.ticketMapper.selectAllMoviesByThName(thName);
+
+        // 고유 날짜를 저장할 Set
+        SortedSet<String> sortedSet = new TreeSet<>();
+
+        // 날짜 리스트를 돌면서 고유 날짜만 저장
+        for (MovieVo screen : screens) {
+            sortedSet.add(screen.getScStartDate().toString().split("T")[0]);
+        }
+        // 결과
+        // [2024-12-11, 2024-12-12, 2024-12-13, 2024-12-14, 2024-12-15, 2024-12-16, 2024-12-17, 2024-12-18, 2024-12-19, 2024-12-20, 2024-12-21, 2024-12-22, 2024-12-23, 2024-12-24, 2024-12-25, 2024-12-26]
+
+        SortedSet<String> sortSet = new TreeSet<>();
+        for (String sort : sortedSet) {
+            sortSet.add(sort.substring(0, 7));
+        }
+        // 결과
+        // [2024-12]
+
+        Map<String, String> map = new TreeMap<>();
+        for (String title : sortSet) {
+            List<String> list = new ArrayList<>();
+            for (String day : sortedSet) {
+                if (day.contains(title)) {
+                    LocalDate localDate = LocalDate.parse(day, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    list.add(day.split("-")[2] + "-" + localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN).split("요일")[0]);
+                }
+            }
+            map.put(title, list.toString().replace('[', ' ').replace(']', ' '));
+        }
+        // 결과
+        // 2024-12 [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+
+        // 결과 반환
+        return map;
     }
 
     public Map<String, String> getWeekdays() {
@@ -289,8 +381,8 @@ public class TicketService {
                                         break;
                                     }
                                     if (cinema.getText().contains("[CGV아트하우스]") ||
-                                        cinema.getText().contains("[영남이공대학교]") ||
-                                        cinema.getText().contains("[아트기획전관]")) {
+                                            cinema.getText().contains("[영남이공대학교]") ||
+                                            cinema.getText().contains("[아트기획전관]")) {
                                         result = cinema.getText();
                                         CinemaEntity artCinema = this.ticketMapper.selectCinemaNumByCinemaTitle(result.substring(0, 2), theater.cgvName);
                                         screen.setCiNum(artCinema.getCiNum());
