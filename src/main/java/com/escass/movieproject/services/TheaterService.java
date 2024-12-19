@@ -56,18 +56,7 @@ public class TheaterService {
         if (region == null) {
             return null;
         }
-        TheaterEntity[] theaters = this.theaterMapper.getTheatersByRegion(region);
-        String[] addrs;
-        for (TheaterEntity theater : theaters) {
-            addrs = theater.getThAddr().split("\n");
-            theater.setThAddr(Arrays.toString(addrs));
-        }
-        return theaters;
-    }
-
-    public Pair<Integer, Integer> getTheaterSeatCount(String theater) {
-        return Pair.of(this.theaterMapper.getCinemaCountByTheater(theater),
-                this.theaterMapper.getSeatCountByCinema(theater));
+        return this.theaterMapper.getTheatersByRegion(region);
     }
 
     @Transactional

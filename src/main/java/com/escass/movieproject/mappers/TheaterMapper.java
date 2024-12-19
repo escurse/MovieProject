@@ -13,8 +13,4 @@ public interface TheaterMapper {
     TheaterEntity[] getTheatersByRegion(@Param(value = "region") String region);
 
     TheaterVo[] selectAllTheaters(@Param(value = "theater") String theater);
-
-    int getCinemaCountByTheater(@Param(value = "theater") String theater);
-
-    int getSeatCountByCinema(@Param(value = "theater") String theater);
 }
