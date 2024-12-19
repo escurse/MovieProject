@@ -4,6 +4,7 @@ import com.escass.movieproject.entities.RegionEntity;
 import com.escass.movieproject.entities.TheaterEntity;
 import com.escass.movieproject.exceptions.TransactionalException;
 import com.escass.movieproject.mappers.TheaterMapper;
+import com.escass.movieproject.vos.TheaterVo;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
@@ -43,6 +44,10 @@ public class TheaterService {
         }
     }
 
+    public TheaterVo[] selectAllTheaters(String theater) {
+        return this.theaterMapper.selectAllTheaters(theater);
+    }
+
     public RegionEntity[] findRegionAll() {
         return this.theaterMapper.getRegionAll();
     }
@@ -71,7 +76,7 @@ public class TheaterService {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-blink-features=AutomationControlled");
         options.addArguments("--headless");
-        WebDriver driver = new ChromeDriver();
+        WebDriver driver = new ChromeDriver(options);
         Map<String, List<String>> maps = new HashMap<>();
         try {
             for (TheaterCode theater : TheaterCode.values()) {

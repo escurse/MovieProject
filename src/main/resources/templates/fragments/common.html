@@ -17,7 +17,7 @@
 </div>
 <header th:fragment="header" id="header" class="frame header">
     <h1>
-        <a href="#">
+        <a th:href="@{'/'}">
             <img src="/fragments/assets/images/jgv_logo.png" alt="로고">
         </a>
         <span class="text">DEEP DIVE SPACE</span>
@@ -30,22 +30,29 @@
                      alt="현대카드광고">
             </a>
         </li>
-        <li class="item">
-            <a href="#">
+        <li class="item" th:if="${session.user == null}">
+            <a th:href="@{'/user/login'}">
                 <img src="https://img.cgv.co.kr/R2014/images/common/ico/loginPassword.png"
                      alt="로그인">
                 <span class="text">로그인</span>
             </a>
         </li>
-        <li class="item">
-            <a href="">
+        <li class="item" th:if="${session.user != null}">
+            <a th:href="@{'/logout'}">
+                <img src="https://img.cgv.co.kr/R2014/images/common/ico/loginPassword.png"
+                     alt="로그아웃">
+                <span class="text">로그아웃</span>
+            </a>
+        </li>
+        <li class="item" th:if="${session.user == null}">
+            <a th:href="@{'/user/register'}">
                 <img src="https://img.cgv.co.kr/R2014/images/common/ico/loginJoin.png"
                      alt="회원가입">
                 <span class="text">회원가입</span>
             </a>
         </li>
         <li class="item">
-            <a href="">
+            <a th:href="${session.user != null ? '/user/myPage' : '/user/login'}">
                 <img src="https://img.cgv.co.kr/R2014/images/common/ico/loginMember.png"
                      alt="private">
                 <span class="text">MY JGV</span>
@@ -65,7 +72,7 @@
         <ul class="nav-menu">
             <li class="item">
                 <h2>
-                    <a href="#">영화</a>
+                    <a href="/movies/movieList">영화</a>
                 </h2>
             </li>
             <li class="item">
@@ -96,13 +103,15 @@
         </ul>
         <div class="-spring"></div>
         <div class="search-wrapper">
-            <label class="search">
-                <input type="text" class="keyword" name="keyword" placeholder="영화를 검색해 주세요">
-                <button>
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAADYElEQVR4nO2aTUhVQRiGH29mikk/VCpBoJvAIErLFkVSEVIWhbVoUYuidrYQCiLSogKlH12ULdsbLXLVD4UG/RAlZCauCoosoeAWVKbdujHwXhguKmrOOaOeBw4cEM/7znfP+eb7ZgYiIiIiIiIiHDMLKAbKgC1Ahe4LmcYDrgSagE7gF5Ac4foGPAROA2uY4uQDDcCntEH+Bd4BL4D7QIcC82WYgPQANUAOU4hcoBH4aQ3kNXAG2Ki/j8RiYBdwFei3/t/cHwFieE6Ffl1j+g9wEyif4LMygWrguRWIx0ARnnICSMjoM6B0Ep+9D+jTs+PADjwiBrTInAlAvRLfZLMAuCWd38AhPKFFpn4AVY61MoBzVjI9gAevfVKD3xCg7jHpDqmWCC3hJXRtD0H/gjVDBF5E5VrZvo5wMHnmgTy0BS3eKOGnIc/NS1U9JoOcGfJV5JhXfxXhU6sAdClJOqdBgq34wRzggzztdC2WadX2poPzheNB5YJK63XziUJ9kmZaXOhSqCnkzD8aHfK216VIp0TW4x918nbFlUAMGFCX52N/vk0BaHclUCSBt/hJyt9HVwJrJfAEP8mRv0FXApskcA9/GZLHbFfNT1LreD6SYS3IzHYhUGqt9vjIXPkzq87Oio2kKkEfKZG/Ny5FvkrELE/5RrW83Qmi2qrCPy7Lm1kyc0a9RJrxj1fyttWlSJlE+hyt/E6UFdaSeZZrsZ6geu9x0CxP14MQq/GsIjTbad/laXVQJWe/BE3mDZtrQWT/dA5L9D0wj/BYZy3NrwxSOAY8UhBuEA7z1ZkaD5fCaj/jMnAqYO0sNWVJTX9Omp+xUKWNSmPkKMENvlWan33YLj+ojUpj6LzjjRLz2t+1zgv0AkvwgP1WL24MFjjQKFejk/rle3Xf7UsQNlvTY1yfxGRUZYt0ZCZhffPFGnS3b0EosA4xJLWBWjtBcyVqcFJFTkLZ3k54XgYBbVR2WYEY0krSSTUry7TLZBdXy4HdwEXgZdppsdujzPPeBiFDgWiz8kP6NWDNIulXXLX9WMpbb4OQwmxX7dGmRbu6STsog0pwJoGe1Vsy3vzhfRCGIzvtU/hfpmQQXHSHqcWR3ul8Bnk0oiAQBWHYnJDHDA9CKTOUPFWWEREREREREQzLP0nrHdyN6qzFAAAAAElFTkSuQmCC"
-                         alt="external-search-logistic-delivery-kiranshastry-solid-kiranshastry">
-                </button>
-            </label>
+            <form class="search-form" method="GET" action="/movies/search">
+                <label class="search">
+                    <input type="text" class="keyword" name="keyword" placeholder="영화를 검색해 주세요">
+                    <button>
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAADYElEQVR4nO2aTUhVQRiGH29mikk/VCpBoJvAIErLFkVSEVIWhbVoUYuidrYQCiLSogKlH12ULdsbLXLVD4UG/RAlZCauCoosoeAWVKbdujHwXhguKmrOOaOeBw4cEM/7znfP+eb7ZgYiIiIiIiIiHDMLKAbKgC1Ahe4LmcYDrgSagE7gF5Ac4foGPAROA2uY4uQDDcCntEH+Bd4BL4D7QIcC82WYgPQANUAOU4hcoBH4aQ3kNXAG2Ki/j8RiYBdwFei3/t/cHwFieE6Ffl1j+g9wEyif4LMygWrguRWIx0ARnnICSMjoM6B0Ep+9D+jTs+PADjwiBrTInAlAvRLfZLMAuCWd38AhPKFFpn4AVY61MoBzVjI9gAevfVKD3xCg7jHpDqmWCC3hJXRtD0H/gjVDBF5E5VrZvo5wMHnmgTy0BS3eKOGnIc/NS1U9JoOcGfJV5JhXfxXhU6sAdClJOqdBgq34wRzggzztdC2WadX2poPzheNB5YJK63XziUJ9kmZaXOhSqCnkzD8aHfK216VIp0TW4x918nbFlUAMGFCX52N/vk0BaHclUCSBt/hJyt9HVwJrJfAEP8mRv0FXApskcA9/GZLHbFfNT1LreD6SYS3IzHYhUGqt9vjIXPkzq87Oio2kKkEfKZG/Ny5FvkrELE/5RrW83Qmi2qrCPy7Lm1kyc0a9RJrxj1fyttWlSJlE+hyt/E6UFdaSeZZrsZ6geu9x0CxP14MQq/GsIjTbad/laXVQJWe/BE3mDZtrQWT/dA5L9D0wj/BYZy3NrwxSOAY8UhBuEA7z1ZkaD5fCaj/jMnAqYO0sNWVJTX9Omp+xUKWNSmPkKMENvlWan33YLj+ojUpj6LzjjRLz2t+1zgv0AkvwgP1WL24MFjjQKFejk/rle3Xf7UsQNlvTY1yfxGRUZYt0ZCZhffPFGnS3b0EosA4xJLWBWjtBcyVqcFJFTkLZ3k54XgYBbVR2WYEY0krSSTUry7TLZBdXy4HdwEXgZdppsdujzPPeBiFDgWiz8kP6NWDNIulXXLX9WMpbb4OQwmxX7dGmRbu6STsog0pwJoGe1Vsy3vzhfRCGIzvtU/hfpmQQXHSHqcWR3ul8Bnk0oiAQBWHYnJDHDA9CKTOUPFWWEREREREREQzLP0nrHdyN6qzFAAAAAElFTkSuQmCC"
+                             alt="external-search-logistic-delivery-kiranshastry-solid-kiranshastry">
+                    </button>
+                </label>
+            </form>
         </div>
     </div>
 </nav>

@@ -1436,7 +1436,7 @@
   cursor: pointer;
   text-decoration: underline;
 }
-.control-bar > .container > .containers > .posters > .movie-info > .rating.hidden {
+.control-bar > .container > .containers > .posters > .movie-info > .unique-rating.hidden {
   display: none;
 }
 .control-bar > .container > .theater-container {
