@@ -85,7 +85,7 @@ public class TicketController {
             modelAndView.addObject("theaterVos", vos);
         }
         if (moTitle == null && thName == null && scStartDate != null) {
-            MovieVo[] movieVos = this.ticketService.selectAllMoviesByscStartDate(scStartDate);
+            MovieVo[] movieVos = this.ticketService.selectAllMoviesByScStartDate(scStartDate);
             List<Object[]> vos = new ArrayList<>();
             SortedSet<String> thKeys = new TreeSet<>();
             Map<String, Boolean> map = new HashMap<>();
@@ -114,7 +114,7 @@ public class TicketController {
             modelAndView.addObject("moThVos", vos);
         }
         if (moTitle != null && thName == null && scStartDate != null) {
-            MovieVo[] movieVos = this.ticketService.selectAllMoviesBymoTitleAndscStartDate(moTitle, scStartDate);
+            MovieVo[] movieVos = this.ticketService.selectAllMoviesByMoTitleAndScStartDate(moTitle, scStartDate);
             List<Object[]> vos = new ArrayList<>();
             SortedSet<String> thKeys = new TreeSet<>();
             for (MovieVo vo : movieVos) {

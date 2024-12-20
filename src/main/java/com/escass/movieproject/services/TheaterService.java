@@ -1,6 +1,7 @@
 package com.escass.movieproject.services;
 
 import com.escass.movieproject.entities.RegionEntity;
+import com.escass.movieproject.entities.ScreenEntity;
 import com.escass.movieproject.entities.TheaterEntity;
 import com.escass.movieproject.exceptions.TransactionalException;
 import com.escass.movieproject.mappers.TheaterMapper;
@@ -16,6 +17,9 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.*;
 
 @Service
@@ -59,8 +63,48 @@ public class TheaterService {
         return this.theaterMapper.getTheatersByRegion(region);
     }
 
+    public Map<String, String> getWeekdays(String theater) {
+        // 화면의 시작 날짜들을 가져옴
+        TheaterVo[] screens = this.theaterMapper.selectAllTheaters(theater);
+
+        // 고유 날짜를 저장할 Set
+        SortedSet<String> sortedSet = new TreeSet<>();
+
+        // 날짜 리스트를 돌면서 고유 날짜만 저장
+        for (TheaterVo screen : screens) {
+            sortedSet.add(screen.getScStartDate().toString().split("T")[0]);
+        }
+        // 결과
+        // [2024-12-11, 2024-12-12, 2024-12-13, 2024-12-14, 2024-12-15, 2024-12-16, 2024-12-17, 2024-12-18, 2024-12-19, 2024-12-20, 2024-12-21, 2024-12-22, 2024-12-23, 2024-12-24, 2024-12-25, 2024-12-26]
+
+        SortedSet<String> sortSet = new TreeSet<>();
+        for (String sort : sortedSet) {
+            sortSet.add(sort.substring(0, 7));
+        }
+        // 결과
+        // [2024-12]
+
+        Map<String, String> map = new TreeMap<>();
+        for (String title : sortSet) {
+            List<String> list = new ArrayList<>();
+            for (String day : sortedSet) {
+                if (day.contains(title)) {
+                    LocalDate localDate = LocalDate.parse(day, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    list.add(day.split("-")[2] + "-" + localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN).split("요일")[0]);
+                }
+            }
+            title = title.substring(5, 7);
+            map.put(title, list.toString().replace('[', ' ').replace(']', ' '));
+        }
+        // 결과
+        // 2024-12 [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+
+        // 결과 반환
+        return map;
+    }
+
     @Transactional
-    public Map<String, List<String>> Crawl() throws TransactionalException {
+    public Map<String, List<String>> Crawl(String theater) throws TransactionalException {
         System.setProperty("webdriver.chrome.driver", "./chromedriver.exe");
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-blink-features=AutomationControlled");
@@ -68,17 +112,19 @@ public class TheaterService {
         WebDriver driver = new ChromeDriver(options);
         Map<String, List<String>> maps = new HashMap<>();
         try {
-            for (TheaterCode theater : TheaterCode.values()) {
-                String dateUrl = "http://www.cgv.co.kr/theaters/?areacode=11&theaterCode=" + theater.cgvCode;
-                driver.get(dateUrl);
-                WebElement movies = driver.findElement(By.cssSelector("#menu > .last"));
-                movies.click();
-                List<WebElement> info = driver.findElements(By.cssSelector(".info-contents"));
-                for (WebElement infoElement : info) {
-                    maps.computeIfAbsent(theater.cgvName, k -> new ArrayList<>()).add(infoElement.getAttribute("outerHTML"));
+            for (TheaterCode thCode : TheaterCode.values()) {
+                if (thCode.cgvName.equals(theater)) {
+                    String dateUrl = "http://www.cgv.co.kr/theaters/?areacode=11&theaterCode=" + thCode.cgvCode;
+                    driver.get(dateUrl);
+                    WebElement movies = driver.findElement(By.cssSelector("#menu > .last"));
+                    movies.click();
+                    List<WebElement> info = driver.findElements(By.cssSelector(".info-contents"));
+                    for (WebElement infoElement : info) {
+                        maps.computeIfAbsent(theater, k -> new ArrayList<>()).add(infoElement.getAttribute("outerHTML"));
+                    }
+                    return maps;
                 }
             }
-            return maps;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

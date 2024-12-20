@@ -38,6 +38,11 @@ public class TicketService {
 
     // 시간 정보를 찾아오는 것.
     public ScreenVo[] selectScreenDatesByMovieAndTheaterAndDate(String moTitle, String thName, String scStartDate) {
+        if (moTitle == null || moTitle.isEmpty() || moTitle.length() > 100 ||
+            thName == null || thName.isEmpty() || thName.length() > 30 ||
+            scStartDate == null || scStartDate.isEmpty() || scStartDate.length() > 10) {
+            return null;
+        }
         TheaterEntity theater = this.ticketMapper.selectTheater(thName);
         MovieEntity movie = this.ticketMapper.selectMovieNumByMovieTitle(moTitle);
         return this.ticketMapper.selectScreenDatesByMovieAndTheaterAndDate(movie.getMoNum(), theater.getThNum(), scStartDate);
@@ -57,14 +62,14 @@ public class TicketService {
         return this.ticketMapper.selectAllMoviesByThName(thName);
     }
 
-    public MovieVo[] selectAllMoviesByscStartDate(String scStartDate) {
+    public MovieVo[] selectAllMoviesByScStartDate(String scStartDate) {
         if (scStartDate == null || scStartDate.isEmpty()) {
             return null;
         }
         return this.ticketMapper.selectAllMoviesByscStartDate(scStartDate);
     }
 
-    public MovieVo[] selectAllMoviesBymoTitleAndscStartDate(String moTitle, String scStartDate) {
+    public MovieVo[] selectAllMoviesByMoTitleAndScStartDate(String moTitle, String scStartDate) {
         if (moTitle == null || moTitle.isEmpty() ||
                 scStartDate == null || scStartDate.isEmpty()) {
             return null;
