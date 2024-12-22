@@ -3,9 +3,12 @@ package com.escass.movieproject.controlles;
 import com.escass.movieproject.entities.RegionEntity;
 import com.escass.movieproject.entities.TheaterEntity;
 import com.escass.movieproject.services.TheaterService;
+import com.escass.movieproject.vos.ScreenDataVo;
+import com.escass.movieproject.vos.ScreenVo;
 import com.escass.movieproject.vos.TheaterVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Slf4j
@@ -25,14 +31,15 @@ public class TheaterController {
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView getIndex(
             @RequestParam(value = "region", required = false) String region,
-            @RequestParam(value = "theater", required = false) String theater) {
+            @RequestParam(value = "theater", required = false) String theater,
+            @RequestParam(value = "date", required = false) String date) {
         ModelAndView modelAndView = new ModelAndView();
         RegionEntity[] regions = this.theaterService.findRegionAll();
         TheaterEntity[] theaters = this.theaterService.getTheatersByRegion(region);
         if (theater != null) {
             TheaterVo[] theaterVos = this.theaterService.selectAllTheaters(theater);
             Map<String, String> maps = this.theaterService.getWeekdays(theater);
-            Map<String, List<String>> infos = this.theaterService.Crawl(theater);
+            // Map<String, List<String>> infos = this.theaterService.Crawl(theater);
             Set<String> keys = new LinkedHashSet<>();
             List<Object[]> values = new ArrayList<>();
             Set<String> types = new LinkedHashSet<>();
@@ -50,7 +57,11 @@ public class TheaterController {
             }
             values.add(new Object[]{keys, types, maps});
             modelAndView.addObject("theaterVos", values);
-            modelAndView.addObject("maps", infos);
+            // modelAndView.addObject("maps", infos);
+        }
+        if (date != null && theater != null) {
+            Map<Set<String>, Map<Set<String>, Set<String>>> screenVos = this.theaterService.selectAllScreens(date, theater);
+            modelAndView.addObject("screenVos", screenVos);
         }
         modelAndView.addObject("regions", regions);
         modelAndView.addObject("theaters", theaters);

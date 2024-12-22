@@ -502,13 +502,29 @@
   background-attachment: scroll;
 }
 #main > .information > .cinema-info > .items > .item > .movie-container > .text {
+  color: #000;
   font-size: 1.1rem;
   font-weight: 500;
 }
-#main > .information > .cinema-info > .items > .item > .movie-container > .able {
+#main > .information > .cinema-info > .items > .item > .movie-container > .date-notice {
+  display: flex;
+}
+#main > .information > .cinema-info > .items > .item > .movie-container > .date-notice > .able {
   padding: 0.1rem;
   border: 0.15rem solid #3e82a4;
   color: #3e82a4;
+  font-weight: 600;
+}
+#main > .information > .cinema-info > .items > .item > .movie-container > .date-notice > .reservation {
+  padding: 0.1rem;
+  border: 0.15rem solid #a16423;
+  color: #a16423;
+  font-weight: 600;
+}
+#main > .information > .cinema-info > .items > .item > .movie-container > .date-notice > .dDay {
+  padding: 0.1rem;
+  border: 0.15rem solid #fb4357;
+  color: #fb4357;
   font-weight: 600;
 }
 #main > .information > .cinema-info > .items > .item > .movie-container > .long-text {
@@ -539,6 +555,7 @@
   padding: 0.3rem 1rem;
   border: 0.1rem solid #cbcabe;
   cursor: pointer;
+  color: #333;
   align-items: center;
   display: flex;
   flex-direction: column;

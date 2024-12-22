@@ -129,6 +129,7 @@
                  LEFT JOIN `jgv`.`theater` ON cinema.th_num = theater.th_num
         LEFT JOIN `jgv`.`region` ON theater.reg_num = region.reg_num
         WHERE `mo_title` = #{moTitle}
+          AND `sc_start_date` > NOW()
     </select>
     <select id="selectScreenDatesByMovieAndTheaterAndDate"
             resultType="com.escass.movieproject.vos.ScreenVo">
@@ -149,6 +150,7 @@
         WHERE `screen`.`mo_num` = #{movie}
           AND `th_num` = #{theater}
           AND `sc_start_date` LIKE CONCAT('%', #{date}, '%')
+          AND `sc_start_date` > NOW()
     </select>
     <select id="selectTheater"
             resultType="com.escass.movieproject.entities.TheaterEntity">
@@ -187,6 +189,7 @@
                  LEFT JOIN `jgv`.`theater` ON cinema.th_num = theater.th_num
                  LEFT JOIN `jgv`.`region` ON theater.reg_num = region.reg_num
         WHERE `th_name` = #{thName}
+          AND `sc_start_date` > NOW()
     </select>
     <select id="selectAllMoviesByscStartDate"
             resultType="com.escass.movieproject.vos.MovieVo">
@@ -215,6 +218,7 @@
                  LEFT JOIN `jgv`.`theater` ON cinema.th_num = theater.th_num
                  LEFT JOIN `jgv`.`region` ON theater.reg_num = region.reg_num
         WHERE `sc_start_date` LIKE CONCAT('%', #{scStartDate}, '%')
+          AND `sc_start_date` > NOW()
     </select>
     <select id="selectAllMoviesByMoTitleAndThName"
             resultType="com.escass.movieproject.vos.MovieVo">
@@ -244,6 +248,7 @@
                  LEFT JOIN `jgv`.`region` ON theater.reg_num = region.reg_num
         WHERE `th_name` = #{thName}
           AND `mo_title` = #{moTitle}
+          AND `sc_start_date` > NOW()
     </select>
     <select id="selectAllMoviesByMoTitleAndScStartDate"
             resultType="com.escass.movieproject.vos.MovieVo">
@@ -273,6 +278,7 @@
                  LEFT JOIN `jgv`.`region` ON theater.reg_num = region.reg_num
         WHERE `sc_start_date` LIKE CONCAT('%', #{scStartDate}, '%')
           AND `mo_title` = #{moTitle}
+          AND `sc_start_date` > NOW()
     </select>
     <select id="selectAllMoviesByThNameAndScStartDate"
             resultType="com.escass.movieproject.vos.MovieVo">
@@ -302,5 +308,6 @@
                  LEFT JOIN `jgv`.`region` ON theater.reg_num = region.reg_num
         WHERE `sc_start_date` LIKE CONCAT('%', #{scStartDate}, '%')
           AND `th_name` = #{thName}
+          AND `sc_start_date` > NOW()
     </select>
 </mapper>

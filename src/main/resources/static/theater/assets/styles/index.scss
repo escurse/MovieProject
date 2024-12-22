@@ -613,17 +613,35 @@
               }
             }
 
-
             > .text {
+              color: #000;
               font-size: 1.1rem;
               font-weight: 500;
             }
 
-            > .able {
-              padding: 0.1rem;
-              border: 0.15rem solid #3e82a4;
-              color: #3e82a4;
-              font-weight: 600;
+            > .date-notice {
+              display: flex;
+
+              > .able {
+                padding: 0.1rem;
+                border: 0.15rem solid #3e82a4;
+                color: #3e82a4;
+                font-weight: 600;
+              }
+
+              > .reservation {
+                padding: 0.1rem;
+                border: 0.15rem solid #a16423;
+                color: #a16423;
+                font-weight: 600;
+              }
+
+              > .dDay {
+                padding: 0.1rem;
+                border: 0.15rem solid #fb4357;
+                color: #fb4357;
+                font-weight: 600;
+              }
             }
 
             > .long-text {
@@ -659,6 +677,7 @@
                 padding: 0.3rem 1rem;
                 border: 0.1rem solid #cbcabe;
                 cursor: pointer;
+                color: #333;
 
                 align-items: center;
                 display: flex;
