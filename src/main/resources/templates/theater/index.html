@@ -92,7 +92,7 @@
                         <div class="info-container">
                             <div class="theater-info">대구광역시 북구 칠성동2가 20-1 스펙트럼시티 4층<br>대구광역시 북구 침산로 93 스펙트럼시티 4층</div>
                         </div>
-                        <a href="#" class="theater-info guide" target="_blank">위치 / 주차 안내 ></a>
+                        <a href="#menu" class="theater-info guide" target="_self">위치 / 주차 안내 ></a>
                         <div class="stretch"></div>
                         <div class="cinema-type">
                             <a href="#" class="IMAX" target="_blank"></a>
@@ -125,7 +125,7 @@
                         <div class="info-container">
                             <div th:utext="${vos[0][1]} + '<br>' + ${vos[0][2]}" class="theater-info"></div>
                         </div>
-                        <a href="#" class="theater-info guide" target="_blank">위치 / 주차 안내 ></a>
+                        <a href="#menu" class="theater-info guide" target="_self">위치 / 주차 안내 ></a>
                         <div class="stretch"></div>
                         <div class="cinema-type">
                             <a href="#"
@@ -359,9 +359,9 @@
                         <div th:classappend="${screen.key[0]}" class="rating"></div>
                         <a th:text="${screen.key[1]}" href="#" class="text"></a>
                         <div class="date-notice">
-                            <span class="able">상영중</span>
-                            <span class="reservation">예매중</span>
-                            <span class="dDay">D-4</span>
+                            <span th:if="${screen.key[3] <= #dates.format(#dates.createNow(), 'yyyy.MM.dd')}" class="able">상영중</span>
+                            <span th:if="${screen.key[3] > #dates.format(#dates.createNow(), 'yyyy.MM.dd')}" class="reservation">예매중</span>
+                            <span th:if="${screen.key[3] > #dates.format(#dates.createNow(), 'yyyy.MM.dd')}" th:text="${screen.key[7].replace('P', 'D').substring(0, screen.key[7].length() - 1)}" class="dDay"></span>
                         </div>
                         <span th:text="${screen.key[6].replace('[', '').replace(']', '') + '/' + screen.key[2] + '분/' + screen.key[3] + ' 개봉'}" class="long-text"></span>
                     </div>
@@ -403,7 +403,7 @@
         </div>
     </div>
     <div class="information hidden" data-id="information">
-        <div class="car-info">
+        <div class="car-info" id="menu">
             <div class="header">
                 <span class="bus"></span>
                 <span class="text">교통안내</span>
@@ -411,12 +411,12 @@
                 <a href="#" class="find">실시간 빠른 길 찾기</a>
             </div>
             <div class="bus detail"
-                 th:if="${maps != null}"
-                 th:each="map : ${maps}"
-                 th:utext="${map.value[0]}">
+                 th:if="${theaterVos != null}"
+                 th:each="map : ${theaterVos}"
+                 th:utext="${map[0][6].split('&&')[0]}">
             </div>
             <div class="bus detail"
-                 th:if="${maps == null}">
+                 th:if="${theaterVos == null}">
                 <p>1) 지하철&nbsp;: 3호선-북구청역 1번 출구에서 약 750M</p>
                 <p>2) 버스</p>
                 <p>-이마트칠성점앞 : 300, 349, 836, 동구2, 칠곡2</p>
@@ -429,12 +429,12 @@
                 <span class="stretch"></span>
             </div>
             <div class="car detail"
-                 th:if="${maps != null}"
-                 th:each="map : ${maps}"
-                 th:utext="${map.value[1]}">
+                 th:if="${theaterVos != null}"
+                 th:each="map : ${theaterVos}"
+                 th:utext="${map[0][6].split('&&')[1]}">
             </div>
             <div class="car detail"
-                 th:if="${maps == null}">
+                 th:if="${theaterVos == null}">
                 <p>
                     '■ 주차 안내<br>
                     &nbsp;- 스펙트럼시티 지하 4층, 5층 이용 시, 무료주차 가능<br>

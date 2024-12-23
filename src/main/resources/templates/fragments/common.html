@@ -24,12 +24,6 @@
     </h1>
     <div class="-spring"></div>
     <ul class="info-wrapper">
-        <li class="ad-partner">
-            <a href="#" target="_blank">
-                <img src="https://img.cgv.co.kr/WingBanner/2023/0208/16758461047540.png"
-                     alt="현대카드광고">
-            </a>
-        </li>
         <li class="item" th:if="${session.user == null}">
             <a th:href="@{'/user/login'}">
                 <img src="https://img.cgv.co.kr/R2014/images/common/ico/loginPassword.png"
@@ -58,13 +52,6 @@
                 <span class="text">MY JGV</span>
             </a>
         </li>
-        <li class="item">
-            <a href="">
-                <img src="https://img.cgv.co.kr/R2014/images/common/ico/loginCustomer.png"
-                     alt="고객센터">
-                <span class="text">고객센터</span>
-            </a>
-        </li>
     </ul>
 </header>
 <nav th:fragment="nav" id="nav" class="nav">
@@ -83,21 +70,6 @@
             <li class="item">
                 <h2>
                     <a th:href="@{../ticket/}" style="color: #FB4357;">예매</a>
-                </h2>
-            </li>
-            <li class="item">
-                <h2>
-                    <a href="#">스토어</a>
-                </h2>
-            </li>
-            <li class="item">
-                <h2>
-                    <a href="#">이벤트</a>
-                </h2>
-            </li>
-            <li class="item">
-                <h2>
-                    <a href="#">혜택</a>
                 </h2>
             </li>
         </ul>

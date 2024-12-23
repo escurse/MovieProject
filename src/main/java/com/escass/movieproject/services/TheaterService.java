@@ -18,8 +18,10 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
@@ -61,11 +63,15 @@ public class TheaterService {
             keys.add(String.valueOf(screen.getSeatCount()));
             keys.add(String.valueOf(screen.getMoNum()));
             keys.add(genreList.toString());
+            keys.add(String.valueOf(Period.between(LocalDate.parse(screen.getMoDate(), DateTimeFormatter.ofPattern("yyyy.MM.dd")), LocalDate.now())));
             if (screen.getCitName().equals("4DX")) {
                 screen.setCitName("DX");
             }
-            if (screen.getCitNum() != 1) {
-                screen.setCiName(screen.getCitName() + '&');
+            if (screen.getCitNum() != 1 && screen.getCitNum() != 5) {
+                screen.setCiName(screen.getCitName() + "&&");
+            }
+            if (screen.getCitNum() == 5) {
+                screen.setCitName("2D");
             }
             values.add(screen.getCiName());
             values.add(screen.getCitName());
@@ -154,8 +160,9 @@ public class TheaterService {
         return map;
     }
 
+    // region 크롤링
     @Transactional
-    public Map<String, List<String>> Crawl(String theater) throws TransactionalException {
+    public Map<String, List<String>> Crawl() throws TransactionalException {
         System.setProperty("webdriver.chrome.driver", "./chromedriver.exe");
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless");
@@ -169,16 +176,13 @@ public class TheaterService {
         Map<String, List<String>> maps = new HashMap<>();
         try {
             for (TheaterCode thCode : TheaterCode.values()) {
-                if (thCode.cgvName.equals(theater)) {
-                    String dateUrl = "http://www.cgv.co.kr/theaters/?areacode=11&theaterCode=" + thCode.cgvCode;
-                    driver.get(dateUrl);
-                    WebElement movies = driver.findElement(By.cssSelector("#menu > .last"));
-                    movies.click();
-                    List<WebElement> info = driver.findElements(By.cssSelector(".info-contents"));
-                    for (WebElement infoElement : info) {
-                        maps.computeIfAbsent(theater, k -> new ArrayList<>()).add(infoElement.getAttribute("outerHTML"));
-                    }
-                    return maps;
+                String dateUrl = "http://www.cgv.co.kr/theaters/?areacode=11&theaterCode=" + thCode.cgvCode;
+                driver.get(dateUrl);
+                WebElement movies = driver.findElement(By.cssSelector("#menu > .last"));
+                movies.click();
+                List<WebElement> info = driver.findElements(By.cssSelector(".info-contents"));
+                for (WebElement infoElement : info) {
+                    maps.computeIfAbsent(thCode.cgvName, k -> new ArrayList<>()).add(infoElement.getAttribute("outerHTML"));
                 }
             }
         } catch (Exception e) {
@@ -186,6 +190,7 @@ public class TheaterService {
         } finally {
             driver.quit();
         }
-        return null;
+        return maps;
     }
+    // endregion
 }

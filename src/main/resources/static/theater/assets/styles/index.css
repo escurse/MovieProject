@@ -4,9 +4,6 @@
   flex-direction: column;
   justify-content: center;
 }
-#main > .D {
-  display: none;
-}
 #main .IMAX {
   width: 5rem;
   height: 1rem;
