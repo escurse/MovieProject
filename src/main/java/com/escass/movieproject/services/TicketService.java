@@ -5,16 +5,12 @@ import com.escass.movieproject.entities.MovieEntity;
 import com.escass.movieproject.entities.ScreenEntity;
 import com.escass.movieproject.entities.TheaterEntity;
 import com.escass.movieproject.exceptions.TransactionalException;
-import com.escass.movieproject.mappers.TheaterMapper;
 import com.escass.movieproject.mappers.TicketMapper;
 import com.escass.movieproject.vos.MovieVo;
 import com.escass.movieproject.vos.RegionVo;
 import com.escass.movieproject.vos.ScreenVo;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.tuple.Pair;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Service;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -24,7 +20,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URL;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -480,8 +475,15 @@ public class TicketService {
                                 timeTable.append("상영관: ").append(result).append("\n");
                                 List<WebElement> timeElements = table.findElements(By.cssSelector(".info-timetable > ul > li > a > em"));
                                 for (WebElement element : timeElements) {
+                                    String updatedText;
                                     timeTable.append("상영 시간: ").append(element.getText()).append("\n");
-                                    String dateTimeString = date + "T" + element.getText();
+                                    if (Integer.parseInt(element.getText().substring(0,2)) >= 24) {
+                                        date = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyyMMdd")).plusDays(1).toString().replaceAll("-", "");
+                                        updatedText = element.getText().replace(element.getText().substring(0, 2), "00");
+                                    } else {
+                                        updatedText = element.getText();
+                                    }
+                                    String dateTimeString = date + "T" + updatedText;
                                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HH:mm");
                                     screen.setScStartDate(LocalDateTime.parse(dateTimeString, formatter));
                                     ScreenEntity[] screens = this.ticketMapper.selectDuplicateScreen(LocalDateTime.parse(dateTimeString, formatter), this.ticketMapper.selectMovieNumByMovieTitle(movieTitle).getMoNum(), ciNum);
