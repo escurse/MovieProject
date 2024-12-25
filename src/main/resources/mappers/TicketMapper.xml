@@ -57,7 +57,7 @@
     </select>
     <select id="selectAllMoviesByRating"
             resultType="com.escass.movieproject.vos.MovieVo">
-        SELECT `mo_num` AS `moNum`,
+        SELECT DISTINCT `movie`.`mo_num` AS `moNum`,
                `mo_title` AS `moTitle`,
                `mo_date` AS `moDate`,
                `mo_time` AS `moTime`,
@@ -68,11 +68,13 @@
                `ra_grade` AS `raGrade`
         FROM `jgv`.`movie`
                  LEFT JOIN `jgv`.`rating` ra ON movie.ra_num = ra.ra_num
+                 LEFT JOIN `jgv`.`screen` ON `movie`.`mo_num` = `screen`.`mo_num`
+        WHERE `sc_start_date` > NOW()
         ORDER BY `mo_booking_rate` DESC
     </select>
     <select id="selectAllMoviesByKorea"
             resultType="com.escass.movieproject.vos.MovieVo">
-        SELECT `mo_num` AS `moNum`,
+        SELECT DISTINCT `movie`.`mo_num` AS `moNum`,
                `mo_title` AS `moTitle`,
                `mo_date` AS `moDate`,
                `mo_time` AS `moTime`,
@@ -83,6 +85,8 @@
                `ra_grade` AS `raGrade`
         FROM `jgv`.`movie`
                  LEFT JOIN `jgv`.`rating` ra ON movie.ra_num = ra.ra_num
+        LEFT JOIN `jgv`.`screen` ON `movie`.`mo_num` = `screen`.`mo_num`
+        WHERE `sc_start_date` > NOW()
         ORDER BY `mo_title`
     </select>
     <select id="selectRegionAndTheaterCount"

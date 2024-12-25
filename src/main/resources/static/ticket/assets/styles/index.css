@@ -368,6 +368,9 @@
   height: 100%;
   padding: 1rem 1rem;
 }
+#main > .main-container > .main > .section .body.time > .time-container.hidden {
+  display: none;
+}
 #main > .main-container > .main > .section .body.time > .time-container > .time-table {
   border-top: 0.15rem solid #cfcdc3;
   padding-bottom: 1rem;

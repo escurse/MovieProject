@@ -78,5 +78,6 @@
         WHERE `sc_start_date` LIKE CONCAT('%', #{date}, '%')
         AND `sc_start_date` > NOW()
         AND `th_name` = #{theater}
+        ORDER BY `ci_name`
     </select>
 </mapper>

@@ -458,6 +458,10 @@
               height: 100%;
               padding: 1rem 1rem;
 
+              &.hidden {
+                display: none;
+              }
+
               > .time-table {
                 border-top: 0.15rem solid #cfcdc3;
                 padding-bottom: 1rem;

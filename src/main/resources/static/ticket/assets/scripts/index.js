@@ -27,14 +27,25 @@ const ticketParams = JSON.parse(localStorage.getItem('ticketParams'));
                 region.click();
             }
         })
-        $movieItems.forEach((movie) => {
-            const $items = movie.querySelector(':scope > .text > .name');
-            if ($items.innerText === ticketParams.moTitle) {
-                movie.click();
-            }
-        })
+        if (ticketParams) {
+            $movieItems.forEach((movie) => {
+                const $items = movie.querySelector(':scope > .text > .name');
+                if ($items.innerText === ticketParams.moTitle) {
+                    setTimeout(() => {
+                        movie.click();
+                    }, 0);
+                }
+            })
+        }
     }
 }
+
+// 지정한 데이터
+const $data = {
+    movie: null,   // 선택된 영화
+    theater: null, // 선택된 지점
+    date: null,    // 선택된 날짜
+};
 
 // 상영 정보를 찾아오는 함수
 function checkScreen() {
@@ -86,10 +97,12 @@ function checkScreen() {
             const $theaterItem = Array.from(new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelectorAll('.theater > .body > .content > .theater-container > .theater'));
             $theaterItem.forEach((x) => {
                 $theater.append(x);
-                if (ticketParams.thName.replace('CGV', '') === x.innerText) {
-                    setTimeout(() => {
-                        x.click();
-                    }, 0); // 클릭 이벤트가 등록될 때까지 대기
+                if (ticketParams) {
+                    if (ticketParams.thName.replace('CGV', '') === x.innerText) {
+                        setTimeout(() => {
+                            x.click();
+                        }, 0); // 클릭 이벤트가 등록될 때까지 대기
+                    }
                 }
                 x.onclick = () => {
                     $theaterItem.forEach((item) => {
@@ -234,18 +247,20 @@ function checkScreen() {
             const $days = Array.from((new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelectorAll('.day > .body > .content > .content-container > .day-container')));
             $days.forEach((x) => {
                 $contentContainer.append(x);
-                const $title = Array.from(x.querySelectorAll(':scope > .title'));
-                $title.forEach((title) => {
-                    const $year = title.querySelector(':scope > .year');
-                    const $month = title.querySelector(':scope > .month');
-                    const $day = Array.from(x.querySelectorAll(':scope > .day'));
-                    $day.forEach((day) => {
-                        const $date = day.querySelector(':scope > .day-container > .date');
-                        if ($year.innerText + '-' + $month.innerText + '-' + $date.innerText === ticketParams.scStartDate) {
-                            setTimeout(() => day.click(), 0);
-                        }
+                if (ticketParams) {
+                    const $title = Array.from(x.querySelectorAll(':scope > .title'));
+                    $title.forEach((title) => {
+                        const $year = title.querySelector(':scope > .year');
+                        const $month = title.querySelector(':scope > .month');
+                        const $day = Array.from(x.querySelectorAll(':scope > .day'));
+                        $day.forEach((day) => {
+                            const $date = day.querySelector(':scope > .day-container > .date');
+                            if ($year.innerText + '-' + $month.innerText + '-' + $date.innerText === ticketParams.scStartDate) {
+                                setTimeout(() => day.click(), 0);
+                            }
+                        })
                     })
-                })
+                }
                 const $day = Array.from(x.querySelectorAll(':scope > .day'));
                 $day.forEach((item) => {
                     item.onclick = () => {
@@ -362,6 +377,7 @@ function checkScreen() {
                 let array = selectedItem.innerText.split('\n');
                 $theaterTime.innerText = $data.date.replaceAll('-', '.') + '(' + array[0] + ')';
             })
+            const $content = document.querySelector('.time > .time > .content');
             const $oldText = $theaterTime.innerText;
             $theaterCinema.innerText = '';
             const $screen = Array.from(new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelectorAll('.time-table'));
@@ -369,6 +385,8 @@ function checkScreen() {
             const $rating = $controlBar.querySelector('.unique-rating');
             $rating.classList.add('hidden');
             $cinemaType.innerText = '';
+            $content.classList.add('hidden');
+            $timeContainer.classList.remove('hidden');
             $timeContainer.innerHTML = '';
             $screen.forEach((screen) => {
                 $timeContainer.append(screen);
@@ -376,9 +394,11 @@ function checkScreen() {
                 $times.forEach((time) => {
                     const $items = Array.from(time.querySelectorAll(':scope > .item'));
                     $items.forEach((item) => {
-                        const $time = item.querySelector(':scope > .time > .text');
-                        if ($time.innerText === ticketParams.time) {
-                            setTimeout(() => item.click(), 0);
+                        if (ticketParams) {
+                            const $time = item.querySelector(':scope > .time > .text');
+                            if ($time.innerText === ticketParams.time) {
+                                setTimeout(() => item.click(), 0);
+                            }
                         }
                         item.onclick = () => {
                             const $cinema = screen.querySelector(':scope > .title > .cinema');
@@ -407,13 +427,6 @@ function checkScreen() {
         Loading.show(0);
     }
 }
-
-// 지정한 데이터
-const $data = {
-    movie: null,   // 선택된 영화
-    theater: null, // 선택된 지점
-    date: null,    // 선택된 날짜
-};
 
 // 영화 정보를 불러오는 함수
 function movieItem($movieItems) {
@@ -719,7 +732,7 @@ $rightButtons.forEach((x) => {
                 if (userCheck) {
                     window.location.replace('.././user/login');
                 } else {
-                    window.location.reload();
+                    return;
                 }
             }
             $mains.forEach((main) => {

@@ -298,10 +298,10 @@
                     <div class="time"></div>
                 </div>
                 <div class="body time">
-                    <div class="content hidden">
+                    <div class="content">
                         <div class="notice">영화,극장,날짜를 선택해 주세요.</div>
                     </div>
-                    <div class="time-container">
+                    <div class="time-container hidden">
                         <div class="time-table" th:each="time : ${times}">
                             <div class="title">
                                 <span th:text="${time.key[0]}" class="cinema-type"></span>
