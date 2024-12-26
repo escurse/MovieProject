@@ -105,7 +105,8 @@
                `mo_num`        AS `moNum`,
                `ci_num`        AS `ciNum`
         FROM `jgv`.`screen`
-        WHERE `sc_start_date` > NOW();
+        WHERE `sc_start_date` > NOW()
+          AND `is_deleted` = false
     </select>
     <select id="selectAllMoviesByMoTitle"
             resultType="com.escass.movieproject.vos.MovieVo">
@@ -135,6 +136,7 @@
         LEFT JOIN `jgv`.`region` ON theater.reg_num = region.reg_num
         WHERE `mo_title` = #{moTitle}
           AND `sc_start_date` > NOW()
+          AND `is_deleted` = false
     </select>
     <select id="selectScreenDatesByMovieAndTheaterAndDate"
             resultType="com.escass.movieproject.vos.ScreenVo">
@@ -156,6 +158,7 @@
           AND `th_num` = #{theater}
           AND `sc_start_date` LIKE CONCAT('%', #{date}, '%')
           AND `sc_start_date` > NOW()
+          AND `is_deleted` = false
     </select>
     <select id="selectTheater"
             resultType="com.escass.movieproject.entities.TheaterEntity">
@@ -195,6 +198,7 @@
                  LEFT JOIN `jgv`.`region` ON theater.reg_num = region.reg_num
         WHERE `th_name` = #{thName}
           AND `sc_start_date` > NOW()
+          AND `is_deleted` = false
     </select>
     <select id="selectAllMoviesByscStartDate"
             resultType="com.escass.movieproject.vos.MovieVo">
@@ -224,6 +228,7 @@
                  LEFT JOIN `jgv`.`region` ON theater.reg_num = region.reg_num
         WHERE `sc_start_date` LIKE CONCAT('%', #{scStartDate}, '%')
           AND `sc_start_date` > NOW()
+          AND `is_deleted` = false
     </select>
     <select id="selectAllMoviesByMoTitleAndThName"
             resultType="com.escass.movieproject.vos.MovieVo">
@@ -254,6 +259,7 @@
         WHERE `th_name` = #{thName}
           AND `mo_title` = #{moTitle}
           AND `sc_start_date` > NOW()
+          AND `is_deleted` = false
     </select>
     <select id="selectAllMoviesByMoTitleAndScStartDate"
             resultType="com.escass.movieproject.vos.MovieVo">
@@ -284,6 +290,7 @@
         WHERE `sc_start_date` LIKE CONCAT('%', #{scStartDate}, '%')
           AND `mo_title` = #{moTitle}
           AND `sc_start_date` > NOW()
+          AND `is_deleted` = false
     </select>
     <select id="selectAllMoviesByThNameAndScStartDate"
             resultType="com.escass.movieproject.vos.MovieVo">
@@ -314,5 +321,6 @@
         WHERE `sc_start_date` LIKE CONCAT('%', #{scStartDate}, '%')
           AND `th_name` = #{thName}
           AND `sc_start_date` > NOW()
+          AND `is_deleted` = false
     </select>
 </mapper>

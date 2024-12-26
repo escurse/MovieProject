@@ -196,6 +196,13 @@ public class TicketController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/showTimes", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView getShowTimes() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("ticket/showTimes");
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/crawling", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView Crawling(ScreenEntity screen) {
         ModelAndView modelAndView = new ModelAndView();

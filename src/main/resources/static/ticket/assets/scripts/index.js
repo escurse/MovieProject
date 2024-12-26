@@ -17,7 +17,14 @@ const $theaterTime = document.getElementById('theater-time');
 const $timeContainer = $mainContent.querySelector(':scope > .time > .time > .time-container');
 const $firstButton = $controlBar.querySelector(':scope > .container > [data-id="main"]')
 const $theaterCinema = document.getElementById('theater-cinema');
-const ticketParams = JSON.parse(localStorage.getItem('ticketParams'));
+const ticketParams = JSON.parse(sessionStorage.getItem('ticketParams'));
+
+const params = {
+    moTitle: null,
+    thName: null,
+    scStartDate: null,
+    time: null
+};
 
 {
     window.onload = () => {
@@ -97,7 +104,7 @@ function checkScreen() {
             const $theaterItem = Array.from(new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelectorAll('.theater > .body > .content > .theater-container > .theater'));
             $theaterItem.forEach((x) => {
                 $theater.append(x);
-                if (ticketParams) {
+                if (ticketParams.thName !== undefined) {
                     if (ticketParams.thName.replace('CGV', '') === x.innerText) {
                         setTimeout(() => {
                             x.click();
@@ -401,6 +408,7 @@ function checkScreen() {
                             }
                         }
                         item.onclick = () => {
+                            params.time = item.innerText.split('\n')[0];
                             const $cinema = screen.querySelector(':scope > .title > .cinema');
                             const $type = screen.querySelector(':scope > .title > .cinema-type');
                             const $text = item.querySelector(':scope > .time > .text');
@@ -413,10 +421,13 @@ function checkScreen() {
                             $theaterTime.innerText = $oldText + $text.innerText;
                             $rating.classList.remove('hidden');
                             $firstButton.classList.add('after');
+                            params.moTitle = $data.movie;
+                            params.thName = $data.theater;
+                            params.scStartDate = $data.date;
+                            sessionStorage.setItem('ticketParams', JSON.stringify(params));
                             $data.movie = null;
                             $data.theater = null;
                             $data.date = null;
-                            localStorage.removeItem('ticketParams');
                         }
                     })
                 })
@@ -734,6 +745,9 @@ $rightButtons.forEach((x) => {
                 } else {
                     return;
                 }
+            }
+            if (sessionStorage.getItem('user') !== null) {
+                sessionStorage.removeItem('ticketParams');
             }
             $mains.forEach((main) => {
                 main.classList.add('hidden');

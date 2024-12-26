@@ -4,7 +4,6 @@ import com.escass.movieproject.entities.RegionEntity;
 import com.escass.movieproject.entities.TheaterEntity;
 import com.escass.movieproject.exceptions.TransactionalException;
 import com.escass.movieproject.mappers.TheaterMapper;
-import com.escass.movieproject.vos.MovieVo;
 import com.escass.movieproject.vos.ScreenDataVo;
 import com.escass.movieproject.vos.ScreenVo;
 import com.escass.movieproject.vos.TheaterVo;
@@ -18,10 +17,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
@@ -37,7 +33,7 @@ public class TheaterService {
             return null;
         }
         ScreenVo[] screenVos = this.theaterMapper.selectAllScreens(date, theater);
-        Map<Set<String>, Map<Set<String>, Set<String>>> map = new HashMap<>();
+        Map<Set<String>, Map<Set<String>, Set<String>>> map = new LinkedHashMap<>();
         for (ScreenVo screen : screenVos) {
             Set<String> keys = new LinkedHashSet<>();
             Set<String> values = new LinkedHashSet<>();
@@ -75,7 +71,7 @@ public class TheaterService {
             timeList.add(String.valueOf(screen.getScStartDate()).split("T")[1]);
             ScreenDataVo screenDataVo = new ScreenDataVo(screen.getSeatCount(), screen.getUsedSeatCount());
             timeList.add(String.valueOf(screenDataVo.emptySeatCount));
-            map.computeIfAbsent(keys, k -> new HashMap<>());
+            map.computeIfAbsent(keys, k -> new LinkedHashMap<>());
             map.get(keys).computeIfAbsent(values, k -> new LinkedHashSet<>()).add(timeList.toString());
         }
         return map;

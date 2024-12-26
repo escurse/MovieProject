@@ -44,6 +44,7 @@
                  LEFT JOIN `jgv`.`screen` ON `c`.`ci_num` = `screen`.`ci_num`
         WHERE `th_name` = #{theater}
           AND `sc_start_date` > NOW()
+          AND `is_deleted` = false
     </select>
     <select id="selectAllScreens"
             resultType="com.escass.movieproject.vos.ScreenVo">
@@ -78,6 +79,7 @@
         WHERE `sc_start_date` LIKE CONCAT('%', #{date}, '%')
         AND `sc_start_date` > NOW()
         AND `th_name` = #{theater}
-        ORDER BY `ci_name`
+        AND `is_deleted` = false
+        ORDER BY `ci_name`, `sc_start_date`
     </select>
 </mapper>

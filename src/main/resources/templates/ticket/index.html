@@ -19,7 +19,7 @@
 <th:block th:replace="~{fragments/common.html :: nav}"></th:block>
 <main id="main">
     <div class="button-container">
-        <a class="content-bar-timetable" href="#"></a>
+        <a class="content-bar-timetable" th:href="@{./showTimes}"></a>
         <a class="content-bar-retry" th:href="@{./}" target="_self"></a>
     </div>
     <div class="main-container">
@@ -674,7 +674,7 @@
         </div>
         <div class="advertisement-container">
             <a href="#" target="_self" class="advertisement-move">
-                <img src="https://adimg.cgv.co.kr/images/202411/MyHero/1119_160x300.jpg" alt="배너"
+                <img src="https://adimg.cgv.co.kr/images/202412/Moana2/1218_160x300.jpg" alt="배너"
                      class="advertisement">
             </a>
         </div>
