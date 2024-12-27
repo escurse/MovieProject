@@ -18,4 +18,5 @@ public class ScreenVo extends ScreenEntity {
     private int citNum;
     private String raGrade;
     private int usedSeatCount;
+    private String thName;
 }

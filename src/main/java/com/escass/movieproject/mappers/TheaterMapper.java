@@ -20,6 +20,13 @@ public interface TheaterMapper {
 
     TheaterVo[] selectAllTheaters(@Param(value = "theater") String theater);
 
+    TheaterVo[] selectAllTheatersByRegion(@Param(value = "region") String region,
+                                          @Param(value = "movie") String movie);
+
     ScreenVo[] selectAllScreens(@Param(value = "date") String date,
                                 @Param(value = "theater") String theater);
+
+    ScreenVo[] selectAllScreensByRegion(@Param(value = "date") String date,
+                                        @Param(value = "region") String region,
+                                        @Param(value = "movie") String movie);
 }

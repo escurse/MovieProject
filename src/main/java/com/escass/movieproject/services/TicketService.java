@@ -61,7 +61,7 @@ public class TicketService {
         if (scStartDate == null || scStartDate.isEmpty()) {
             return null;
         }
-        return this.ticketMapper.selectAllMoviesByscStartDate(scStartDate);
+        return this.ticketMapper.selectAllMoviesByScStartDate(scStartDate);
     }
 
     public MovieVo[] selectAllMoviesByMoTitleAndScStartDate(String moTitle, String scStartDate) {
@@ -106,6 +106,27 @@ public class TicketService {
             }
         }
         return movies;
+    }
+
+    public Map<Set<String>, Set<Set<String>>> selectShowTimesByMoTitle(String movie) {
+        MovieVo[] movies = this.ticketMapper.selectShowTimesByMoTitle(movie);
+        Map<Set<String>, Set<Set<String>>> map = new LinkedHashMap<>();
+        Set<String> keys = new LinkedHashSet<>();
+        Set<Set<String>> values = new LinkedHashSet<>();
+        Set<String> genres = new LinkedHashSet<>();
+        Set<String> citNames = new LinkedHashSet<>();
+        for (MovieVo movieVo : movies) {
+            keys.add(movieVo.getMoTitle());
+            keys.add(movieVo.getMoDate());
+            keys.add(String.valueOf(movieVo.getMoTime()));
+            keys.add(movieVo.getMImgUrl());
+            genres.add(movieVo.getGeName());
+            citNames.add(movieVo.getCitName());
+        }
+        values.add(genres);
+        values.add(citNames);
+        map.computeIfAbsent(keys, k -> new LinkedHashSet<>()).addAll(values);
+        return map;
     }
 
     public RegionVo[] selectRegionAndTheaterCount() {

@@ -1,5 +1,6 @@
 package com.escass.movieproject.controlles;
 
+import com.escass.movieproject.entities.RegionEntity;
 import com.escass.movieproject.entities.ScreenEntity;
 import com.escass.movieproject.entities.TheaterEntity;
 import com.escass.movieproject.entities.user.UserEntity;
@@ -8,6 +9,7 @@ import com.escass.movieproject.services.TicketService;
 import com.escass.movieproject.vos.MovieVo;
 import com.escass.movieproject.vos.RegionVo;
 import com.escass.movieproject.vos.ScreenVo;
+import com.escass.movieproject.vos.TheaterVo;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -197,8 +199,70 @@ public class TicketController {
     }
 
     @RequestMapping(value = "/showTimes", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView getShowTimes() {
+    public ModelAndView getShowTimes(@RequestParam(value = "region", required = false) String region,
+                                     @RequestParam(value = "theater", required = false) String theater,
+                                     @RequestParam(value = "movie", required = false) String movie,
+                                     @RequestParam(value = "date", required = false) String date) {
         ModelAndView modelAndView = new ModelAndView();
+        MovieVo[] movies = this.ticketService.selectAllMoviesByRating();
+        RegionEntity[] regions = this.theaterService.findRegionAll();
+        TheaterEntity[] theaters = this.theaterService.getTheatersByRegion(region);
+        if (theater != null) {
+            TheaterVo[] theaterVos = this.theaterService.selectAllTheaters(theater);
+            Map<String, String> maps = this.theaterService.getWeekdays(theater);
+            Set<String> keys = new LinkedHashSet<>();
+            List<Object[]> values = new ArrayList<>();
+            Set<String> types = new LinkedHashSet<>();
+            for (TheaterVo theaterVo : theaterVos) {
+                keys.add(theaterVo.getThName());
+                keys.add(theaterVo.getThAddr().split("\n")[0]);
+                keys.add(theaterVo.getThAddr().split("\n")[1]);
+                keys.add(theaterVo.getThImg());
+                keys.add(String.valueOf(theaterVo.getSeatCount()));
+                keys.add(String.valueOf(theaterVo.getCinemaCount()));
+                keys.add(theaterVo.getThParking());
+                if (theaterVo.getCitName().equals("4DX")) {
+                    theaterVo.setCitName("DX");
+                }
+                types.add(theaterVo.getCitName());
+            }
+            values.add(new Object[]{keys, types, maps});
+            modelAndView.addObject("theaterVos", values);
+        }
+        if (date != null && theater != null) {
+            Map<Set<String>, Map<Set<String>, Set<String>>> screenVos = this.theaterService.selectAllScreens(date, theater);
+            modelAndView.addObject("screenVos", screenVos);
+        }
+        if (region != null && movie != null) {
+            TheaterVo[] theaterVos = this.theaterService.selectAllTheatersByRegion(region, movie);
+            Map<String, String> maps = this.theaterService.getWeekdaysByRegion(region, movie);
+            Map<Set<String>, Set<Set<String>>> map = this.ticketService.selectShowTimesByMoTitle(movie);
+            Set<String> keys = new LinkedHashSet<>();
+            List<Object[]> values = new ArrayList<>();
+            Set<String> types = new LinkedHashSet<>();
+            for (TheaterVo theaterVo : theaterVos) {
+                keys.add(theaterVo.getThName());
+                keys.add(theaterVo.getThAddr().split("\n")[0]);
+                keys.add(theaterVo.getThAddr().split("\n")[1]);
+                keys.add(theaterVo.getThImg());
+                keys.add(String.valueOf(theaterVo.getSeatCount()));
+                keys.add(String.valueOf(theaterVo.getCinemaCount()));
+                if (theaterVo.getCitName().equals("4DX")) {
+                    theaterVo.setCitName("DX");
+                }
+                types.add(theaterVo.getCitName());
+            }
+            values.add(new Object[]{keys, types, maps});
+            modelAndView.addObject("theaterVos", values);
+            modelAndView.addObject("map", map);
+        }
+        if (date != null && region != null && movie != null) {
+            Map<Set<String>, Map<Set<String>, Set<String>>> screenVos = this.theaterService.selectAllScreensByRegion(date, region, movie);
+            modelAndView.addObject("screenVos", screenVos);
+        }
+        modelAndView.addObject("regions", regions);
+        modelAndView.addObject("theaters", theaters);
+        modelAndView.addObject("movies", movies);
         modelAndView.setViewName("ticket/showTimes");
         return modelAndView;
     }
