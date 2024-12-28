@@ -202,7 +202,8 @@ public class TicketController {
     public ModelAndView getShowTimes(@RequestParam(value = "region", required = false) String region,
                                      @RequestParam(value = "theater", required = false) String theater,
                                      @RequestParam(value = "movie", required = false) String movie,
-                                     @RequestParam(value = "date", required = false) String date) {
+                                     @RequestParam(value = "date", required = false) String date,
+                                     @RequestParam(value = "cinema", required = false) String cinema) {
         ModelAndView modelAndView = new ModelAndView();
         MovieVo[] movies = this.ticketService.selectAllMoviesByRating();
         RegionEntity[] regions = this.theaterService.findRegionAll();
@@ -256,8 +257,8 @@ public class TicketController {
             modelAndView.addObject("theaterVos", values);
             modelAndView.addObject("map", map);
         }
-        if (date != null && region != null && movie != null) {
-            Map<Set<String>, Map<Set<String>, Set<String>>> screenVos = this.theaterService.selectAllScreensByRegion(date, region, movie);
+        if (date != null && region != null && movie != null && cinema != null) {
+            Map<Set<String>, Map<Set<String>, Set<String>>> screenVos = this.theaterService.selectAllScreensByCinemaType(date, region, movie, cinema);
             modelAndView.addObject("screenVos", screenVos);
         }
         modelAndView.addObject("regions", regions);

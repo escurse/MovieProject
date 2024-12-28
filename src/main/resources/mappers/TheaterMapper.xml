@@ -109,9 +109,9 @@
         AND `sc_start_date` > NOW()
         AND `th_name` = #{theater}
         AND `is_deleted` = false
-        ORDER BY `ci_name`, `sc_start_date`
+        ORDER BY CAST(`ci_name` AS UNSIGNED), `sc_start_date`
     </select>
-    <select id="selectAllScreensByRegion"
+    <select id="selectAllScreensByCinemaType"
             resultType="com.escass.movieproject.vos.ScreenVo">
         SELECT DISTINCT `screen`.`sc_num`                                  AS `scNum`,
                         `sc_start_date`                                    AS `scStartDate`,
@@ -147,7 +147,8 @@
           AND `sc_start_date` > NOW()
           AND `reg_name` = #{region}
           AND `mo_title` = #{movie}
+          AND `cit_name` = #{cinema}
           AND `is_deleted` = false
-        ORDER BY `ci_name`, `sc_start_date`
+        ORDER BY CAST(`ci_name` AS UNSIGNED), `sc_start_date`
     </select>
 </mapper>

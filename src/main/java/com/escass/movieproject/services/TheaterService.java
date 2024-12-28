@@ -77,13 +77,14 @@ public class TheaterService {
         return map;
     }
 
-    public Map<Set<String>, Map<Set<String>, Set<String>>> selectAllScreensByRegion(String date, String region, String movie) {
+    public Map<Set<String>, Map<Set<String>, Set<String>>> selectAllScreensByCinemaType(String date, String region, String movie, String cinema) {
         if (date == null || date.isEmpty() ||
                 region == null || region.isEmpty() ||
-                movie == null || movie.isEmpty()) {
+                movie == null || movie.isEmpty() ||
+                cinema == null || cinema.isEmpty()) {
             return null;
         }
-        ScreenVo[] screenVos = this.theaterMapper.selectAllScreensByRegion(date, region, movie);
+        ScreenVo[] screenVos = this.theaterMapper.selectAllScreensByCinemaType(date, region, movie, cinema);
         Map<Set<String>, Map<Set<String>, Set<String>>> map = new LinkedHashMap<>();
         for (ScreenVo screen : screenVos) {
             Set<String> keys = new LinkedHashSet<>();
