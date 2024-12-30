@@ -370,8 +370,8 @@ let text = null;
                                                         $screens.append(screen);
                                                     })
                                                     $cinemaItem.forEach((item) => {
-                                                        if ($cinemaItems.firstElementChild) {
-                                                            $cinemaItems.firstElementChild.click(); // 첫 번째 자식 클릭
+                                                        if (item === $cinemaItems.firstElementChild) {
+                                                            setTimeout(() => {$cinemaItems.firstElementChild.click()}, 0); // 첫 번째 자식 클릭
                                                         }
                                                         item.onclick = () => {
                                                             $cinemaItem.forEach((cinema) => {
