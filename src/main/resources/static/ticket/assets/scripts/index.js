@@ -615,7 +615,7 @@ function checkScreen() {
             document.querySelectorAll('.day.select').forEach((selectedItem) => {
                 let array = selectedItem.innerText.split('\n');
                 $theaterTime.innerText = $data.date.replaceAll('-', '.') + '(' + array[0] + ')';
-            })
+            })  
             const $content = document.querySelector('.time > .time > .content');
             const $oldText = $theaterTime.innerText;
             $theaterCinema.innerText = '';
