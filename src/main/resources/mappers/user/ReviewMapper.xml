@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.escass.movieproject.mappers.user.ReviewMapper">
+    <insert id="insertReview">
+        INSERT INTO jgv.review (re_content, re_created_at, re_updated_at, re_deleted_at, re_liked, mo_num, us_num)
+        VALUES (#{reContent}, #{reCreatedAt}, #{reUpdatedAt}, #{reDeletedAt},#{reLiked}, #{moNum}, #{usNum})
+    </insert>
+
+    <select id="selectArticleCountByMovieId" resultType="_int">
+        SELECT COUNT(0)
+        FROM jgv.review
+        WHERE mo_num = #{id}
+        AND re_deleted_at IS NULL
+    </select>
+
+    <select id="selectArticleByMovieId" resultType="com.escass.movieproject.DTO.ReviewDTO">
+        SELECT r.re_num AS 'reNum',
+               r.re_content AS 'reContent',
+               r.re_created_at AS 'reCreatedAt',
+               r.re_updated_at AS 'reUpdatedAt',
+               r.re_deleted_at AS 'reDeletedAt',
+               r.re_liked AS 'reLiked',
+               r.mo_num AS 'moNum',
+               r.us_num AS 'usNum',
+               u.us_nickname AS 'usNickName'
+        FROM jgv.review r
+        LEFT JOIN jgv.user u on u.us_num = r.us_num
+        WHERE mo_num = #{id}
+        AND re_deleted_at IS NULL
+        ORDER BY re_num DESC
+        LIMIT #{limitCount} OFFSET #{offsetCount}
+    </select>
+
+
+    <update id="incrementLikeCount">
+        UPDATE jgv.review
+        SET re_liked = re_liked + 1
+        WHERE re_num = #{reviewId}
+    </update>
+
+    <select id="countUserReviewsForMovie" resultType="_int">
+        SELECT COUNT(*)
+        FROM jgv.review
+        WHERE mo_num = #{movieId}
+        AND us_num = #{userId}
+        AND re_deleted_at IS NULL
+    </select>
+
+    <select id="getReviewsById" resultType="com.escass.movieproject.entities.user.ReviewEntity">
+        SELECT re_num AS 'reNum',
+               re_content AS 'reContent',
+               re_created_at AS 'reCreatedAt',
+               re_updated_at AS 'reUpdatedAt',
+               re_deleted_at AS 'reDeletedAt',
+               mo_num AS 'moNum',
+               us_num AS 'usNum',
+               re_liked AS 'reLiked'
+        FROM jgv.review
+        WHERE re_num = #{reviewId}
+    </select>
+
+    <update id="updateReview">
+        UPDATE jgv.review
+        SET re_content = #{reContent},
+            re_updated_at = NOW()
+        WHERE re_num = #{reNum}
+    </update>
+
+    <update id="deleteReview">
+        UPDATE jgv.review
+        SET re_deleted_at = NOW()
+        WHERE re_num = #{reviewId}
+    </update>
+
+    <select id="selectArticleCountByUserId" resultType="_int">
+        SELECT COUNT(*)
+        FROM jgv.review
+          WHERE us_num = #{userId}
+          AND re_deleted_at IS NULL
+    </select>
+
+    <select id="selectArticleByUserId" resultType="com.escass.movieproject.DTO.MyReviewDTO">
+        SELECT r.re_num AS reNum,
+               r.re_content AS reContent,
+               r.re_liked AS reLiked,
+               r.us_num AS usNum,
+               r.mo_num AS moNum,
+               r.re_created_at AS reCreatedAt,
+               u.us_nickname AS usNickName,
+               m.mo_title AS moTitle,
+               mi.m_img_num AS mImgNum,
+               mi.m_img_url AS mImgUrl
+        FROM jgv.review r
+                 LEFT JOIN jgv.user u on u.us_num = r.us_num
+                 LEFT JOIN jgv.movie m on m.mo_num = r.mo_num
+                 LEFT JOIN jgv.movie_image mi on m.mo_num = mi.mo_num
+        WHERE r.us_num = #{userId}
+          AND re_deleted_at IS NULL
+        LIMIT #{limitCount} OFFSET #{offsetCount}
+    </select>
+
+</mapper>

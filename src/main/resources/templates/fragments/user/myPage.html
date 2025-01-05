@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<div class="content main" th:fragment="main">
+    <div class="main-container">
+        <div class="title-container">
+            <h2>MY 예매내역</h2>
+            <span th:text="${allReservations} + '건'"></span>
+        </div>
+        <div class="my-reservation" th:each="reservation, stat : ${reservations}">
+            <div class="reservation-info">
+                <span class="reservation-num">예매번호</span>
+                <span class="num-red" th:text="${reservation.key[0]}"></span>
+                <span class="reservation-num" th:text="${reservation.key[8]}"></span>
+            </div>
+            <div class="reservation-container">
+                <div class="reservation-movie">
+                    <a th:href="@{'../../../movies/movieList/movieInfo/' + ${reservation.key[10]}}" target="_blank">
+                        <img th:src="${reservation.key[1]}" alt="예매사진">
+                    </a>
+                    <div class="movie-info">
+                        <div class="movie-title">
+                            <a th:href="@{'../../../movies/movieList/movieInfo/' + ${reservation.key[10]}}" target="_blank" th:text="${reservation.key[2]}"></a>
+                        </div>
+                        <div class="cinema">
+                            <span>관람 극장</span>
+                            <span class="content" th:text="${reservation.key[4]}"></span>
+                            <span class="content" th:text="${reservation.key[6]}"></span>
+                        </div>
+                        <div class="date">
+                            <span>관람 일시</span>
+                            <span th:text="${reservation.key[5]}" class="content"></span>
+                        </div>
+                        <div class="seat">
+                            <span>관람 좌석</span>
+                            <span th:text="${#strings.trim(reservation.value.toString()).substring(1, reservation.value.toString().length() - 1)}"
+                                  class="content"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="payment">
+                    <span class="text">총 결제 금액</span>
+                    <span class="pay" th:text="${reservation.key[3]}"></span>
+                </div>
+            </div>
+        </div>
+        <div class="paging">
+            <div class="no-reservation" th:if="${#lists.isEmpty(PageReservations)}">
+                <span class="no-reservation-text">예매한 영화가 없습니다.</span>
+            </div>
+            <div class="paging"
+                 th:if="${!#lists.isEmpty(PageReservations) && PageReservations.displayMaxPage > PageReservations.displayMinPage}">
+                <a class="page"
+                   th:each="page2 : ${#numbers.sequence(PageReservations.displayMinPage, PageReservations.displayMaxPage)}"
+                   th:text="${page2}"
+                   th:href="@{/user/myPage/main(page=${page}, page2=${page2})}"
+                   th:classappend="${page2 == PageReservations.requestPage} ? 'active'"></a>
+
+            </div>
+        </div>
+    </div>
+    <div class="review-title-container">
+        <h2>내가 쓴 리뷰</h2>
+    </div>
+    <div class="reserve-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>리뷰 작성</h2>
+                <button class="close-button" id="closeModal">x</button>
+            </div>
+            <p class="movie-title" id="modalMovieTitle"></p>
+            <hr>
+            <div class="review-userInfo">
+                <img class="profile-img" src="http://img.cgv.co.kr/R2014/images/common/default_profile.gif"
+                     alt="profile">
+                <span class="user-name" id="modalUserName">사용자 이름</span>
+            </div>
+            <label class="label">
+                <textarea id="reviewText" placeholder="운영원칙에 어긋나는 게시물로 판단되는 글은 제재 조치를 받을 수 있습니다."
+                          maxlength="280"></textarea>
+            </label>
+            <div class="modal-action">
+                <span id="charCount">0 / 280 (byte)</span>
+                <button id="submitReview">작성완료!</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="my-review">
+        <div class="review-list">
+            <div class="review-item" th:if="${!#lists.isEmpty(Reviews)}" th:each="review : ${Reviews}"
+                 th:attr="data-review-id=${review.reNum}">
+                <div class="review-thumbnail">
+                    <img th:src="${review.mImgUrl}" alt="Poster">
+                </div>
+                <div class="review-content">
+                    <h3 class="review-title" th:text="${review.moTitle}">청설</h3>
+                    <div class="review-info">
+                        <span class="nickname" th:text="${review.usNickName}">지니율스</span><span> | </span>
+                        <span class="review-date" th:text="${#temporals.format(review.reCreatedAt, 'yyyy-MM-dd')}">2024.12.26</span>
+                    </div>
+                    <p class="review-description" th:text="${review.reContent}">1보다는 별로지만 암튼 재밌었어염</p>
+                    <div class="review-actions">
+                        <button class="edit-review">수정하기</button>
+                        <img class="likes" src="http://img.cgv.co.kr/R2014/images/point/ico_point_default.png"
+                             alt="likes">
+                        <span th:text="${review.reLiked}">0</span>
+                    </div>
+                    <button class="delete-review">X</button>
+                </div>
+            </div>
+            <div class="no-review" th:if="${#lists.isEmpty(Reviews)}">
+                <span class="no-review-text">작성한 리뷰가 없습니다.</span>
+            </div>
+            <div class="paging"
+                 th:if="${!#lists.isEmpty(Reviews) && pageVo.displayMaxPage > pageVo.displayMinPage}">
+                <a class="page"
+                   th:each="page : ${#numbers.sequence(pageVo.displayMinPage, pageVo.displayMaxPage)}"
+                   th:text="${page}"
+                   th:href="@{/user/myPage/main(page=${page}, page2=${page2})}"
+                   th:classappend="${page == pageVo.requestPage} ? 'active'"></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content reservation" th:fragment="reservation">
+    <div class="my-reservation">
+        <h3>나의 예매내역</h3>
+        <div class="alert">
+            <span class="black">지난</span>
+            <span class="red"> 1개월</span>
+            <span class="black">까지의 예매내역을 확인하실 수 있으며, 영수증은</span>
+            <span class="red"> 신용카드 결제 내역</span>
+            <span class="black">만 출력 가능합니다.</span>
+        </div>
+    </div>
+    <div class="tooltip">
+        <h2 class="black">현장에서 발권하실 경우 꼭 </h2>
+        <h2 class="red"> 예매번호</h2>
+        <h2 class="black">를 확인하세요.</h2>
+    </div>
+    <div class="sub-tooltip">
+        <span>티켓판매기에서 예매번호를 입력하면 티켓을 발급받을 수 있습니다.</span>
+    </div>
+    <div th:each="reservation, stat : ${reservations}">
+        <div class="reservation-main">
+            <div class="reservation-num">
+                <span class="res-num">예매번호</span>
+                <div class="-spring"></div>
+                <span class="red" th:id="'paNum-' + ${stat.index}" th:text="${reservation.key[0]}">예매번호</span>
+            </div>
+            <div class="reservation-info">
+                <a class="image-wrapper"
+                   th:href="@{'../../../movies/movieList/movieInfo/' + ${reservation.key[10]}}">
+                    <!-- 영화 이미지 출력 -->
+                    <img th:src="${reservation.key[1]}" alt="영화 이미지">
+                </a>
+                <div class="movie-info">
+                    <div class="title-container">
+                        <!-- 영화 제목 -->
+                        <a target="blank"  th:href="@{'../../../movies/movieList/movieInfo/' + ${reservation.key[10]}}"
+                           class="movie" th:id="'moTitle-' + ${stat.index}" th:text="${reservation.key[2]}"></a>
+                        <span class="movie" th:text="${reservation.key[6]}"></span>
+                        <div class="-spring"></div>
+                        <!-- 결제 금액 -->
+                        <span class="pay" th:id="'paPrice-' + ${stat.index}" th:text="${reservation.key[3]}"></span>
+                    </div>
+                    <div class="detail">
+                        <span class="title">관람극장</span>
+                        <!-- 영화관 이름 -->
+                        <span class="black content" th:id="'thName-' + ${stat.index}"
+                              th:text="${reservation.key[4]}"></span>
+                        <span class="title">관람인원</span>
+                        <!-- 관람 인원: 좌석 수만큼 반복 -->
+                        <span class="black content">
+                        <span class="black" th:id="'seHuman-' + ${stat.index}"
+                              th:text="'일반' + ${reservation.value.size()}"></span>
+                </span>
+                    </div>
+                    <div class="detail">
+                        <span class="title">관람일시</span>
+                        <!-- 상영 시작 시간 -->
+                        <span
+                                th:id="'scStartDate-' + ${stat.index}"
+                                th:classappend="${reservation.key[9] < currentDate} ? 'black content' : 'red content'"
+                                th:text="${reservation.key[5]}"></span>
+                        <span class="title">관람좌석</span>
+                        <!-- 좌석 이름: 각 좌석을 반복 출력 -->
+                        <span class="black content">
+                    <span id="seName"
+                          th:text="${#strings.trim(reservation.value.toString()).substring(1, reservation.value.toString().length() - 1)}"></span>
+
+                </span>
+                    </div>
+                    <div class="detail">
+                        <span class="title">상영관</span>
+                        <!-- 상영관 이름 -->
+                        <span class="black content" th:id="'ciName-' + ${stat.index}"
+                              th:text="${reservation.key[6]}"></span>
+                        <span class="title">매수</span>
+                        <!-- 매수: 좌석 수를 계산하여 출력 -->
+                        <span class="black content" th:text="${reservation.value.size()} + '매'"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="display: none;" th:id="'paCreatedAt-' + ${stat.index}" th:text="${reservation.key[8]}"></div>
+
+
+        <div class="movie-receipt">
+            <div class="receipt">
+                <div class="result-title">
+                    <h3>결제 내역</h3>
+                </div>
+                <div class="result">
+                    <div class="result-pay underline">
+                        <span class="result-text">총 결제금액</span>
+                        <div class="-spring"></div>
+                        <span class="result-payment" th:text="${reservation.key[3]}"></span>
+                    </div>
+                    <div class="result-pay">
+                        <span class="payment-method" th:id="'meName-' + ${stat.index}"
+                              th:text="'└  ' + ${reservation.key[7]}"></span>
+                        <div class="-spring"></div>
+                        <span class="method-payment" th:text="${reservation.key[3]}"></span>
+                    </div>
+                </div>
+                <div class="reservation-cancel">
+                    <button class="reservation-cancel-button"
+                            th:onclick="'ticketCancel(' + ${stat.index} + ')'"
+                            th:classappend="${reservation.key[9] < currentDate} ? 'hidden' : ''">
+                        예매 취소
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="paging">
+        <div class="no-reservation" th:if="${#lists.isEmpty(PageReservations)}">
+            <span class="no-reservation-text">예매한 영화가 없습니다.</span>
+        </div>
+        <div class="paging"
+             th:if="${!#lists.isEmpty(PageReservations) && PageReservations.displayMaxPage > PageReservations.displayMinPage}">
+            <a class="page"
+               th:each="page2 : ${#numbers.sequence(PageReservations.displayMinPage, PageReservations.displayMaxPage)}"
+               th:text="${page2}"
+               th:href="@{/user/myPage/reservation(page2=${page2})}"
+               th:classappend="${page2 == PageReservations.requestPage} ? 'active'"></a>
+
+        </div>
+    </div>
+    <div class="cancel-container">
+        <div class="title-container">
+            <span class="main-title">MY 취소내역</span>
+            <span class="sub-title">상영일 기준 지난 7일 동안의 취소내역입니다.</span>
+        </div>
+        <div class="cancel-history">
+            <table>
+                <thead>
+                <tr class="first-row">
+                    <th>관람 영화</th>
+                    <th>관람 JGV</th>
+                    <th>관람 일시</th>
+                    <th>취소일</th>
+                    <th>결제취소 금액</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="cancelReservation : ${cancelReservations}">
+                    <td style="text-align: center; width: 20%; overflow: hidden;"
+                        th:text="${cancelReservation[0]}"></td>
+                    <td th:text="${cancelReservation[1]}"></td>
+                    <td th:text="${cancelReservation[2]}"></td>
+                    <td th:text="${cancelReservation[3]}"></td>
+                    <td th:text="${cancelReservation[4]}"></td>
+                </tr>
+                <tr th:if="${cancelReservations == null || cancelReservations.size() == 0}">
+                    <td colspan="5">고객님의 최근 취소내역이 존재하지 않습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="content personal" th:fragment="personal">
+    <form id="passwordCheck" method="post">
+        <div class="title">
+            <h2>비밀번호 확인</h2>
+        </div>
+        <div class="check-password">
+            <div class="caution">
+                <span>고객님의 개인정보를 위한 절차이오니, JGV 로그인 시 사용하는 비밀번호를 입력해 주세요.</span>
+            </div>
+            <div class="input-wrapper">
+                <label class="id-wrapper --obj-label">
+                    <span class="text">아이디</span>
+                    <span th:text="${session.user.getUsId()}"
+                          class="text"></span>
+                </label>
+                <label class="--obj-label">
+                    <span class="text">비밀번호</span>
+                    <input class="--obj-filed -border" name="password" type="password">
+                </label>
+            </div>
+        </div>
+        <div class="button-container">
+            <button class="complete" type="submit">확인</button>
+            <button class="home">
+                <a th:href="@{'../../'}">JGV 첫화면으로</a>
+            </button>
+        </div>
+    </form>
+</div>
+<div class="content withdraw" th:fragment="withdraw">
+    <div id="user-withdraw">
+        <div class="caution">
+            <h2>나의 정보</h2>
+            <h3>회원 탈퇴</h3>
+        </div>
+        <div class="withdraw">
+            <div class="row">
+                <span>고객님의 개인정보 관리는</span>
+                <span style="color: #FB4357"> JGV 홈페이지에서 통합관리</span>
+                <span> 하고 있습니다.</span>
+            </div>
+            <div class="row">
+                <span>그동안 JGV 서비스를 이용해주셔서 감사합니다.</span>
+            </div>
+        </div>
+        <div class="button-container">
+            <button class="withdraw-button" type="button"
+            onclick="window.open(`../../user/myPage/userWithdraw`,
+            `회원탈퇴`,
+            `width=600,height=800,left=200,top=200`)">
+                JGV 회원탈퇴</button>
+        </div>
+    </div>
+</div>
+</html>

@@ -3,11 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.escass.movieproject.mappers.user.EmailTokenMapper">
+
     <insert id="insertEmailToken">
         INSERT INTO `jgv`.`email_tokens` (`em_email`, `em_key`, `em_created_at`, `em_expires_at`, `em_is_used`)
         VALUES (#{emEmail}, #{emKey}, #{emCreatedAt}, #{emExpiresAt}, #{emUsed})
     </insert>
-
     <update id="updateEmailToken"
     parameterType="com.escass.movieproject.entities.user.EmailTokenEntity">
         UPDATE `jgv`.`email_tokens`
@@ -17,6 +17,7 @@
         WHERE `em_email` = #{emEmail}
         LIMIT 1
     </update>
+
 
     <select id="selectEmailTokenByUserEmailAndKey"
             resultType="com.escass.movieproject.entities.user.EmailTokenEntity">
@@ -29,5 +30,6 @@
         WHERE `em_email` = #{emEmail}
           AND `em_key` = #{emKey}
         LIMIT 1
+
     </select>
 </mapper>

@@ -2,7 +2,6 @@ package com.escass.movieproject.results.user;
 
 import com.escass.movieproject.results.Result;
 
-
 public enum RegisterResult implements Result {
 
     FAILURE_DUPLICATE_ID,

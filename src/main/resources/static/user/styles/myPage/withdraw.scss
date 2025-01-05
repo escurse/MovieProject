@@ -1,0 +1,44 @@
+@import "../../../fragments/assets/styles/global";
+
+.withdraw {
+  #user-withdraw {
+    @include flex(column, flex-start, flex-start, 1rem);
+    width: 780px;
+
+    > .caution {
+      @include flex(column, flex-start, center, 1rem);
+    }
+
+    > .withdraw {
+      @include flex(column, center, center, 1rem);
+      width: 100%;
+      height: 10rem;
+      border-top: 1px solid #9e9e9e;
+      border-bottom: 1px solid #9e9e9e;
+
+      > .row {
+        > span {
+          font-size: 1.5rem;
+          font-weight: 700;
+        }
+      }
+    }
+
+    > .button-container {
+      @include flex(row, center, center);
+      width: 100%;
+
+      > button {
+        width: 7rem;
+        height: 27px;
+        background-color: #FB4357;
+        color: #ffffff;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+    }
+  }
+
+
+}

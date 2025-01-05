@@ -8,41 +8,6 @@ HTMLElement.prototype.show = function () {
     return this;
 }
 
-// function toggleSelectClass(x, items) {
-//     items.forEach((item) => {
-//         item.classList.remove('select');
-//         if (x === item) {
-//             item.classList.add('select');
-//         }
-//     });
-// }
-//
-// function initTheaterItems($theaterItems) {
-//     $theaterItems.forEach((item) => {
-//         item.onclick = () => toggleSelectClass(item, $theaterItems);
-//     });
-// }
-//
-// // 예시 사용법
-// initTheaterItems($theaterItems);
-
-class Buttons {
-    // x.onclick = () => {
-//         $rightButtons.forEach((button) => {
-//             button.classList.add('hidden');
-//             if (x.getAttribute('data-id') === 'main' &&
-//                 button.getAttribute('data-id') === 'main-seat') {
-//                 $seatContainer.classList.add('hidden');
-//                 $paymentContainer.classList.add('hidden');
-//                 button.classList.remove('hidden');
-//             }
-//             if (x.getAttribute('data-id') === 'main-seat' &&
-//                 button.getAttribute('data-id') === 'main-payment') {
-//                 button.classList.remove('hidden');
-//             }
-//         })
-}
-
 class Loading {
     /** @type {HTMLElement} */
     static $element;
@@ -72,3 +37,37 @@ class Loading {
         setTimeout(() => Loading.$element.show(), delay);
     }
 }
+
+//검색 기능 추가
+document.addEventListener('DOMContentLoaded', () => {
+    const $form = document.querySelector('.nav > .nav-wrapper > .search-wrapper > .search-form')
+    const $searchKeyword = $form.querySelector('.search > .keyword');
+
+
+    $form.onsubmit = (e) => {
+        e.preventDefault(); // 기본 폼 제출 동작 방지
+
+        if ($searchKeyword.value === '') {
+            alert("검색어를 입력해 주세요");
+            return;
+        }
+
+        // GET 요청: 검색 키워드를 쿼리 파라미터로 전달
+        const searchUrl = `/movies/search?keyword=${encodeURIComponent($searchKeyword.value)}`;
+        const xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState !== XMLHttpRequest.DONE) {
+                return;
+            }
+            if (xhr.status >= 200 && xhr.status < 300) {
+                window.location.href = searchUrl;
+            } else {
+                alert("서버가 알수 없는 응답을 반환하였습니다. 잠시 후 다시 시도해 주세요.");
+            }
+        };
+
+        xhr.open('GET', searchUrl);
+        xhr.send(); // GET 요청에는 본문(formData)이 필요하지 않습니다.
+    }
+})

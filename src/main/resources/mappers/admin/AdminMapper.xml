@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.escass.movieproject.mappers.admin.AdminMapper">
+    <update id="updateTheater"
+            parameterType="com.escass.movieproject.entities.theater.ScreenEntity">
+        UPDATE `jgv`.`screen`
+        SET `sc_start_date` = #{scStartDate},
+            `is_deleted`    = #{isDeleted},
+            `mo_num`        = #{moNum},
+            `ci_num`        = #{ciNum}
+        WHERE `sc_num` = #{scNum}
+        LIMIT 1
+    </update>
+
+    <select id="selectAllMovie" resultType="com.escass.movieproject.entities.movie.MovieEntity">
+        SELECT mo_num          AS `moNum`,
+               mo_title        AS `moTitle`,
+               mo_date         AS `moDate`,
+               mo_time         AS `moTime`,
+               mo_plot         AS `moPlot`,
+               mo_booking_rate AS `moBookingRate`,
+               mo_ending       AS `moEnding`,
+               ra_num          AS `raNum`
+        FROM `jgv`.`movie`
+    </select>
+
+
+    <select id="selectArticleByMovieName" resultType="com.escass.movieproject.DTO.AdminMovieDTO">
+        SELECT m.mo_num     AS 'moNum',
+               mi.m_img_url AS 'mImgUrl',
+               m.mo_title   AS 'moTitle',
+               m.mo_date    AS 'moDate',
+               r.ra_grade   AS 'raGrade'
+        FROM `jgv`.`movie` m
+                 LEFT JOIN `jgv`.`movie_image` mi ON m.mo_num = mi.mo_num
+                 LEFT JOIN `jgv`.`rating` r ON m.ra_num = r.ra_num
+        WHERE mo_ending IS NULL
+        ORDER BY m.mo_num
+        LIMIT #{limitCount} OFFSET #{offsetCount}
+    </select>
+
+    <select id="searchArticleByMovieName"
+            resultType="com.escass.movieproject.DTO.AdminMovieDTO">
+        SELECT m.mo_num AS 'moNum',
+        mi.m_img_url AS 'mImgUrl',
+        m.mo_title AS 'moTitle',
+        m.mo_date AS 'moDate',
+        r.ra_grade AS 'raGrade'
+        FROM `jgv`.`movie` m
+        LEFT JOIN `jgv`.`movie_image` mi ON m.mo_num = mi.mo_num
+        LEFT JOIN `jgv`.`rating` r ON m.ra_num = r.ra_num
+        WHERE `mo_ending` IS NULL
+        <if test="filter.equals('moTitle')">
+            AND `mo_title` LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="filter.equals('month')">
+            AND DATE_FORMAT(`mo_date`, '%m') = #{keyword}
+        </if>
+        <if test="filter.equals('year')">
+            AND DATE_FORMAT(`mo_date`, '%Y') = #{keyword}
+        </if>
+        ORDER BY m.mo_num
+        LIMIT #{limitCount} OFFSET #{offsetCount}
+    </select>
+
+    <select id="selectArticleCountByMovieName" resultType="_int">
+        SELECT COUNT(0)
+        FROM `jgv`.`movie`
+        WHERE mo_ending IS NULL
+    </select>
+
+    <select id="searchArticleCountByMovieName" resultType="_int">
+        SELECT COUNT(0)
+        FROM `jgv`.`movie`
+        WHERE mo_ending IS NULL
+        <if test="filter.equals('moTitle')">
+            AND `mo_title` = #{keyword}
+        </if>
+        <if test="filter.equals('month')">
+            AND DATE_FORMAT(`mo_date`, '%m') = #{keyword}
+        </if>
+        <if test="filter.equals('year')">
+            AND DATE_FORMAT(`mo_date`, '%Y') = #{keyword}
+        </if>
+    </select>
+
+    <select id="selectAllDTO" resultType="com.escass.movieproject.DTO.AdminMovieDTO">
+        SELECT m.mo_num     AS 'moNum',
+               mi.m_img_url AS 'mImgUrl',
+               m.mo_title   AS 'moTitle',
+               m.mo_date    AS 'moDate',
+               r.ra_grade   AS 'raGrade'
+        FROM `jgv`.`movie` m
+                 LEFT JOIN `jgv`.`movie_image` mi ON m.mo_num = mi.mo_num
+                 LEFT JOIN `jgv`.`rating` r ON m.ra_num = r.ra_num
+    </select>
+    <select id="selectArticleCountByTheater" resultType="_int">
+        SELECT COUNT(0)
+        FROM (SELECT 1
+              FROM `jgv`.`screen` `sc`
+                       LEFT JOIN `jgv`.`movie` `m` ON `sc`.`mo_num` = `m`.`mo_num`
+                       LEFT JOIN `jgv`.`cinema` `ci` ON `sc`.`ci_num` = `ci`.`ci_num`
+                       LEFT JOIN `jgv`.`theater` `th` ON `ci`.`th_num` = `th`.`th_num`
+              WHERE m.`mo_ending` IS NULL
+                AND `is_deleted` IS FALSE
+              GROUP BY `m`.`mo_num`, th.`th_num`) AS `TI`
+    </select>
+    <select id="searchArticleCountByTheater" resultType="_int">
+        SELECT COUNT(0)
+        FROM (SELECT 1
+        FROM `jgv`.`screen` `sc`
+        LEFT JOIN `jgv`.`movie` `m` ON `sc`.`mo_num` = `m`.`mo_num`
+        LEFT JOIN `jgv`.`cinema` `ci` ON `sc`.`ci_num` = `ci`.`ci_num`
+        LEFT JOIN `jgv`.`theater` `th` ON `ci`.`th_num` = `th`.`th_num`
+        WHERE m.`mo_ending` IS NULL
+        AND `is_deleted` IS FALSE
+        <if test="screenFilter.equals('ciName')">
+            AND `ci_name` LIKE CONCAT('%', #{screenKeyword}, '%')
+        </if>
+        <if test="screenFilter.equals('moTitle')">
+            AND `mo_title` LIKE CONCAT('%', #{screenKeyword}, '%')
+        </if>
+        <if test="screenFilter.equals('date')">
+            AND DATE_FORMAT(sc_start_date, '%Y-%m-%d') Like CONCAT('%', #{screenKeyword} ,'%')
+        </if>
+        GROUP BY `m`.`mo_num`, th.`th_num`) AS `TI`
+    </select>
+    <select id="selectAllDTOByTheaters" resultType="com.escass.movieproject.DTO.AdminTheaterDTO">
+        SELECT `th`.`th_name`        AS `thName`,
+               `m`.`mo_title`       AS 'moTitle',
+               `mi`.`m_img_url`     AS 'mImgUrl',
+               `ci`.`ci_name`       AS `ciName`,
+               `sc`.`sc_num`        AS `scNum`,
+               `sc`.`sc_start_date` AS `scStartDate`,
+               `sc`.`is_deleted` AS `isDeleted`
+        FROM (SELECT `sc`.`ci_num`  AS `_ci_num`,
+                     `sc`.`mo_num`  AS `_mo_num`,
+                     `th`.`th_num`  AS `_th_num`,
+                     `th`.`th_name` AS `thName`
+              FROM `jgv`.`screen` `sc`
+                       LEFT JOIN `jgv`.`movie` `m` ON `sc`.`mo_num` = `m`.`mo_num`
+                       LEFT JOIN `jgv`.`cinema` `ci` ON `sc`.`ci_num` = `ci`.`ci_num`
+                       LEFT JOIN `jgv`.`theater` `th` ON `ci`.`th_num` = `th`.`th_num`
+              WHERE m.`mo_ending` IS NULL
+                AND `is_deleted` IS FALSE
+              GROUP BY `m`.`mo_num`, th.`th_num`
+              ORDER BY `m`.`mo_num`, `th`.`th_num`
+              LIMIT #{limitCount} OFFSET #{offsetCount}) AS `TI`
+                 LEFT JOIN `jgv`.`movie` m ON `TI`.`_mo_num` = `m`.`mo_num`
+                 LEFT JOIN `jgv`.`movie_image` `mi` ON `m`.`mo_num` = `mi`.`mo_num`
+                 LEFT JOIN `jgv`.`screen` AS `sc` ON `m`.mo_num = `sc`.`mo_num`
+                 LEFT JOIN `jgv`.`cinema` AS `ci` ON `sc`.`ci_num` = `ci`.`ci_num`
+                 LEFT JOIN `jgv`.`theater` AS `th` ON `TI`.`_th_num` = `th`.`th_num` AND `ci`.`th_num` = `th`.`th_num`
+        WHERE `th_name` IS NOT NULL
+          AND `is_deleted` = FALSE
+        ORDER BY m.mo_num, ci.`ci_num`, th.th_num, sc_start_date
+    </select>
+    <select id="searchAllDTOByTheaters" resultType="com.escass.movieproject.DTO.AdminTheaterDTO">
+        SELECT `th`.`th_name` AS `thName`,
+        `m`.`mo_title` AS 'moTitle',
+        `mi`.`m_img_url` AS 'mImgUrl',
+        `ci`.`ci_name` AS `ciName`,
+        `sc`.`sc_num` AS `scNum`,
+        `sc`.`sc_start_date` AS `scStartDate`
+        FROM (SELECT `sc`.`ci_num` AS `_ci_num`,
+        `sc`.`mo_num` AS `_mo_num`,
+        `th`.`th_num` AS `_th_num`,
+        `th`.`th_name` AS `thName`
+        FROM `jgv`.`screen` `sc`
+        LEFT JOIN `jgv`.`movie` `m` ON `sc`.`mo_num` = `m`.`mo_num`
+        LEFT JOIN `jgv`.`cinema` `ci` ON `sc`.`ci_num` = `ci`.`ci_num`
+        LEFT JOIN `jgv`.`theater` `th` ON `ci`.`th_num` = `th`.`th_num`
+        WHERE m.`mo_ending` IS NULL
+        AND `is_deleted` IS FALSE
+        <if test="screenFilter.equals('ciName')">
+            AND `ci_name` LIKE CONCAT('%', #{screenKeyword}, '%')
+        </if>
+        <if test="screenFilter.equals('moTitle')">
+            AND `mo_title` LIKE CONCAT('%', #{screenKeyword}, '%')
+        </if>
+        <if test="screenFilter.equals('date')">
+            AND DATE_FORMAT(sc_start_date, '%Y-%m-%d') Like CONCAT('%', #{screenKeyword} ,'%')
+        </if>
+        GROUP BY `m`.`mo_num`, th.`th_num`
+        ORDER BY `m`.`mo_num`, `th`.`th_num`
+        LIMIT #{limitCount} OFFSET #{offsetCount}) AS `TI`
+        LEFT JOIN `jgv`.`movie` m ON `TI`.`_mo_num` = `m`.`mo_num`
+        LEFT JOIN `jgv`.`movie_image` `mi` ON `m`.`mo_num` = `mi`.`mo_num`
+        LEFT JOIN `jgv`.`screen` AS `sc` ON `m`.mo_num = `sc`.`mo_num`
+        LEFT JOIN `jgv`.`cinema` AS `ci` ON `sc`.`ci_num` = `ci`.`ci_num`
+        LEFT JOIN `jgv`.`theater` AS `th` ON `TI`.`_th_num` = `th`.`th_num` AND `ci`.`th_num` = `th`.`th_num`
+        WHERE `th_name` IS NOT NULL
+        AND `is_deleted` = FALSE
+        <if test="screenFilter.equals('date')">
+            AND DATE_FORMAT(sc_start_date, '%Y-%m-%d') Like CONCAT('%', #{screenKeyword} ,'%')
+        </if>
+        ORDER BY `m`.`mo_num`, `ci`.`ci_num`, `th`.`th_num`, `sc_start_date`
+    </select>
+    <select id="selectScreenByScNum"
+            resultType="com.escass.movieproject.entities.theater.ScreenEntity">
+        SELECT `sc_num` AS `scNum`,
+               `sc_start_date` AS `scStartDate`,
+               `is_deleted` AS `isDeleted`,
+               `mo_num` AS `moNum`,
+               `ci_num` AS `ciNum`
+        FROM `jgv`.`screen`
+        WHERE `sc_num` = #{scNum}
+        AND `is_deleted` = FALSE
+        LIMIT 1
+    </select>
+</mapper>

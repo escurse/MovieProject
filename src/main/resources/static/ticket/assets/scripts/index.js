@@ -19,12 +19,76 @@ const $firstButton = $controlBar.querySelector(':scope > .container > [data-id="
 const $theaterCinema = document.getElementById('theater-cinema');
 const ticketParams = JSON.parse(sessionStorage.getItem('ticketParams'));
 
+// region 광고
+{
+    const $sideAdvertisementArray = ['https://adimg.cgv.co.kr/images/202411/Firefighters/996x140.jpg', 'https://adimg.cgv.co.kr/images/202412/PORORO/996x140.jpg', 'https://adimg.cgv.co.kr/images/202412/HARBIN/996x140.jpg'];
+    document.addEventListener("DOMContentLoaded", () => {
+        const $advertisement = document.querySelector('.add');
+        const $advertisementRandom = $sideAdvertisementArray[Math.floor(Math.random() * $sideAdvertisementArray.length)];
+        const $img = $advertisement.querySelector(':scope > img');
+        if ($advertisementRandom === $sideAdvertisementArray[0]) {
+            $advertisement.setAttribute('href', '../movies/movieList/movieInfo/3651')
+        } else if ($advertisementRandom === $sideAdvertisementArray[1]) {
+            $advertisement.setAttribute('href', '../movies/movieList/movieInfo/3628')
+        } else {
+            $advertisement.setAttribute('href', '../movies/movieList/movieInfo/3611')
+        }
+        $img.setAttribute('src', $advertisementRandom);
+    });
+
+    const $advertisementContainerArray = ['https://adimg.cgv.co.kr/images/202412/PORORO/1231_160x300.jpg', 'https://adimg.cgv.co.kr/images/202412/Moana2/1218_160x300.jpg', 'https://adimg.cgv.co.kr/images/202412/HARBIN/1227_160x300.png'];
+    const $advertisementContainer = Array.from(document.querySelectorAll('.advertisement-container'));
+    document.addEventListener("DOMContentLoaded", () => {
+        $advertisementContainer.forEach((advertisement) => {
+            const $advertisementMove = Array.from(advertisement.querySelectorAll(':scope > .advertisement-move'));
+            $advertisementMove.forEach((ad) => {
+                const $advertisementRandom = $advertisementContainerArray[Math.floor(Math.random() * $advertisementContainerArray.length)];
+                if ($advertisementRandom === $advertisementContainerArray[0]) {
+                    ad.setAttribute('href', '../movies/movieList/movieInfo/3628')
+                } else if ($advertisementRandom === $advertisementContainerArray[1]) {
+                    ad.setAttribute('href', '../movies/movieList/movieInfo/3669')
+                } else {
+                    ad.setAttribute('href', '../movies/movieList/movieInfo/3611')
+                }
+                const $img = ad.querySelector(':scope > img');
+                $img.setAttribute('src', $advertisementRandom);
+            })
+        })
+    });
+}
+// endregion
+
 const params = {
     moTitle: null,
     thName: null,
     scStartDate: null,
     time: null
 };
+
+{
+    $theaterTheater.onclick = () => {
+        const theater = {
+            thName: $theaterTheater.innerText.replace('>', '')
+        };
+        sessionStorage.setItem('theater', JSON.stringify(theater));
+    }
+}
+
+{
+    const $contentBarRetry = document.querySelector('.content-bar-retry');
+    $contentBarRetry.onclick = () => {
+        sessionStorage.removeItem('ticketParams');
+    }
+}
+
+{
+    const $infoWrapper = document.querySelector('.info-wrapper')
+    const $first = $infoWrapper.querySelector(':scope > .item:nth-child(1) > a');
+    const redirectUrl = window.location.pathname;
+    if ($first.getAttribute('href') === '/user/login') {
+        $first.setAttribute('href', `.././user/login?forward=${encodeURIComponent(redirectUrl)}`);
+    }
+}
 
 {
     window.onload = () => {
@@ -34,6 +98,8 @@ const params = {
                 region.click();
             }
         })
+    }
+    document.addEventListener('DOMContentLoaded', () => {
         if (ticketParams) {
             $movieItems.forEach((movie) => {
                 const $items = movie.querySelector(':scope > .text > .name');
@@ -44,7 +110,7 @@ const params = {
                 }
             })
         }
-    }
+    })
 }
 
 // 지정한 데이터
@@ -70,6 +136,60 @@ function checkScreen() {
                 alert('오류 발생');
                 return;
             }
+            const $regionContainer = document.querySelector('.region-container');
+            const $responseRegionContainer = new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelector('.region-container');
+            const $region = Array.from($responseRegionContainer.querySelectorAll(':scope > .region'));
+            $region.forEach((region) => {
+                if (region.innerText.includes('대구')) {
+                    region.classList.add('select');
+                }
+                region.onclick = () => {
+                    $region.forEach((reg) => {
+                        reg.classList.remove('select');
+                        if (region === reg) {
+                            reg.classList.add('select');
+                            const xhr = new XMLHttpRequest();
+                            url.searchParams.set('region', reg.innerText.split('(')[0]);
+                            xhr.onreadystatechange = () => {
+                                if (xhr.readyState !== XMLHttpRequest.DONE) {
+                                    return;
+                                }
+                                Loading.hide();
+                                if (xhr.status < 200 || xhr.status >= 300) {
+                                    alert('오류 발생');
+                                    return;
+                                }
+                                $theater.innerHTML = "";
+                                const $theaterItem = Array.from(new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelectorAll('.theater > .body > .content > .theater-container > .theater'));
+                                $theaterItem.forEach((x) => {
+                                    $theater.append(x);
+                                    x.onclick = () => {
+                                        $theaterItem.forEach((item) => {
+                                            item.classList.remove('select');
+                                            if (x === item) {
+                                                item.classList.add('select');
+                                            }
+                                            $theaterInfo.forEach((theater) => {
+                                                theater.classList.add('hidden');
+                                                if (theater.classList.contains('theater')) {
+                                                    theater.classList.remove('hidden');
+                                                }
+                                                $data.theater = 'CGV' + x.innerText;
+                                                $theaterTheater.innerText = 'CGV' + x.innerText + '>';
+                                            })
+                                        })
+                                        checkScreen();
+                                    }
+                                })
+                            };
+                            xhr.open('GET', url.toString());
+                            xhr.send();
+                            Loading.show(0);
+                        }
+                    })
+                }
+            })
+            $regionContainer.replaceWith($responseRegionContainer);
             $contentContainer.innerHTML = '';
             const $days = Array.from((new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelectorAll('.day > .body > .content > .content-container > .day-container')));
             $days.forEach((x) => {
@@ -105,7 +225,7 @@ function checkScreen() {
             $theaterItem.forEach((x) => {
                 $theater.append(x);
                 if (ticketParams) {
-                    if (ticketParams.thName != null) {
+                    if (ticketParams.thName !== null && ticketParams.thName !== undefined) {
                         if (ticketParams.thName.replace('CGV', '') === x.innerText) {
                             setTimeout(() => {
                                 x.click();
@@ -204,6 +324,60 @@ function checkScreen() {
                 alert('오류 발생');
                 return;
             }
+            const $regionContainer = document.querySelector('.region-container');
+            const $responseRegionContainer = new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelector('.region-container');
+            const $region = Array.from($responseRegionContainer.querySelectorAll(':scope > .region'));
+            $region.forEach((region) => {
+                if (region.innerText.includes('대구')) {
+                    region.classList.add('select');
+                }
+                region.onclick = () => {
+                    $region.forEach((reg) => {
+                        reg.classList.remove('select');
+                        if (region === reg) {
+                            reg.classList.add('select');
+                            const xhr = new XMLHttpRequest();
+                            url.searchParams.set('region', reg.innerText.split('(')[0]);
+                            xhr.onreadystatechange = () => {
+                                if (xhr.readyState !== XMLHttpRequest.DONE) {
+                                    return;
+                                }
+                                Loading.hide();
+                                if (xhr.status < 200 || xhr.status >= 300) {
+                                    alert('오류 발생');
+                                    return;
+                                }
+                                $theater.innerHTML = "";
+                                const $theaterItem = Array.from(new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelectorAll('.theater > .body > .content > .theater-container > .theater'));
+                                $theaterItem.forEach((x) => {
+                                    $theater.append(x);
+                                    x.onclick = () => {
+                                        $theaterItem.forEach((item) => {
+                                            item.classList.remove('select');
+                                            if (x === item) {
+                                                item.classList.add('select');
+                                            }
+                                            $theaterInfo.forEach((theater) => {
+                                                theater.classList.add('hidden');
+                                                if (theater.classList.contains('theater')) {
+                                                    theater.classList.remove('hidden');
+                                                }
+                                                $data.theater = 'CGV' + x.innerText;
+                                                $theaterTheater.innerText = 'CGV' + x.innerText + '>';
+                                            })
+                                        })
+                                        checkScreen();
+                                    }
+                                })
+                            };
+                            xhr.open('GET', url.toString());
+                            xhr.send();
+                            Loading.show(0);
+                        }
+                    })
+                }
+            })
+            $regionContainer.replaceWith($responseRegionContainer);
             $theater.innerHTML = "";
             const $theaterItem = Array.from(new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelectorAll('.theater > .body > .content > .theater-container > .theater'));
             $theaterItem.forEach((x) => {
@@ -311,10 +485,65 @@ function checkScreen() {
             if (xhr.readyState !== XMLHttpRequest.DONE) {
                 return;
             }
+            Loading.hide();
             if (xhr.status < 200 || xhr.status >= 300) {
                 alert('오류 발생');
                 return;
             }
+            const $regionContainer = document.querySelector('.region-container');
+            const $responseRegionContainer = new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelector('.region-container');
+            const $region = Array.from($responseRegionContainer.querySelectorAll(':scope > .region'));
+            $region.forEach((region) => {
+                if (region.innerText.includes('대구')) {
+                    region.classList.add('select');
+                }
+                region.onclick = () => {
+                    $region.forEach((reg) => {
+                        reg.classList.remove('select');
+                        if (region === reg) {
+                            reg.classList.add('select');
+                            const xhr = new XMLHttpRequest();
+                            url.searchParams.set('region', reg.innerText.split('(')[0]);
+                            xhr.onreadystatechange = () => {
+                                if (xhr.readyState !== XMLHttpRequest.DONE) {
+                                    return;
+                                }
+                                Loading.hide();
+                                if (xhr.status < 200 || xhr.status >= 300) {
+                                    alert('오류 발생');
+                                    return;
+                                }
+                                $theater.innerHTML = "";
+                                const $theaterItem = Array.from(new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelectorAll('.theater > .body > .content > .theater-container > .theater'));
+                                $theaterItem.forEach((x) => {
+                                    $theater.append(x);
+                                    x.onclick = () => {
+                                        $theaterItem.forEach((item) => {
+                                            item.classList.remove('select');
+                                            if (x === item) {
+                                                item.classList.add('select');
+                                            }
+                                            $theaterInfo.forEach((theater) => {
+                                                theater.classList.add('hidden');
+                                                if (theater.classList.contains('theater')) {
+                                                    theater.classList.remove('hidden');
+                                                }
+                                                $data.theater = 'CGV' + x.innerText;
+                                                $theaterTheater.innerText = 'CGV' + x.innerText + '>';
+                                            })
+                                        })
+                                        checkScreen();
+                                    }
+                                })
+                            };
+                            xhr.open('GET', url.toString());
+                            xhr.send();
+                            Loading.show(0);
+                        }
+                    })
+                }
+            })
+            $regionContainer.replaceWith($responseRegionContainer);
             $theater.innerHTML = "";
             const $theaterItem = Array.from(new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelectorAll('.theater > .body > .content > .theater-container > .theater'));
             $theaterItem.forEach((x) => {
@@ -340,6 +569,7 @@ function checkScreen() {
         };
         xhr.open('GET', url.toString());
         xhr.send();
+        Loading.show();
     }
     if (!movie && theater && date) {
         const xhr = new XMLHttpRequest();
@@ -423,13 +653,6 @@ function checkScreen() {
                             $theaterTime.innerText = $oldText + $text.innerText;
                             $rating.classList.remove('hidden');
                             $firstButton.classList.add('after');
-                            params.moTitle = $data.movie;
-                            params.thName = $data.theater;
-                            params.scStartDate = $data.date;
-                            sessionStorage.setItem('ticketParams', JSON.stringify(params));
-                            $data.movie = null;
-                            $data.theater = null;
-                            $data.date = null;
                         }
                     })
                 })
@@ -457,11 +680,14 @@ function movieItem($movieItems) {
                         if (xhr.readyState !== XMLHttpRequest.DONE) {
                             return;
                         }
-                        Loading.hide();
+                        if (!ticketParams) {
+                            Loading.hide();
+                        }
                         if (xhr.status < 200 || xhr.status >= 300) {
                             alert('오류 발생');
                             return;
                         }
+                        checkScreen();
                         const $info = Array.from(new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelectorAll(' #control-bar > .container > .containers > [data-id="movieInfo"]'));
                         $containers.innerHTML = "";
                         $info.forEach((info) => {
@@ -474,10 +700,9 @@ function movieItem($movieItems) {
                     };
                     xhr.open('GET', url.toString());
                     xhr.send();
-                    Loading.show(0);
+                    Loading.show();
                 }
             })
-            checkScreen();
         }
     })
 }
@@ -505,12 +730,11 @@ $orderItems.forEach((x) => {
                         $movieItem.forEach((x) => {
                             $movie.append(x);
                             movieItem($movieItem);
-                            checkScreen();
                         })
                     };
                     xhr.open('GET', './movies');
                     xhr.send();
-                    Loading.show(0);
+                    Loading.show();
                 } else if (x.innerText === '예매율순') {
                     const xhr = new XMLHttpRequest();
                     xhr.onreadystatechange = () => {
@@ -527,12 +751,11 @@ $orderItems.forEach((x) => {
                         $movieItem.forEach((x) => {
                             $movie.append(x);
                             movieItem($movieItem);
-                            checkScreen();
                         })
                     };
                     xhr.open('GET', './');
                     xhr.send();
-                    Loading.show(0);
+                    Loading.show();
                 }
             }
         })
@@ -540,6 +763,7 @@ $orderItems.forEach((x) => {
 })
 
 movieItem($movieItems);
+
 // endregion
 
 $regionItems.forEach((x) => {
@@ -555,7 +779,9 @@ $regionItems.forEach((x) => {
                     if (xhr.readyState !== XMLHttpRequest.DONE) {
                         return;
                     }
-                    Loading.hide();
+                    if (!ticketParams) {
+                        Loading.hide();
+                    }
                     if (xhr.status < 200 || xhr.status >= 300) {
                         alert('오류 발생');
                         return;
@@ -619,6 +845,8 @@ $dayContainer.forEach((days) => {
     })
 })
 
+// ---------------------------------- 분리점
+
 const $whiteBlow = document.getElementById('whiteBlow');
 const $mains = Array.from($mainContainer.querySelectorAll(':scope > .mains'));
 const $seatContainer = $controlBar.querySelector(':scope > .container > .seat-container');
@@ -630,10 +858,9 @@ const $RightSecond = $controlBar.querySelector(':scope > .container > .second.ri
 const $LeftSecond = $controlBar.querySelector(':scope > .container > .second.left-button');
 const $paymentSection = document.getElementById('payment-section');
 
+
 const $mainPayment = document.getElementById("main-payment");
-const $mainSeat = document.getElementById("main-seat");
 const $payForm = $paymentSection.querySelector(':scope > .pay-form');
-const $realMain = document.getElementById("main");
 let t = 0;
 let m = 0;
 const $seatContent = $controlBar.querySelector(':scope > .container > .seat > .seat-content');
@@ -656,10 +883,14 @@ const $payPriceWon4 = document.getElementById("pay-price-won4");
 const $payPriceWon5 = document.getElementById("pay-price-won5");
 const $payPriceWon6 = document.getElementById("pay-price-won6");
 const $payPriceWonInt = document.getElementById("pay-price-won-int");
-const $SeatDate = document.getElementById("seat-date");
+const $seatDate = document.getElementById("seat-date");
+const $seatTime = document.getElementById("seat-time");
+const $posterImg = document.getElementById("poster-img");
+
 
 const adults = document.querySelectorAll('.adults');
 const seats = [];
+
 
 const table = document.createElement('table');
 table.className = 'table';
@@ -677,10 +908,13 @@ $seatContent.appendChild($seatNumber);
 
 let selectedSeats = [];
 
+
 const $payButton = document.getElementById('pay-button');
 const $realCancel = $payButton.querySelector(':scope > .real-cancel');
 const $seatColor = document.getElementById('seat-color');
 const $method = document.getElementById('method');
+const $payKind = document.getElementById('pay-kind');
+
 
 let selectedHuman = [];
 const $priceTitle = $controlBar.querySelector(':scope > .container > .price > .price-title');
@@ -705,7 +939,6 @@ const $payMovie = document.getElementById('pay-movie')
 const $payTheater = document.getElementById('pay-theater')
 const $payCinema = document.getElementById('pay-cinema')
 const $payTime = document.getElementById('pay-time')
-const $theaterMovie = document.getElementById('theater-movie');
 
 const $checkboxAgreeAll = document.getElementById('checkbox-agree-all');
 const $checkboxAgreeSolo = document.getElementById('checkbox-agree-solo');
@@ -734,7 +967,7 @@ const $paycoContainer = $mainPayment.querySelector(':scope > .left-container > .
 const $cultureCard = document.querySelector('input[name="culture-card"]');
 const $noneCulturePayText = $mainPayment.querySelector(':scope > .left-container >.simple-pay-container > .naver-pay-container > .none-culture-pay-text')
 const $CulturePayText = $mainPayment.querySelector(':scope > .left-container >.simple-pay-container > .naver-pay-container > .culture-pay-text')
-
+let $theaterTheater2 = "";
 
 $rightButtons.forEach((x) => {
     x.onclick = () => {
@@ -743,7 +976,12 @@ $rightButtons.forEach((x) => {
             if (sessionStorage.getItem('user') === null) {
                 const userCheck = confirm("로그인이 필요한 서비스입니다.\n로그인 페이지로 이동하시겠습니까?")
                 if (userCheck) {
-                    window.location.replace('.././user/login');
+                    params.moTitle = $data.movie;
+                    params.thName = $data.theater;
+                    params.scStartDate = $data.date;
+                    sessionStorage.setItem('ticketParams', JSON.stringify(params));
+                    const redirectUrl = window.location.pathname;
+                    window.location.replace(`.././user/login?forward=${encodeURIComponent(redirectUrl)}`);
                 } else {
                     return;
                 }
@@ -751,20 +989,26 @@ $rightButtons.forEach((x) => {
             if (sessionStorage.getItem('user') !== null) {
                 sessionStorage.removeItem('ticketParams');
             }
+
+            const $theaterMovie = $containers.querySelector(':scope > .posters > .movie-info > .title');
+
             $mains.forEach((main) => {
                 main.classList.add('hidden');
                 if (x.getAttribute('data-id') === 'main' &&
                     main.getAttribute('data-id') === 'main-seat') {
                     main.classList.remove('hidden');
-                    console.log($SeatDate);
-                    $SeatDate.innerText = `${$theaterTime.innerText}`;
+                    $seatDate.innerText = `${$theaterTime.innerText}`;
+                    $theaterTheater2 = `${$theaterTheater.innerText.substring(0, $theaterTheater.innerText.length - 1)}`;
+
                     let rawDateStr = $theaterTime.innerText;
                     let formattedDate = rawDateStr
                         .replace(/\([^)]+\)/, "T") // "(금)" 제거
                         .replace(/\./g, "-"); // "." -> "-"
+
                     const xhr = new XMLHttpRequest();
-                    const url = new URL("http://localhost:8080/ticket/seat"); //ticket
-                    url.searchParams.set('thName', $theaterTheater.innerText);
+                    const url = new URL(location.href); //ticket
+                    url.pathname += 'seat'
+                    url.searchParams.set('thName', $theaterTheater2);
                     url.searchParams.set('ciName', $theaterCinema.innerText);
                     url.searchParams.set('moTitle', $theaterMovie.innerText);
                     url.searchParams.set('scStartDate', formattedDate);
@@ -778,14 +1022,42 @@ $rightButtons.forEach((x) => {
                         const response = JSON.parse(xhr.responseText);
                         const result = response['result'];
                         const result2 = response['results'];
-                        console.log(result);
-                        console.log(result2);
                         $seatColor.innerText = 40 - result.length;
 
                         $payMovie.innerText = `${$theaterMovie.innerText}`;
-                        $payTheater.innerText = `${$theaterTheater.innerText}`;
+                        $payTheater.innerText = `${$theaterTheater2}`;
                         $payCinema.innerText = `${$theaterCinema.innerText}`;
-                        $payTime.innerText = `${$theaterTime.innerText}`;
+
+                        // 주어진 날짜와 시간
+                        let dateTime = $theaterTime.innerText;
+                        let addMinutes = `${result2[0].moTime}`;
+// 시와 분을 추출
+                        let timePart = dateTime.split(')')[1]; // "08:45" 추출
+                        let [hour, minute] = timePart.split(':').map(Number); // hour = 8, minute = 45
+
+// 추가 시간 계산
+                        let extraHours = Math.floor(addMinutes / 60); // 124 ÷ 60 = 2
+                        let extraMinutes = addMinutes % 60;          // 124 % 60 = 4
+
+// 기존 시간에 추가
+                        let newHour = hour + extraHours;             // 8 + 2 = 10
+                        let newMinute = minute + extraMinutes;       // 45 + 4 = 49
+
+// 분이 60을 넘는 경우 처리 (현재는 필요 없음)
+                        if (newMinute >= 60) {
+                            newHour += Math.floor(newMinute / 60);
+                            newMinute %= 60;
+                        }
+
+
+// 시와 분을 두 자리로 맞추기
+                        newHour = newHour.toString().padStart(2, '0'); // 2자리 형식의 시
+                        newMinute = newMinute.toString().padStart(2, '0'); // 2자리 형식의 분
+
+// 결과 출력
+                        $seatTime.innerText = `${newHour}:${newMinute}`;
+
+                        $payTime.innerText = `${$theaterTime.innerText}` + ` ~ ` + `${$seatTime.innerText}`;
 
 
                         rows.forEach(row => {
@@ -838,6 +1110,7 @@ $rightButtons.forEach((x) => {
                                     selectedHuman.push(`일반 ${(radio.value)} 명`);
                                     $seatHuman.textContent = `${selectedHuman.join(', ')}`
                                     $payHuman.textContent = selectedHuman;
+                                    $posterImg.src = `${result2[0].MImgUrl}`
 
 
                                 } else {
@@ -903,7 +1176,7 @@ $rightButtons.forEach((x) => {
                             })
                         });
                     }
-                    xhr.open('GET', url.toString());
+                    xhr.open('GET', url.toString()); //ticket/ciName=2관&thName=CGV대구
                     xhr.send();
                 }
                 if (x.getAttribute('data-id') === 'main-seat' &&
@@ -1041,7 +1314,7 @@ $realCancel.onclick = () => {
 
 }
 
-
+$method.innerText = "신용카드"
 $paymentCheck.forEach((radio) => {
     radio.addEventListener('change', () => {
             pay = String(`${(radio.value)}`);
@@ -1052,12 +1325,18 @@ $paymentCheck.forEach((radio) => {
 
             if (pay === "card") {
                 $method.innerText = "신용카드"
+                $payKind.innerText = $method.innerText;
+
                 $cardContainer.style.display = 'block';
             } else if (pay === "cellPhone") {
                 $method.innerText = "휴대폰 결제"
+                $payKind.innerText = $method.innerText;
+
                 $cellphoneContainer.style.display = 'block';
             } else if (pay === "simple-pay") {
                 $method.innerText = "간편결제"
+                $payKind.innerText = $method.innerText;
+
                 $simplePayContainer.style.display = 'block';
                 $simplePayCheck.forEach((radio) => {
                     radio.addEventListener('change', () => {
@@ -1080,10 +1359,13 @@ $paymentCheck.forEach((radio) => {
                 })
             } else if (pay === "credit") {
                 $method.innerText = "내통장결제"
+                $payKind.innerText = $method.innerText;
+
 
                 $creditContainer.style.display = 'block';
             } else if (pay === "toss") {
                 $method.innerText = "토스"
+                $payKind.innerText = $method.innerText;
                 $tossContainer.style.display = 'block';
             }
         }
@@ -1115,7 +1397,7 @@ $checkboxAgrees.forEach(checkbox => {
 
 function ReservationRefundRegulation() {
     window.open(
-        "http://localhost:8080/ticket/ReservationRefundRegulations", // 팝업에서 열릴 URL
+        "./ReservationRefundRegulations", // 팝업에서 열릴 URL
         "ReservationRefundRegulation",         // 팝업창 이름
         "width=600,height=800,left=200,top=200" // 크기와 위치
     );
@@ -1147,7 +1429,6 @@ function TCPPIC() {
 
 $payForm.onsubmit = (e) => {
     e.preventDefault(); // 기본 폼 제출 방지
-
     // 약관 동의를 체크했는지 확인
     if ($checkboxAgreeAll.checked && $checkboxAgreeSolo.checked) {
         // 새로운 XMLHttpRequest 객체 생성
@@ -1156,48 +1437,85 @@ $payForm.onsubmit = (e) => {
         // FormData 객체 생성
         const formData = new FormData();
 
-
         // 세션에서 userId 값을 가져옴
-        const sessionUsId = sessionStorage.getItem('userId');  // 세션에서 userId를 가져오기
-        if (sessionUsId) {
-            formData.append("usId", sessionUsId);  // 세션에서 가져온 userId 추가
+        const sessionUsId = sessionStorage.getItem('user');  // 세션에서 user 가져오기
+
+        if (sessionUsId === null || sessionUsId.trim() === "") {
+            const userCheck = confirm("로그인이 필요한 서비스입니다.\n로그인 페이지로 이동하시겠습니까?")
+            if (userCheck) {
+                const redirectUrl = window.location.pathname;
+                window.location.replace(`.././user/login?forward=${encodeURIComponent(redirectUrl)}`);
+            } else {
+                return;
+            }
         } else {
-            console.log('세션에 userId가 없습니다.');
+            const trimmedUsId = sessionUsId.trim();  // null 체크 후 trim 호출
+            formData.append("usNum", trimmedUsId);  // 세션에서 가져온 userId 추가
         }
+        let rawDateStr = $theaterTime.innerText;
+        let formattedDate = rawDateStr
+            .replace(/\([^)]+\)/, "T") // "(금)" 제거
+            .replace(/\./g, "-"); // "." -> "-"
 
         // 폼 데이터 추가 (span의 텍스트는 innerText로 가져오기)
-        formData.append("paPrice", document.getElementById('pay-price-won-int').innerText); // span 요소의 텍스트
-        formData.append("meName", document.getElementById('method').innerText);  // span 요소에서 결제 방법 번호 가져오기
-
-        // 좌석 정보 처리 (seats가 input 요소가 아니라면 innerText 사용)
-        const seats = Array.from(document.querySelectorAll('.pay-seat'));  // pay-seat 클래스를 가진 모든 요소를 선택
-        seats.forEach((seat, index) => {
-            formData.append(`seName${index}`, seat.innerText.trim());  // span 요소의 텍스트
+        formData.append("paPrice", document.getElementById('pay-price-won-int').innerText.trim()); // span 요소의 텍스트
+        formData.append("meName", document.getElementById('method').innerText.trim());  // span 요소에서 결제 방법 번호 가져오기
+        formData.append("moTitle", $payMovie.innerText);
+        formData.append("ciName", $theaterCinema.innerText);
+        formData.append("thName", $theaterTheater2);
+        formData.append("scStartDate", formattedDate);
+        selectedSeats.forEach(seat => {
+            formData.append("seName", seat);
         });
-
         // 요청 상태 변화 처리
         xhr.onreadystatechange = () => {
             if (xhr.readyState !== XMLHttpRequest.DONE) {
                 return;
             }
-            if (xhr.status >= 200 && xhr.status < 300) {
-            } else {
+            Loading.hide();
+
+            if (xhr.status < 200 && xhr.status >= 300) {
                 alert("오류가 발생했습니다. 다시 시도해주세요.");
+                return;
             }
+
             const response = JSON.parse(xhr.responseText);
-            console.log(response);
-            if (response['result'] !== "success") {
-                alert("오류가 발생했습니다. 다시 시도해주세요.");
+            const result2 = response['results'];
+            if (response['result'] === "success") {
+                alert("결제가 완료되었습니다.");
+                // 결제 완료 후 sessionStorage에 상태 저장
+                sessionStorage.setItem('paymentComplete', 'true');
+                // 예매 정보도 sessionStorage에 저장
+                sessionStorage.setItem('meName', document.getElementById('method').innerText);
+                sessionStorage.setItem('moTitle', $payMovie.innerText);
+                sessionStorage.setItem('ciName', $theaterCinema.innerText);
+                sessionStorage.setItem('thName', $theaterTheater2);
+                sessionStorage.setItem('scStartDate', $payTime.innerText);
+                sessionStorage.setItem('paPrice', $seatPriceAdd.innerText);
+                sessionStorage.setItem('human', $seatHuman.innerText);
+                sessionStorage.setItem('seName', $seatNumber.innerText);
+                sessionStorage.setItem('poster', $posterImg.src);
+                sessionStorage.setItem('paymentNumber', `${result2}`);
+                window.location.href = ("../../ticket/reservation")
+            } else if (response['result'] === "failure_un_steady_login") {
+                const userCheck = confirm("로그인이 필요한 서비스입니다.\n로그인 페이지로 이동하시겠습니까?")
+                if (userCheck) {
+                    const redirectUrl = window.location.pathname;
+                    window.location.replace(`.././user/login?forward=${encodeURIComponent(redirectUrl)}`);
+                } else {
+                    return;
+                }
+
             }
         };
 
 
         // 요청 설정 및 전송
-        xhr.open('POST', '../ticket/reservation');  // 실제 결제 처리 URL로 수정
+        xhr.open('POST', location.href);
         xhr.send(formData);
+        Loading.show();
 
     } else {
         alert("약관을 모두 동의해주세요");
     }
 };
-

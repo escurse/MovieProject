@@ -1,0 +1,961 @@
+body {
+  background-color: #f8f8f8;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.movie-detail-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  background-color: #f8f8f8;
+  padding: 20px;
+  border-radius: 8px;
+
+  .movie-header {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 50px;
+
+    .poster {
+      flex: 0 0 200px;
+
+      img {
+        width: 86%;
+      }
+    }
+
+    .movie-info {
+      flex: 1;
+
+      .title {
+        font-size: 28px;
+        font-weight: bold;
+        margin: 0;
+        color: #333;
+      }
+
+      .stats {
+        display: flex;
+        gap: 20px;
+        font-size: 16px;
+        margin-bottom: 15px;
+        margin-top: 10px;
+
+        p {
+          margin: 0;
+
+          span {
+            font-weight: bold;
+          }
+        }
+      }
+
+      .details {
+        font-size: 13px;
+
+        p {
+          margin: 5px 0;
+
+          span {
+            font-weight: bold;
+            color: #333;
+          }
+        }
+      }
+
+      .buttons {
+        margin-top: 20px;
+
+        .btn {
+          font-size: 16px;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+
+          &.reserve {
+            background-color: #ff4d4f;
+            color: #fff;
+          }
+
+          &:hover {
+            opacity: 0.9;
+          }
+        }
+      }
+    }
+  }
+
+  .tabs-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 20px;
+
+    .tabs {
+      flex: 3;
+      background-color: #ff5a5a; /* 빨간 배경 */
+      padding: 8px;
+      max-width: 450px;
+      margin: 0 auto; /* 화면 중앙 정렬 */
+      display: flex;
+      justify-content: center; /* 탭 중앙 정렬 */
+
+
+      .tab-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center; /* 중앙 정렬 */
+        justify-content: center; /* 가운데 정렬 */
+      }
+
+      .tab-item {
+        margin: 0 10px; /* 좌우 간격 조정 */
+        padding: 5px 10px;
+        font-size: 14px; /* 크기 줄이기 */
+        cursor: pointer;
+      }
+
+      .tab-item a {
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+      }
+
+      .tab-separator {
+        color: white;
+        font-weight: bold;
+        margin: 0 5px;
+        font-size: 14px; /* 크기 조정 */
+      }
+    }
+  }
+
+  #overview {
+    margin-top: 20px;
+
+    .content-container {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+
+
+      .movie-synopsis {
+        flex: 2;
+        margin-top: 50px;
+        white-space: pre-wrap; /* 줄바꿈과 공백을 유지 */
+        word-wrap: break-word; /* 단어가 길 경우 강제로 줄바꿈 */
+        line-height: 2; /* 줄 간격 조정 */
+      }
+
+    }
+    .ad {
+      width: 100%;
+      height: 100px;
+      border: 0;
+      aspect-ratio: auto 800 / 90;
+      overflow-clip-margin: content-box;
+      border-right-style: solid;
+    }
+  }
+}
+
+
+section {
+  display: none; /* 기본적으로 모든 섹션 숨김 */
+}
+
+section.active {
+  display: block; /* 활성화된 섹션만 표시 */
+}
+
+.tabs .tab-item a.active {
+  font-weight: bold;
+}
+
+#character {
+  padding: 20px;
+
+  h2 {
+    font-size: 15px;
+    margin-bottom: 15px;
+    background-color: #ddd;
+    padding: 8px;
+    color: #333;
+  }
+
+  .movie-people-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /* 감독과 출연 사이의 간격 */
+  }
+
+  .director {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    img {
+      width: 100px;
+      height: 136px;
+      object-fit: cover;
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+
+      .name {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .related-works {
+        display: flex;
+        justify-content: flex-end;
+        margin-right: 15px;
+
+        p {
+          width: 32px;
+          height: 37px;
+          background: url("https://img.cgv.co.kr/R2014/images/title/text_relationmovie.gif") 0 0 no-repeat;
+          margin-right: 5px;
+        }
+
+        .works {
+          display: flex;
+          gap: 10px;
+          justify-content: flex-end;
+
+          div {
+            img {
+              width: 70px;
+              height: 100px;
+              object-fit: cover;
+            }
+
+            span {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .actors-list {
+    display: grid; /* 그리드 레이아웃 활성화 */
+    grid-template-columns: repeat(2, 1fr); /* 한 줄에 두 개씩 배치 */
+    gap: 20px; /* 그리드 아이템 간의 간격 */
+  }
+
+  .actor {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: #f9f9f9;
+    padding: 10px;
+
+    img {
+      width: 80px;
+      height: 100px;
+      object-fit: cover;
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      .role {
+        font-size: 14px;
+        font-weight: bold;
+        color: #ff5a5a;
+      }
+
+      .name {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+      }
+    }
+  }
+}
+
+.review-no-data {
+  width: 200%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 100px;
+
+  .review-no-text {
+    font-size: 17px;
+    font-weight: 500;
+  }
+}
+
+.review-header {
+  margin: 20px 0;
+  padding: 30px;
+  background: #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .bold {
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.8em;
+    color: #212224;
+
+    strong {
+      color: #ff4d4f;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    gap: 10px;
+
+    .write-review-btn {
+      padding: 8px 16px;
+      border: 1px solid #ddd;
+      background-color: #ff5a5a;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .my-review-btn {
+      padding: 8px 16px;
+      border: 1px solid #ddd;
+      background-color: #666;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  }
+}
+
+.reviews {
+  margin-top: 5px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 한 줄에 두 개씩 */
+  border-top: 1px solid black;
+
+  .review-item {
+    display: flex;
+    gap: 15px;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    align-items: flex-start;
+    background-color: #fff;
+    border-radius: 4px;
+
+    &:nth-child(odd) {
+      border-right: 1px solid #ddd;
+    }
+
+
+
+    .review-user {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+
+      .profile-img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
+
+    .review-content {
+      margin-top: 10px;
+      flex: 1;
+      position: relative;
+
+      .user-name {
+        font-weight: bold;
+        color: #333;
+        font-size: 14px;
+        display: inline-block;
+      }
+
+
+      .menu-btn {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 20px;
+        color: #aaa;
+
+      }
+
+      .menu-dropdown {
+        position: absolute;
+        top: 25px;
+        right: 0;
+        background-color: #333;
+        color: white;
+        border-radius: 5px;
+        padding: 5px 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        font-size: 14px;
+        z-index: 1000;
+        white-space: nowrap;
+
+        ul {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+
+          li {
+            padding: 5px 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+
+            &:hover {
+              background-color: #444;
+            }
+
+            &.edit-review::before {
+              content: '✏️';
+              margin-right: 8px;
+            }
+
+            &.delete-review::before {
+              content: '🗑️';
+              margin-right: 8px;
+            }
+          }
+        }
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .review-text {
+        margin: 8px 0;
+        font-size: 14px;
+        color: black;
+        white-space: pre-wrap; /* 줄바꿈과 공백 유지 */
+        word-wrap: break-word; /* 단어가 너무 길 경우 강제로 줄바꿈 */
+      }
+
+      .spring {
+        height: 100px;
+      }
+
+      .review-footer {
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        color: #999;
+
+        .review-date {
+          color: #666;
+        }
+
+
+        #like-btn {
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-size: 14px;
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          color: black;
+        }
+
+        .like-count {
+          margin-left: 6px;
+          color: black;
+        }
+      }
+    }
+  }
+}
+
+.review-sort {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 20px;
+
+  .pagination-btn {
+    padding: 5px 10px;
+    margin: 0 2px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+
+    &.active {
+      color: #ff5a5a;
+    }
+  }
+
+  .review-sort-button {
+    padding: 5px 10px;
+    margin: 0 2px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+
+    &.active {
+      color: #ff5a5a;
+    }
+  }
+}
+
+.paging {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+
+  a {
+    padding: 5px 5px;
+    margin: 0 2px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+
+    &.active {
+      color: #ff5a5a;
+    }
+  }
+}
+
+.reserve-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+
+  .modal-content {
+    background-color: #F6F6F4;
+    border-radius: 8px;
+    width: 700px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: left;
+    position: relative;
+    padding: 0; /* 전체 여백 제거 */
+
+    // 헤더 영역
+    h2 {
+      margin: 0;
+      padding: 10px 20px;
+      font-size: 18px;
+      font-weight: bold;
+      background-color: #333333; /* 다크 그레이 배경 */
+      color: #f2f0e5; /* 밝은 텍스트 */
+      border-radius: 8px 8px 0 0; /* 상단 모서리 둥글게 */
+      display: flex; /* Flexbox 사용 */
+      justify-content: space-between; /* 요소를 양쪽 끝으로 배치 */
+      align-items: center; /* 수직 정렬 */
+    }
+
+    // 버튼과 h2를 감쌀 헤더 구조 추가
+    .modal-header {
+      display: flex; /* Flexbox 사용 */
+      justify-content: space-between; /* 양쪽 끝 정렬 */
+      align-items: center; /* 수직 가운데 정렬 */
+      padding: 10px 20px; /* 적절한 여백 */
+      background-color: #333333; /* 다크 그레이 배경 */
+      color: #f2f0e5; /* 밝은 텍스트 */
+      border-radius: 8px 8px 0 0; /* 상단 모서리 둥글게 */
+    }
+
+    .close-button {
+      background: none;
+      border: none;
+      font-size: 20px;
+      font-weight: bold;
+      color: #f2f0e5; /* 텍스트 색상 */
+      cursor: pointer;
+      padding: 0;
+      margin: 0;
+      outline: none;
+
+      &:hover {
+        color: #ff3b30; /* Hover 시 색상 */
+      }
+    }
+
+    // 나머지 모달 스타일
+    .movie-title {
+      font-size: 30px;
+      font-weight: bold;
+      text-align: center;
+      color: #555;
+      margin: 20px 0;
+    }
+
+    .review-userInfo {
+      margin-top: 10px;
+      display: flex;
+      align-items: center; /* 세로 중앙 정렬 */
+      justify-content: center; /* 가로 중앙 정렬 */
+      flex-direction: column; /* 이미지와 이름을 세로로 배치 */
+
+      .profile-img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 5px; /* 이미지와 이름 간격 추가 */
+      }
+
+      .user-name {
+        font-size: 14px; /* 이름 글꼴 크기 */
+        font-weight: bold;
+        color: #333;
+        text-align: center; /* 텍스트 중앙 정렬 */
+      }
+    }
+
+
+    .label {
+      display: flex;
+      justify-content: center;
+      align-items: center; /* 세로 중앙 정렬 */
+      flex-direction: column; /* 자식 요소를 세로로 배치 */
+      height: 100%; /* 부모 요소 높이를 100%로 설정 */
+      margin-top: 10px;
+      width: 100%;
+
+      textarea#reviewText {
+        width: 600px;
+        height: 90px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 14px;
+        resize: none;
+        outline: none;
+        margin: 0 auto;
+        display: block;
+
+      }
+    }
+
+
+
+
+
+    .modal-action {
+      margin: 10px 40px 35px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+
+      button#submitReview {
+        background-color: #FB4357;
+        color: #fff;
+        padding: 6px 15px;
+        border: none;
+        font-size: 14px;
+        cursor: pointer;
+      }
+
+      #charCount {
+        font-size: 15px;
+        text-align: right;
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+.reserve-btn {
+  display: block;
+  background-color: #e74c3c;
+  border: none;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  width: 80px;
+
+  &:hover {
+    background-color: #c0392b;
+  }
+}
+
+#schedule {
+  .IMAX {
+    width: 5rem;
+    height: 1rem;
+    background-image: url("https://img.cgv.co.kr/R2014/images/sprite/sprite_screentype02.png");
+    background-repeat: no-repeat;
+    background-position: -99px -18px;
+    display: flex;
+  }
+
+  .DX {
+    width: 5rem;
+    height: 1rem;
+    background-image: url("https://img.cgv.co.kr/R2014/images/sprite/sprite_screentype02.png");
+    background-repeat: no-repeat;
+    background-position: -99px -36px;
+    display: flex;
+  }
+
+  .SCREENX {
+    width: 5rem;
+    height: 1rem;
+    background-image: url("https://img.cgv.co.kr/R2014/images/sprite/sprite_screentype02.png");
+    background-repeat: no-repeat;
+    background-position: -99px -162px;
+    display: flex;
+  }
+
+  .CINE\&FORET {
+    width: 5rem;
+    height: 1rem;
+    background-image: url("https://img.cgv.co.kr/R2014/images/sprite/sprite_screentype02.png");
+    background-repeat: no-repeat;
+    background-position: -99px -348px;
+    display: flex;
+  }
+
+  > .main {
+    height: 2rem;
+    margin-top: 1rem;
+    padding: 0.3rem 0;
+    border-top: 0.3rem solid #241D1E;
+    border-bottom: 0.3rem solid #241D1E;
+
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 4.2rem;
+    justify-content: flex-start;
+
+    > .item {
+      color: #666;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+
+      &.select {
+        padding: 0.85rem 0;
+        color: #333;
+        background-image: url("https://img.cgv.co.kr/r2014/images/common/ico/ico_arrow02.png");
+        background-repeat: no-repeat;
+        background-position-x: 50%;
+        background-position-y: 97%;
+      }
+
+      &:nth-child(1) {
+        margin-left: 2rem;
+      }
+
+      &:hover {
+        color: #333;
+      }
+    }
+  }
+
+  > .cinema-info {
+    > .day-containers {
+      height: 100%;
+      padding: 0.5rem 0 3rem 0;
+      border-top: #241d1e solid 0.2rem;
+      position: relative;
+
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+
+      > .before {
+        cursor: pointer;
+        margin-right: 3rem;
+        width: 3.5rem;
+        height: 1.5rem;
+        background-image: url("https://img.cgv.co.kr/r2014/images/sprite/sprite_btn.png");
+        background-repeat: no-repeat;
+        background-position: -117px -174px;
+        border: none;
+      }
+
+      > .after {
+        right: 0;
+        cursor: pointer;
+        position: absolute;
+        width: 3.5rem;
+        height: 1.15rem;
+        background-image: url("https://img.cgv.co.kr/r2014/images/sprite/sprite_btn.png");
+        background-repeat: no-repeat;
+        background-position: -117px -155px;
+        border: none;
+      }
+
+      > .day-container {
+        height: 100%;
+
+        display: flex;
+        flex-direction: row;
+
+        > .item {
+          width: 100%;
+          height: 100%;
+          padding: 0.3rem 0.5rem;
+          color: #717171;
+          border: transparent solid 0.15rem;
+          cursor: pointer;
+          box-sizing: border-box;
+
+          align-items: center;
+          display: flex;
+          flex-direction: row;
+          gap: 0.15rem;
+          justify-content: center;
+
+          &.select {
+            color: #000000;
+            border-color: #000000;
+            border-radius: 0.25rem;
+          }
+
+          &.hidden {
+            display: none;
+          }
+
+          > .small-container {
+            width: 1.4rem;
+
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+
+            .day {
+              font-size: 0.7rem;
+            }
+          }
+
+          > .day {
+            font-size: 1.9rem;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+
+    > .notice {
+      padding: 0.5rem 0;
+      font-weight: 400;
+      color: #794624;
+    }
+
+    > .notice-footer {
+      border-top: 0.15rem solid #474746;
+      padding-top: 0.5rem;
+      color: #666;
+    }
+
+    > .items {
+      > .item {
+        border-top: 0.1rem solid #474746;
+        padding: 1.5rem 0;
+
+        display: flex;
+        flex-direction: row;
+
+        > .theater {
+          width: 8rem;
+          color: #000;
+          padding: 1rem 0.5rem;
+          font-weight: 700;
+          font-size: 1.5rem;
+        }
+
+        > .screens {
+          display: flex;
+          flex-direction: column;
+
+          > .screen-container {
+            width: 765px;
+            padding: 1rem 1rem;
+
+            > .theater-info {
+              align-items: center;
+              display: flex;
+              flex-direction: row;
+
+              .text {
+                margin: 0 0.5rem;
+                font-size: 0.8rem;
+                font-weight: 500;
+              }
+            }
+
+            > .time-table-container {
+
+              display: flex;
+              flex-direction: row;
+              flex-wrap: wrap;
+
+              > .time-table {
+                margin-top: 0.5rem;
+                width: 2.3rem;
+                padding: 0.3rem 1rem;
+                border: 0.1rem solid #cbcabe;
+                cursor: pointer;
+                color: #333;
+
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+
+                > .time {
+                  font-weight: 600;
+                }
+
+                > .seat {
+                  color: #2275a4;
+                  font-weight: 600;
+                  font-size: 0.75rem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

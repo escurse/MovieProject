@@ -5,23 +5,27 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>예매</title>
-    <link rel="stylesheet" th:href="@{'/ticket/assets/styles/index.css'}" type="text/css">
+    <link rel="stylesheet" type="text/css" th:href="@{'/ticket/assets/styles/index.css'}">
     <link rel="stylesheet" th:href="@{'../../assets/styles/common.css'}" type="text/css">
-    <link rel="stylesheet" th:href="@{'../../fragments/assets/styles/index.css'}" type="text/css">
-    <link rel="stylesheet" th:href="@{'../../fragments/assets/styles/common.css'}" type="text/css">
+    <link rel="stylesheet" type="text/css" th:href="@{'../../fragments/assets/styles/index.css'}">
+    <link rel="stylesheet" type="text/css" th:href="@{'../../fragments/assets/styles/common.css'}">
+    <link rel="shortcut icon" href="https://img.cgv.co.kr/theater_img/favicon.ico" type="image/x-icon">
     <script defer th:src="@{'/ticket/assets/scripts/index.js'}"></script>
     <script defer th:src="@{'../../assets/scripts/common.js'}"></script>
+    <script defer th:src="@{'../../fragments/assets/scripts/common.js'}"></script>
+    <title>JGV - 티켓 예매</title>
 </head>
 <body>
 <th:block th:replace="~{fragments/common.html :: advertisement}"></th:block>
 <th:block th:replace="~{fragments/common.html :: header}"></th:block>
 <th:block th:replace="~{fragments/common.html :: nav}"></th:block>
+<div id="whiteBlow" class="hidden"></div>
 <main id="main">
     <div class="button-container">
         <a class="content-bar-timetable" th:href="@{./showTimes}"></a>
         <a class="content-bar-retry" th:href="@{./}" target="_self"></a>
     </div>
+    <!------------------------------------------------------------------------------------>
     <div class="main-container">
         <div class="advertisement-container">
             <a href="#" target="_self" class="advertisement-move">
@@ -91,7 +95,7 @@
                 <div class="body theater">
                     <div class="content">
                         <ul class="region-container"
-                            th:if="${movieVos == null}">
+                            th:if="${movieVos == null && dateVos == null && moScVos == null}">
                             <li th:each="region : ${regions}"
                                 th:text="${region.getRegName() + '(' + region.getTheaterCount() + ')'}"
                                 class="region" data-id="region"></li>
@@ -100,16 +104,25 @@
                             th:if="${movieVos != null}"
                             th:each="vos : ${movieVos}">
                             <li th:each="region : ${regions}"
-                                th:if="${region.getRegName().equals(vos[0][4])}"
-                                th:text="${vos[0][4] + '(' + vos[0][3] + ')'}"
-                                class="region" data-id="region"></li>
-                            <li th:each="region : ${regions}"
-                                th:if="${!region.getRegName().equals(vos[0][4])}"
-                                th:text="${region.getRegName() + '(' + region.getTheaterCount() + ')'}"
+                                th:text="${region.getRegName().equals(vos[0][4]) ? vos[0][4] + '(' + vos[0][3] + ')' : region.getRegName() + '(' + region.getTheaterCount() + ')'}"
                                 class="region" data-id="region"></li>
                         </ul>
+                        <ul class="region-container"
+                            th:if="${dateVos != null}"
+                            th:each="vos : ${dateVos}">
+                            <li th:each="region : ${regions}"
+                                th:text="${region.getRegName().equals(vos[2][1]) ? vos[2][1] + '(' + vos[2][0] + ')' : region.getRegName() + '(' + region.getTheaterCount() + ')'}"
+                                class="region" data-id="region"></li>
+                        </ul>
+                        <ul class="region-container"
+                            th:if="${moScVos != null}"
+                            th:each="vos : ${moScVos}">
+                                <li th:each="region : ${regions}"
+                                    th:text="${region.getRegName().equals(vos[1][0]) ? vos[1][0] + '(' + vos[1][1] + ')' : region.getRegName() + '(' + region.getTheaterCount() + ')'}"
+                                    class="region" data-id="region"></li>
+                        </ul>
                         <ul class="theater-container"
-                            th:if="${movieVos == null && theaterVos == null && moScVos == null}">
+                            th:if="${movieVos == null && dateVos == null && moScVos == null && movieRegVos == null && dateRegionVos == null && moScRegionVos == null}">
                             <li class="theater"
                                 th:if="theaters != null"
                                 th:each="theater : ${theaters}">
@@ -136,6 +149,30 @@
                         <ul class="theater-container"
                             th:if="${moScVos != null}"
                             th:each="vos : ${moScVos}">
+                            <li class="theater" th:each="vo : ${vos[0]}">
+                                <span th:text="${vo.substring(3, vo.length())}"
+                                      class="text"></span>
+                            </li>
+                        </ul>
+                        <ul class="theater-container"
+                            th:if="${movieRegVos != null}"
+                            th:each="vos : ${movieRegVos}">
+                            <li class="theater" th:each="vo : ${vos[1]}">
+                                <span th:text="${vo.substring(3, vo.length())}"
+                                      class="text"></span>
+                            </li>
+                        </ul>
+                        <ul class="theater-container"
+                            th:if="${dateRegionVos != null}"
+                            th:each="vos : ${dateRegionVos}">
+                            <li class="theater" th:each="vo : ${vos[1]}">
+                                <span th:text="${vo.substring(3, vo.length())}"
+                                      class="text"></span>
+                            </li>
+                        </ul>
+                        <ul class="theater-container"
+                            th:if="${moScRegionVos != null}"
+                            th:each="vos : ${moScRegionVos}">
                             <li class="theater" th:each="vo : ${vos[0]}">
                                 <span th:text="${vo.substring(3, vo.length())}"
                                       class="text"></span>
@@ -321,6 +358,8 @@
                 </div>
             </div>
         </div>
+
+        <!------------------------------------------------------------------------------------>
         <div id="main-seat" class="mains hidden" data-id="main-seat">
             <div class="seat-div">
                 <div class="content">인원/좌석</div>
@@ -378,7 +417,7 @@
                         <div class="title-container">
                             <b class="big-text" id="seat-date"></b>
                             <b class="big-text">~</b>
-                            <b class="big-text">19:00</b>
+                            <b class="big-text" id="seat-time"></b>
                         </div>
                     </div>
                 </div>
@@ -658,7 +697,7 @@
                     <div class="pay-box">
                         <div class="pay-title">결제 내역</div>
                         <div class="pay-content">
-                            <span class="pay-kind">신용카드</span>
+                            <span class="pay-kind" id="pay-kind">신용카드</span>
                             <span class="pay-price" id="pay-price-won2"></span>
                             <span class="pay-price">원</span>
                         </div>
@@ -674,7 +713,7 @@
         </div>
         <div class="advertisement-container">
             <a href="#" target="_self" class="advertisement-move">
-                <img src="https://adimg.cgv.co.kr/images/202412/Moana2/1218_160x300.jpg" alt="배너"
+                <img src="" alt="배너"
                      class="advertisement">
             </a>
         </div>
@@ -698,7 +737,7 @@
         </div>
         <div class="table-div">
             <div>
-                <img class="img" src="/ticket/assets/images/icon3.png" alt="#">
+                <img class="img" id="poster-img" alt="이미지">
             </div>
             <div class="div-title1">
                 <span>영화명</span>
@@ -709,15 +748,12 @@
                 <span>좌석</span>
             </div>
             <div class="div-content1">
-                <span id="pay-movie">위키드(자막)</span>
-                <span id="pay-theater">CGV대구</span>
-                <span id="pay-cinema">2관</span>
-                <span id="pay-time">2024년 12월 1일 20:10~23:00</span>
+                <span id="pay-movie"></span>
+                <span id="pay-theater"></span>
+                <span id="pay-cinema"></span>
+                <span id="pay-time"></span>
                 <span class="pay-human"></span>
                 <span class="pay-seat"></span>
-                <label>
-                    <input type="text" style="display: none">
-                </label>
             </div>
             <div class="div-title2">
                 <span>결제금액</span>
@@ -732,6 +768,8 @@
                     <span class="big-font" id="method"></span>
                     <span class="small-red" id="pay-price-won5"></span>
                     <span>원</span>
+                    <span id="pay-price-won-int" style="display: none"></span>
+
                 </span>
             </div>
         </div>
@@ -803,7 +841,8 @@
                 <div th:if="${movieVos != null}"
                      th:each="vos : ${movieVos}"
                      class="movie-info">
-                    <a href="#" th:text="${vos[0][0]}" class="title"></a>
+                    <a th:href="@{'../movies/movieList/movieInfo/' + ${vos[0][5]}}"
+                       th:text="${vos[0][0]}" class="title"></a>
                     <div class="stretch"></div>
                     <div class="unique-cinema-type"></div>
                     <div th:text="${vos[0][2]}" class="unique-rating hidden"></div>
@@ -811,7 +850,8 @@
                 <div th:if="${Vos != null}"
                      th:each="vos : ${Vos}"
                      class="movie-info">
-                    <a href="#" th:text="${vos[0][0]}" class="title"></a>
+                    <a th:href="@{'../movies/movieList/movieInfo/' + ${vos[0][5]}}"
+                       th:text="${vos[0][0]}" class="title"></a>
                     <div class="stretch"></div>
                     <div class="unique-cinema-type"></div>
                     <div th:text="${vos[0][2]}" class="unique-rating hidden"></div>
@@ -823,7 +863,7 @@
         <div class="theater info hidden" data-id="theaterInfo">
             <div class="text">
                 <span class="head">극장</span>
-                <a href="#" class="data" id="theater-theater"></a>
+                <a th:href="@{../theater/}" class="data" id="theater-theater"></a>
             </div>
             <div class="text">
                 <span class="head">일시</span>
@@ -837,18 +877,18 @@
                 <span class="head">인원</span>
             </div>
         </div>
+
         <img class="info" src="https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/tnb/split.png" alt="split ">
         <div class="seat-container"></div>
         <div class="seat info hidden">
             <div class="text seat-title">
                 <span class="head">좌석명</span>
             </div>
-            <div class="text seat-content">
+            <div class="text seat-content ">
                 <span class="head">좌석번호</span>
             </div>
         </div>
-        <img class="info hidden" src="https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/tnb/split.png"
-             alt="split ">
+        <img class="info hidden" src="https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/tnb/split.png" alt="split ">
         <div class="price info hidden">
             <div class="text price-title"></div>
             <div class="text price-content"></div>
@@ -856,12 +896,12 @@
         <div class="payment-container"></div>
         <div class="first right-button" data-id="main"></div>
         <div class="second right-button hidden" data-id="main-seat"></div>
-        <div class="third right-button hidden" data-id="main-payment"></div>
+        <div class="third right-button hidden after" data-id="main-payment"></div>
     </div>
 </section>
 <!------------------------------------------------------------------------------------>
 <a href="#" class="add">
-    <img class="image" src="https://adimg.cgv.co.kr/images/202411/MorningCalm/996x140.jpg" alt="">
+    <img class="image" src="" alt="">
 </a>
 
 <th:block th:replace="~{fragments/common.html :: footer}"></th:block>

@@ -9,9 +9,11 @@
     <link rel="stylesheet" th:href="@{'../../fragments/assets/styles/common.css'}" type="text/css">
     <link rel="stylesheet" th:href="@{'/ticket/assets/styles/showTimes.css'}" type="text/css">
     <link rel="stylesheet" th:href="@{'../../assets/styles/common.css'}" type="text/css">
+    <link rel="shortcut icon" href="https://img.cgv.co.kr/theater_img/favicon.ico" type="image/x-icon">
     <script defer th:src="@{'./assets/scripts/showTimes.js'}"></script>
     <script defer th:src="@{'../../assets/scripts/common.js'}"></script>
-    <title>상영시간표</title>
+    <script defer th:src="@{'../../fragments/assets/scripts/common.js'}"></script>
+    <title>JGV - 상영시간표</title>
 </head>
 <body>
 <th:block th:replace="~{fragments/common.html :: advertisement}"></th:block>
@@ -30,39 +32,6 @@
                      data-id="movie">
                 <span class="text">영화별 상영시간표</span>
             </div>
-        </div>
-        <div class="head">
-            <img src="https://img.cgv.co.kr/R2014/images/title/h4_favorite_cgv.png" alt="" class="image">
-            <ul id="favorite-theaters">
-                <li class="container">
-                    <a href="#" class="text-container">
-                        <span class="text">1</span>
-                    </a>
-                </li>
-                <li class="container">
-                    <a href="#" class="text-container">
-                        <span class="text">2</span>
-                    </a>
-                </li>
-                <li class="container">
-                    <a href="#" class="text-container">
-                        <span class="text">3</span>
-                    </a>
-                </li>
-                <li class="container">
-                    <a href="#" class="text-container">
-                        <span class="text">4</span>
-                    </a>
-                </li>
-                <li class="container">
-                    <a href="#" class="text-container">
-                        <span class="text">5</span>
-                    </a>
-                </li>
-            </ul>
-            <button class="button" type="button">
-                <img src="https://img.cgv.co.kr/r2014/images/common/btn/btn_plus.gif" alt="" class="image">
-            </button>
         </div>
         <ul class="main">
             <li class="item"
@@ -98,28 +67,16 @@
                 <span class="text">영화별 상영시간표</span>
             </div>
         </div>
-        <div class="head" data-id="movie">
-            <ul class="items">
-                <li class="reservation item select">예매율순</li>
-                <li class="line">
-                    <img src="https://img.cgv.co.kr/R2014/images/common/bg/bg_writeinfo.gif" alt="선">
-                </li>
-                <li class="review item">평점순</li>
-                <li class="line">
-                    <img src="https://img.cgv.co.kr/R2014/images/common/bg/bg_writeinfo.gif" alt="선">
-                </li>
-                <li class="human item">관람객순</li>
-            </ul>
-        </div>
         <div class="movie-container">
             <div class="movie"
                  th:if="${map != null}"
-            th:each="ma : ${map}">
-                <a href="#" class="poster">
+                 th:each="ma : ${map}">
+                <a th:href="@{'../movies/movieList/movieInfo/' + ${ma.key[4]}}" class="poster">
                     <img class="poster" th:src="${ma.key[3]}" alt="하얼빈">
                 </a>
                 <div class="movie-info">
-                    <div th:text="${#strings.arrayJoin(ma.value[0], ', ')} + '/ ' + ${ma.key[2]} + '분'" class="text"></div>
+                    <div th:text="${#strings.arrayJoin(ma.value[0], ', ')} + '/ ' + ${ma.key[2]} + '분'"
+                         class="text"></div>
                     <div th:text="${ma.key[1]} + ' 개봉'" class="text"></div>
                 </div>
             </div>
@@ -138,7 +95,7 @@
                 <ul class="items" th:each="ma : ${map}">
                     <li class="item"
                         th:each="val : ${ma.value[1]}"
-                    th:text="${val}"></li>
+                        th:text="${val}"></li>
                 </ul>
             </div>
         </div>
@@ -266,7 +223,7 @@
                 <li class="item" th:each="screen : ${screenVos}">
                     <div class="movie-container">
                         <div th:classappend="${screen.key[0]}" class="rating"></div>
-                        <a th:text="${screen.key[1]}" href="#" class="text"></a>
+                        <a th:text="${screen.key[1]}" th:href="@{'../movies/movieList/movieInfo/' + ${screen.key[5]}}" class="text"></a>
                         <div class="date-notice">
                             <span th:if="${screen.key[3] <= #dates.format(#dates.createNow(), 'yyyy.MM.dd')}"
                                   class="able">상영중</span>
@@ -296,7 +253,7 @@
                             <span th:text="'총 ' + ${screen.key[4]} + '석'" class="text"></span>
                         </div>
                         <div class="time-table-container">
-                            <a href="#" class="time-table" th:each="sc : ${scVal.value}">
+                            <a th:href="@{./}" class="time-table" th:each="sc : ${scVal.value}">
                                 <div th:text="${sc.split(',')[0].replace('[', '')}" class="time"></div>
                                 <div th:text="${sc.split(',')[1].replace(']', '')} + '석'" class="seat"></div>
                             </a>
@@ -349,7 +306,7 @@
                     <li class="item"
                         th:if="${screenVos != null}"
                         th:each="screen : ${screenVos}">
-                        <a href="#" th:utext="${screen.key[7].substring(0, 3)} + '<br>' + ${screen.key[7].substring(3)}"
+                        <a th:href="@{../../theater/}" th:utext="${screen.key[7].substring(0, 3)} + '<br>' + ${screen.key[7].substring(3)}"
                            class="theater"></a>
                         <div class="screens">
                             <div class="screen-container"
@@ -371,13 +328,19 @@
                                     <span th:text="'총 ' + ${screen.key[4]} + '석'" class="text"></span>
                                 </div>
                                 <div class="time-table-container">
-                                    <a href="#" class="time-table" th:each="sc : ${scVal.value}">
+                                    <a th:href="@{./}" class="time-table"
+                                       th:each="sc : ${scVal.value}">
                                         <div th:text="${sc.split(',')[0].replace('[', '')}" class="time"></div>
                                         <div th:text="${sc.split(',')[1].replace(']', '')} + '석'" class="seat"></div>
                                     </a>
                                 </div>
                             </div>
                         </div>
+                    </li>
+                    <li class="item"
+                        th:if="${#maps.isEmpty(screenVos)}"
+                        style="display: flex; justify-content: center;">
+                        <div style="font-weight: 600; font-size: 1.5rem;">현재 조건에 해당하는 영화가 없습니다.</div>
                     </li>
                 </ul>
                 <div class="notice-footer">* 입장 지연에 따른 관람 불편을 최소화하기 위해 영화는 10분 후 상영이 시작됩니다.</div>

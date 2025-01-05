@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.escass.movieproject.mappers.movie.MovieMapper">
+
+    <insert id="insertMovie"
+            useGeneratedKeys="true"
+            keyColumn="moNum"
+            keyProperty="movie.moNum">
+        INSERT INTO `jgv`.movie (mo_title, mo_date, mo_time, mo_plot, mo_booking_rate, mo_ending, ra_num)
+        VALUES (#{movie.moTitle},#{movie.moDate},#{movie.moTime},#{movie.moPlot},#{movie.moBookingRate},#{movie.moEnding}, #{raiting})
+    </insert>
+    <delete id="deleteDupleMovies">
+        DELETE FROM `jgv`.movie
+        WHERE movie.mo_num NOT IN (
+            SELECT MoNum
+            FROM (
+                     SELECT MIN(mo_num) AS MoNum
+                     FROM jgv.movie
+                     GROUP BY mo_title, mo_date, mo_time
+                 ) AS unique_movies
+        );
+    </delete>
+    <select id="selectMovie" resultType="java.lang.Integer">
+        SELECT COUNT(0)
+        FROM jgv.movie
+    </select>
+    <select id="selectNowPlayingMovies" resultType="com.escass.movieproject.DTO.Movie_ImageDTO">
+        SELECT DISTINCT
+            m.mo_num AS 'moNum',
+            m.mo_title AS 'moTitle',
+            m.mo_date AS 'moDate',
+            m.mo_time AS 'moTime',
+            m.mo_plot AS 'moPlot',
+            m.mo_booking_rate AS 'moBookingRate',
+            i.m_img_url AS 'm_img_url'
+        FROM
+            jgv.movie m
+                LEFT JOIN
+            jgv.movie_image i ON m.mo_num = i.mo_num
+        LEFT JOIN jgv.screen s ON m.mo_num = s.mo_num
+        WHERE m.mo_ending IS NULL
+        AND s.sc_start_date > NOW()
+        ORDER BY m.mo_booking_rate DESC
+#         AND 15 >= DATEDIFF(NOW(), m.mo_date)
+    </select>
+
+    <select id="selectUpcomingMovies" resultType="com.escass.movieproject.DTO.Movie_ImageDTO">
+        SELECT DISTINCT
+            m.mo_num AS 'moNum',
+            m.mo_title AS 'moTitle',
+            m.mo_date AS 'moDate',
+            m.mo_time AS 'moTime',
+            m.mo_plot AS 'moPlot',
+            m.mo_booking_rate AS 'moBookingRate',
+            i.m_img_url AS 'm_img_url'
+        FROM
+            jgv.movie m
+                LEFT JOIN
+            jgv.movie_image i ON m.mo_num = i.mo_num
+                LEFT JOIN
+            jgv.screen s ON m.mo_num = s.mo_num
+        WHERE
+            m.mo_ending IS NULL
+          AND STR_TO_DATE(m.mo_date, '%Y.%m.%d') > NOW(); -- 현재 이후의 상영작
+    </select>
+
+    <select id="selectMovieByUniqueFields" resultType="java.lang.Integer">
+        SELECT *
+        FROM jgv.movie
+        WHERE mo_title = #{movieTitle}
+          AND mo_date LIKE CONCAT('%', #{movieDate}, '%')
+        LIMIT 1
+    </select>
+
+    <select id="selectMovieIdByTitle" parameterType="String" resultType="Integer">
+        SELECT mo_num
+        FROM jgv.movie
+        WHERE mo_title = #{movieTitle}
+    </select>
+    <select id="selectMovieRaitingByMovieId" resultType="Integer" parameterType="int">
+        SELECT ra_num
+        FROM jgv.movie
+        WHERE mo_num = #{moNum}
+    </select>
+
+    <update id="updateMovieRaiting" parameterType="map">
+        UPDATE jgv.movie
+        SET ra_num = #{raId}
+        WHERE mo_num = #{moNum}
+    </update>
+
+    <update id="updateMovie" parameterType="com.escass.movieproject.entities.movie.MovieEntity">
+        UPDATE jgv.movie
+        SET mo_date = #{moDate},
+            mo_time = #{moTime},
+            mo_plot = #{moPlot},
+            mo_booking_rate = #{moBookingRate}
+        WHERE mo_num = #{moNum}
+    </update>
+
+    <select id="getMovieInfoById" parameterType="int" resultType="com.escass.movieproject.DTO.Movie_InfoDTO">
+        SELECT m.mo_num AS moNum,
+               mo_title AS moTitle,
+               i.m_img_url AS m_img_url,
+               mo_date AS moDate,
+               mo_time AS moTime,
+               mo_plot AS moPlot,
+               mo_booking_rate AS moBookingRate,
+               r.ra_grade AS grade,
+               GROUP_CONCAT(DISTINCT g.ge_name) AS genres,
+               GROUP_CONCAT(DISTINCT y.co_name) AS countries,
+               d.ch_name AS directorName,
+               d_img.c_img_url AS directorImage,
+               GROUP_CONCAT(DISTINCT a.ch_name) AS actorNames,
+               GROUP_CONCAT(a_img.c_img_url) AS actorImages
+        FROM jgv.movie m
+                 LEFT JOIN jgv.movie_image i ON m.mo_num = i.mo_num
+                 LEFT JOIN jgv.rating r ON m.ra_num = r.ra_num
+                 LEFT JOIN jgv.movie_genere mg ON m.mo_num = mg.mo_num
+                 LEFT JOIN jgv.genre g ON mg.ge_num = g.ge_num
+                 LEFT JOIN jgv.movie_country my ON m.mo_num = my.mo_num
+                 LEFT JOIN jgv.country y ON my.co_num = y.co_num
+
+                 LEFT JOIN jgv.movie_charactor mc ON m.mo_num = mc.mo_num
+                 LEFT JOIN jgv.charactor d ON mc.ch_num = d.ch_num AND d.ch_job = '감독'
+                 LEFT JOIN jgv.charactor a ON mc.ch_num = a.ch_num AND a.ch_job = '배우'
+                 LEFT JOIN jgv.charactor_image d_img ON d.ch_num = d_img.ch_num
+                 LEFT JOIN jgv.charactor_image a_img ON a.ch_num = a_img.ch_num
+        WHERE m.mo_num = #{id}
+        GROUP BY m.mo_num
+    </select>
+
+    <select id="getRelatedMoviesByDirector" resultType="Map">
+        SELECT m.mo_title AS movieTitle,
+               mi.m_img_url AS movieImage,
+               m.mo_num AS movieNum
+        FROM jgv.movie m
+                 INNER JOIN jgv.movie_charactor mc ON m.mo_num = mc.mo_num
+                 INNER JOIN jgv.charactor c ON mc.ch_num = c.ch_num
+                 LEFT JOIN jgv.movie_image mi on m.mo_num = mi.mo_num
+        WHERE c.ch_job = '감독'
+          AND c.ch_name = #{director}
+        ORDER BY m.mo_date DESC
+        LIMIT 5
+    </select>
+
+    <select id="findMovieByKeyword" resultType="com.escass.movieproject.DTO.Movie_ImageDTO">
+        SELECT m.mo_num AS moNum,
+               mo_title AS moTitle,
+               mo_date AS moDate,
+               mo_time AS moTime,
+               mo_plot AS moPlot,
+               mo_booking_rate AS moBookingRate,
+               ra_num AS raNum,
+               m_img_url AS m_img_url
+        FROM jgv.movie m
+                 LEFT JOIN jgv.movie_image mi on m.mo_num = mi.mo_num
+        WHERE m.mo_title LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY m.mo_date DESC
+        LIMIT #{offsetCount}, #{countPerPage}
+    </select>
+
+    <select id="findCharacterByKeyword" resultType="com.escass.movieproject.DTO.CharacterDTO">
+        SELECT c.ch_num AS chNum,
+               ch_name AS chName,
+               ch_job AS chJob,
+               ch_birth AS chBirth,
+               ch_nation AS chNation,
+               MIN(c_img_num) AS CImgNum, -- 가장 작은 이미지 번호
+               MIN(c_img_url) AS CImgUrl -- 가장 작은 번호의 이미지 URL
+        FROM jgv.charactor c
+                 LEFT JOIN jgv.charactor_image ci ON c.ch_num = ci.ch_num
+        WHERE c.ch_name LIKE CONCAT('%', #{keyword}, '%')
+        GROUP BY c.ch_num, ch_name, ch_job, ch_birth, ch_nation
+    </select>
+
+
+
+    <select id="searchMoviesByPersonKeyword" resultType="com.escass.movieproject.DTO.Movie_ImageDTO">
+        SELECT m.mo_num AS moNum,
+               mo_title AS moTitle,
+               mo_date AS moDate,
+               mo_time AS moTime,
+               mo_plot AS moPlot,
+               mo_booking_rate AS moBookingRate,
+               mc.ch_num AS chNum,
+               mc.mo_num AS moNum,
+               i.m_img_url AS m_img_url
+        FROM jgv.movie m
+                 INNER JOIN jgv.movie_charactor mc ON m.mo_num = mc.mo_num
+                 INNER JOIN jgv.charactor c ON mc.ch_num = c.ch_num
+                 INNER JOIN jgv.movie_image i ON m.mo_num = i.mo_num
+        WHERE c.ch_name LIKE CONCAT('%', #{keyword}, '%')
+    </select>
+
+    <select id="findMoviesByActorName" resultType="Map">
+        SELECT m.mo_num AS moNum,
+               m.mo_title AS movieTitle,
+               mi.m_img_url AS movieImage
+        FROM jgv.movie m
+                 INNER JOIN jgv.movie_charactor mc ON m.mo_num = mc.mo_num
+                 INNER JOIN jgv.charactor c ON mc.ch_num = c.ch_num
+                 LEFT JOIN jgv.movie_image mi ON m.mo_num = mi.mo_num
+        WHERE c.ch_name = #{actorName}
+          AND c.ch_job IN ('감독', '배우')
+        ORDER BY m.mo_date DESC
+        LIMIT 5
+    </select>
+
+    <select id="findMoviesByCharacterId" resultType="Map">
+        SELECT DISTINCT m.mo_num AS moNum,
+                        m.mo_title AS movieTitle,
+                        mi.m_img_url AS movieImage
+        FROM jgv.movie m
+                 INNER JOIN jgv.movie_charactor mc ON m.mo_num = mc.mo_num
+                 LEFT JOIN jgv.movie_image mi ON m.mo_num = mi.mo_num
+        WHERE mc.ch_num = #{charId}
+        ORDER BY m.mo_date DESC
+    </select>
+
+    <select id="getMovieCountByKeyword" resultType="int">
+        SELECT COUNT(*)
+        FROM jgv.movie
+        WHERE mo_title LIKE CONCAT('%', #{keyword}, '%')
+    </select>
+
+    <select id="selectCaraouselCurrentMovies" resultType="com.escass.movieproject.DTO.Movie_ImageDTO">
+        SELECT DISTINCT
+            m.mo_num AS 'moNum',
+            m.mo_title AS 'moTitle',
+            m.mo_date AS 'moDate',
+            m.mo_time AS 'moTime',
+            m.mo_plot AS 'moPlot',
+            m.mo_booking_rate AS 'moBookingRate',
+            i.m_img_url AS 'm_img_url'
+        FROM
+            jgv.movie m
+                LEFT JOIN
+            jgv.movie_image i ON m.mo_num = i.mo_num
+        LEFT JOIN jgv.screen s ON m.mo_num = s.mo_num
+        WHERE CURRENT_DATE() > STR_TO_DATE(mo_date, '%Y.%m.%d')
+        AND s.sc_start_date > NOW()
+        ORDER BY mo_booking_rate DESC
+        LIMIT 20
+    </select>
+
+    <select id="selectCarouselUpcomingMovies" resultType="com.escass.movieproject.DTO.Movie_ImageDTO">
+        SELECT DISTINCT
+            m.mo_num AS 'moNum',
+            m.mo_title AS 'moTitle',
+            m.mo_date AS 'moDate',
+            m.mo_time AS 'moTime',
+            m.mo_plot AS 'moPlot',
+            m.mo_booking_rate AS 'moBookingRate',
+            i.m_img_url AS 'm_img_url'
+        FROM
+            jgv.movie m
+                LEFT JOIN
+            jgv.movie_image i ON m.mo_num = i.mo_num
+        LEFT JOIN jgv.screen s ON m.mo_num = s.mo_num
+        WHERE STR_TO_DATE(mo_date, '%Y.%m.%d') > CURRENT_DATE()
+          AND s.sc_start_date > NOW()
+        LIMIT 20
+    </select>
+
+    <update id="updateMoEnding">
+        UPDATE jgv.movie
+        SET mo_ending = NOW()
+        WHERE mo_num = #{movieId} AND mo_ending IS NULL
+    </update>
+
+    <select id="getMovieById" resultMap="movieResultMap">
+        SELECT
+            m.mo_num AS moNum,
+            mo_title AS moTitle,
+            mo_date AS moDate,
+            mo_time AS moTile,
+            mo_plot AS moPlot,
+            mo_booking_rate AS moBookingRate,
+            mo_ending AS moEnding,
+            m.ra_num AS raNum,
+            ra_grade AS raGrade,
+            m_img_num AS mImgNum,
+            m_img_url AS mImgUrl,
+            g.ge_num AS geNum,
+            g.ge_name AS geName,
+            c.ch_num AS chNum,
+            c.ch_name AS chName,
+            c2.co_num AS coNum,
+            c2.co_name AS coName,
+            ci.c_img_url AS cImgUrl
+        FROM jgv.movie m
+                 LEFT JOIN jgv.rating r ON r.ra_num = m.ra_num
+                 LEFT JOIN jgv.movie_genere mg ON m.mo_num = mg.mo_num
+                 LEFT JOIN jgv.genre g ON g.ge_num = mg.ge_num
+                 LEFT JOIN jgv.movie_image mi ON m.mo_num = mi.mo_num
+                 LEFT JOIN jgv.movie_charactor mc ON m.mo_num = mc.mo_num
+                 LEFT JOIN jgv.charactor c ON c.ch_num = mc.ch_num
+                 LEFT JOIN jgv.charactor_image ci on c.ch_num = ci.ch_num
+                 LEFT JOIN jgv.movie_country mc2 ON m.mo_num = mc2.mo_num
+                 LEFT JOIN jgv.country c2 ON c2.co_num = mc2.co_num
+        WHERE m.mo_num = #{movieNum};
+    </select>
+
+    <resultMap id="movieResultMap" type="com.escass.movieproject.DTO.AllMovieInfoDTO">
+        <!-- 기본 필드 매핑 -->
+        <result property="moNum" column="moNum"/>
+        <result property="moTitle" column="moTitle"/>
+        <result property="moDate" column="moDate"/>
+        <result property="moTile" column="moTile"/>
+        <result property="moPlot" column="moPlot"/>
+        <result property="moBookingRate" column="moBookingRate"/>
+        <result property="moEnding" column="moEnding"/>
+        <result property="raNum" column="raNum"/>
+        <result property="raGrade" column="raGrade"/>
+        <result property="mImgNum" column="mImgNum"/>
+        <result property="mImgUrl" column="mImgUrl"/>
+
+        <!-- 장르 리스트 매핑 -->
+        <collection property="genres" ofType="java.lang.String">
+            <result column="geName"/>
+        </collection>
+
+        <!-- 배우 리스트 매핑 -->
+        <collection property="actors" ofType="java.lang.String">
+            <result column="chName"/>
+        </collection>
+
+        <!-- 국가 리스트 매핑 -->
+        <collection property="countries" ofType="java.lang.String">
+            <result column="coName"/>
+        </collection>
+
+        <!-- 인물 이미지 매핑 -->
+        <collection property="actorImages" ofType="java.lang.String">
+            <result column="cImgUrl"/>
+        </collection>
+
+        <collection property="movieCharacters" ofType="com.escass.movieproject.DTO.AllMovieInfoDTO$MovieCharacterDTO">
+            <result column="chNum" property="chNum"/> <!-- chNum 매핑 -->
+            <result column="chName" property="chName"/> <!-- chName 매핑 -->
+        </collection>
+    </resultMap>
+
+
+    <!-- 영화 정보 수정 -->
+
+    <update id="modifyMovie" parameterType="com.escass.movieproject.DTO.AllMovieInfoDTO">
+        UPDATE jgv.movie
+        SET
+            mo_time = #{moTile},
+            mo_plot = #{moPlot},
+            ra_num = (SELECT ra_num FROM jgv.rating WHERE ra_grade = #{raGrade})
+        WHERE mo_num = #{moNum}
+    </update>
+
+
+    <delete id="deleteActorsByMovieId" parameterType="int">
+        DELETE FROM jgv.movie_charactor WHERE mo_num = #{movieNum}
+    </delete>
+
+    <update id="updateMovieRating" parameterType="map">
+        UPDATE jgv.movie
+        SET ra_num = (SELECT ra_num FROM jgv.rating WHERE ra_grade = #{rating})
+        WHERE mo_num = #{movieNum}
+    </update>
+
+    <update id="updateActorName" parameterType="map">
+        UPDATE jgv.charactor
+        SET ch_name = #{chName}
+        WHERE ch_num = #{chNum};
+    </update>
+
+    <!-- 새 영화-인물 관계 추가 -->
+    <insert id="addActorToMovie">
+        INSERT INTO jgv.movie_charactor (mo_num, ch_num)
+        VALUES (#{movieNum}, #{chNum})
+    </insert>
+
+
+
+    
+    <!-- 장르 -->
+    <delete id="deleteGenresByMovieId" parameterType="int">
+        DELETE FROM jgv.movie_genere WHERE mo_num = #{movieNum};
+    </delete>
+
+    <select id="findGenreByName" parameterType="string" resultType="int">
+        SELECT ge_num
+        FROM jgv.genre
+        WHERE ge_name = #{geName};
+    </select>
+
+    <insert id="insertGenre" parameterType="string">
+        INSERT INTO jgv.genre (ge_name) VALUES (#{geName});
+    </insert>
+
+    <insert id="insertMovieGenre" parameterType="map">
+        INSERT INTO jgv.movie_genere (mo_num, ge_num)
+        VALUES (#{movieNum}, #{geNum});
+    </insert>
+
+
+    <!-- 제작국가 -->
+    <delete id="deleteCountriesByMovieId" parameterType="int">
+        DELETE FROM jgv.movie_country WHERE mo_num = #{movieNum};
+    </delete>
+
+    <select id="findCountryByName" parameterType="string" resultType="int">
+        SELECT co_num
+        FROM jgv.country
+        WHERE co_name = #{coName};
+    </select>
+
+    <insert id="insertCountry" parameterType="string">
+        INSERT INTO jgv.country (co_name) VALUES (#{coName});
+    </insert>
+
+    <insert id="insertMovieCountry" parameterType="map">
+        INSERT INTO jgv.movie_country (mo_num, co_num)
+        VALUES (#{movieNum}, #{coNum});
+    </insert>
+
+    <select id="selectMovieReserveByMovieId" resultType="_int">
+        SELECT COUNT(*)
+        FROM jgv.movie m
+        LEFT JOIN jgv.screen s ON m.mo_num = s.mo_num
+        WHERE m.mo_num = #{movieNum}
+        AND s.sc_start_date > NOW()
+    </select>
+
+</mapper>

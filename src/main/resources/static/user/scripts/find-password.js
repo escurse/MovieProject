@@ -15,6 +15,7 @@ $findPassword.onsubmit = (e) => {
 
         return;
         }
+        Loading.hide();
         if (xhr.status < 200 || xhr.status >= 300 ) {
             alert('요청을 전송하는 도중 오류가 발생하였습니다. 잠시 후 다시 시도해 주세요.');
         return;
@@ -37,6 +38,7 @@ $findPassword.onsubmit = (e) => {
                     break;
                 case 'success':
                     alert('입력하신 이메일로 비밀번호로 재설정 할 수 있는 링크를 포함한 메일을 전송하였습니다. 확인을 클릭하면 로그인 페이지로 이동합니다.');
+                    location.href = '/';
                     break;
                 default:
                     alert('알 수 없는 이유로 오류가 발생하였습니다. 잠시 후 다시 시도해 주세요.');
@@ -48,6 +50,5 @@ $findPassword.onsubmit = (e) => {
     };
     xhr.open('POST', location.href);
     xhr.send(formData);
-
-
+    Loading.show(0);
 }

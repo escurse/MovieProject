@@ -1,0 +1,308 @@
+@import "../../../fragments/assets/styles/global";
+
+.my-reservation {
+  @include flex(column, flex-start, center, 2rem);
+  border-bottom: 2px solid #222222;
+  padding-bottom: 0.5rem;
+
+  > h3 {
+    padding-top: 2rem;
+  }
+
+  > .alert {
+    > .red {
+      color: #FB4357;
+      font-weight: 500;
+    }
+
+    > .black {
+      color: #222222;
+      font-weight: 500;
+    }
+
+  }
+}
+
+.tooltip {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  justify-content: center;
+  padding-top: 1rem;
+
+  > .black {
+    color: #222222;
+    font-weight: 500;
+  }
+
+  > .red {
+    color: #FB4357;
+    font-weight: 500;
+  }
+}
+
+.paging {
+  @include flex(row, center, center, 0.6rem);
+  width: 760px;
+  border: 1px solid #666666;
+
+  > .no-reservation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 40px;
+
+    .no-reservation-text {
+      font-size: 16px;
+      font-weight: 500;
+    }
+  }
+
+  > .paging {
+    display: flex;
+    justify-content: center;
+
+   > .page {
+      padding: 5px 5px;
+      margin: 0 2px;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+
+      &.active {
+        color: #ff5a5a;
+      }
+    }
+  }
+}
+
+.sub-tooltip {
+  @include flex(row, center, center, 0.5rem);
+  padding-top: 0.5rem;
+  color: #666666;
+  font-weight: 400;
+}
+
+.reservation-main {
+  @include flex(column, center, center, 1rem);
+
+  > .reservation-num {
+    @include flex(row, center, center);
+    width: 13rem;
+    padding-top: 2rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+
+    > .res-num {
+      font-size: 1.4rem;
+      color: #666666;
+      font-weight: 700;
+    }
+
+    > .black {
+      color: #222222;
+      font-weight: 500;
+    }
+
+    > .red {
+      color: #FB4357;
+      font-weight: 500;
+    }
+  }
+
+  > .reservation-info {
+    @include flex(row, flex-start, flex-start, 1rem);
+    width: 100%;
+    height: 10rem;
+    background-color: #ffffff;
+    padding: 0 0 2rem 0;
+
+    > .image-wrapper > img {
+      width: 126px;
+      height: 180px;
+    }
+
+    > .movie-info {
+      @include flex(column, flex-start, flex-start, 1rem);
+      width: 100%;
+
+      > .detail {
+        @include flex(row, flex-start, center, 0.7rem);
+        width: 80%;
+
+        > .black {
+          color: #222222;
+          font-weight: 500;
+        }
+
+        > .red {
+          color: #FB4357;
+          font-weight: 500;
+        }
+
+        > .title {
+          width: 3.5rem;
+        }
+
+        > .content {
+          width: 12.6rem;
+        }
+      }
+
+      > .title-container {
+        @include flex(row, flex-start, flex-start, 1rem);
+        width: 100%;
+        border-bottom: 1px solid #666666;
+        padding-bottom: 1rem;
+
+        > .movie {
+          font-size: 1rem;
+          font-weight: 500;
+          color: #222222;
+        }
+
+        > .pay {
+          color: #2275a4;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+}
+
+.movie-receipt {
+  @include flex(column, flex-start, center, 1rem);
+  width: 100%;
+  padding-top: 2rem;
+
+  > .receipt {
+    @include flex(column, center, center, 1rem);
+    width: 100%;
+
+    border-bottom: 1px solid #e2e2e0;
+
+    > .result-title {
+      width: 80%;
+      @include flex(column, flex-start, flex-start, 1rem);
+    }
+
+
+    > .result {
+      @include flex(column, flex-start, center, 1rem);
+      width: 80%;
+      border: 1px solid transparent;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+
+      > .underline {
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #b8b6aa;
+
+      }
+
+      > .result-pay {
+        width: 100%;
+        @include flex(row, center, flex-start, 1rem);
+
+        > .result-text {
+          font-size: 1rem;
+          font-weight: 500;
+        }
+
+        > .result-payment {
+          font-size: 1rem;
+          font-weight: 700;
+          color: #2275a4;
+        }
+
+        > .payment-method {
+          font-size: 0.8rem;
+          font-weight: 500;
+          color: #666666;
+        }
+
+        > .method-payment {
+          font-size: 0.8rem;
+          font-weight: 700;
+          color: #666666;
+        }
+      }
+    }
+
+    > .reservation-cancel {
+      @include flex(row, center, flex-end);
+      width: 80%;
+      padding-bottom: 2rem;
+
+      > .hidden {
+        display: none;
+      }
+
+      > .reservation-cancel-button {
+        width: 6rem;
+        height: 1.8rem;
+        background-color: transparent;
+        border: 3px solid #222222;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.cancel-container {
+  @include flex(column, flex-start, center, 1rem);
+  width: 100%;
+  padding-top: 2rem;
+
+
+  > .title-container {
+    @include flex(row, center, flex-start, 0.4rem);
+    width: 100%;
+
+    > .main-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    > .sub-title {
+      font-size: 0.8rem;
+      font-weight: 300;
+      color: #666666;
+    }
+  }
+
+  > .cancel-history {
+    width: 100%;
+    height: auto;
+
+    > table {
+      width: 100%;
+      text-align: center;
+      border-top: 1px solid #b8b6aa;
+      border-bottom: 1px solid #b8b6aa;
+      border-collapse: collapse;
+
+
+      > thead {
+        background-color: #e2e2e0;
+        color: #666666;
+        height: 2rem;
+      }
+
+      > tbody {
+        color: #666666;
+
+        > tr > td {
+          height: 2rem;
+
+        }
+      }
+    }
+
+  }
+}

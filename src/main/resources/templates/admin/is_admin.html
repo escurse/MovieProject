@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JGV - 관리자 페이지</title>
+    <link rel="stylesheet" th:href="@{'../../assets/styles/common.css'}" type="text/css">
+    <link rel="stylesheet" th:href="@{'../../fragments/assets/styles/index.css'}"
+          type="text/css">
+    <link rel="stylesheet" th:href="@{'../../fragments/assets/styles/common.css'}"
+          type="text/css">
+    <link rel="stylesheet" href="/admin/styles/is_admin.css" type="text/css">
+    <script defer src="/fragments/assets/scripts/common.js"
+            type="text/javascript"></script>
+    <script defer src="/admin/script/is_admin.js" type="text/javascript"></script>
+    <link rel="shortcut icon" href="https://img.cgv.co.kr/theater_img/favicon.ico" type="image/x-icon">
+
+    <!--    <script th:if="${!session.user.isUsIsAdmin()}">-->
+    <!--        alert('올바르지 않은 접근입니다.');-->
+    <!--        if (history.length > 1) {-->
+    <!--            history.back();-->
+    <!--        } else {-->
+    <!--            window.close();-->
+    <!--        }-->
+    <!--    </script>-->
+</head>
+<!--th:if="${session.user.isUsIsAdmin()}"-->
+<body>
+<th:block th:replace="~{fragments/common.html :: advertisement}"></th:block>
+<th:block th:replace="~{fragments/common.html :: header}"></th:block>
+<th:block th:replace="~{fragments/common.html :: nav}"></th:block>
+<div id="admin-title-container">
+    <button class="movie-information">
+        <span>영화 정보</span>
+    </button>
+    <img src="/home/images/verticalLine.png" alt="구분선">
+    <button class="theater-information">
+        <span>상영 정보</span>
+    </button>
+    <div class="-spring"></div>
+    <div class="admin-button-wrapper">
+        <button id="movie-crawl-button">
+            <span>영화정보 받아오기</span>
+        </button>
+        <button id="theater-crawl-button">
+            <span>상영관정보 받아오기</span>
+        </button>
+    </div>
+</div>
+<form id="movie-search-form" class="frame">
+    <div class="movie-keyword-wrapper">
+        <label class="--obj-label">
+            <select class="movie-keyword" name="filter">
+                <option value="moTitle">영화이름</option>
+                <option value="year">년도별검색</option>
+                <option value="month">월별검색</option>
+            </select>
+        </label>
+        <label class="--obj-label">
+            <input name="keyword" class="--obj-filed" placeholder="영화정보 검색" type="text">
+        </label>
+        <button class="movie-search" type="submit">검색</button>
+    </div>
+</form>
+
+<form id="theater-search-form" class="frame">
+    <div class="theater-keyword-wrapper">
+        <label class="--obj-label">
+            <select class="theater-keyword" name="screen-filter">
+                <option value="moTitle">영화제목</option>
+                <option value="ciName">상영관이름</option>
+                <option value="date">일자별검색</option>
+            </select>
+        </label>
+        <label class="--obj-label">
+            <input name="screen-keyword" class="--obj-filed" placeholder="상영관정보 검색" type="text">
+        </label>
+        <input type="hidden" name="mode" value="theater">
+        <button class="theater-search" type="submit">검색</button>
+    </div>
+</form>
+<main id="movie-admin-page" class="frame">
+    <div class="admin-movie-list">
+        <!--        번호 / 영화 이름 / 개봉일 / 관람등급-->
+        <table>
+            <tbody>
+            <tr>
+                <th>번호</th>
+                <th>영화 이미지</th>
+                <th>영화 이름</th>
+                <th>개봉일</th>
+                <th>관람등급</th>
+                <th>수정</th>
+                <th>삭제</th>
+            </tr>
+            <tr th:each="movie : ${adminDTO}">
+                <td th:text="${movie.getMoNum()}">9999</td>
+                <td>
+                    <img th:src="${movie.getMImgUrl()}"
+                         alt="영화이미지">
+                </td>
+                <td>
+                    <span th:text="${movie.getMoTitle()}">미세스 그린애플</span>
+                </td>
+                <td th:text="${movie.getMoDate()}">2024-12-26</td>
+                <td th:text="${movie.getRaGrade()}">15세</td>
+                <td>
+                    <button class="movie-modify" th:attr="data-mo-num=${movie.getMoNum()}">수정</button>
+                </td>
+                <td>
+                    <button class="movie-delete" th:attr="data-mo-num=${movie.getMoNum()}">삭제</button>
+                </td>
+            </tr>
+            <tr th:if="${adminDTO == null || adminDTO.length == 0}">
+                <td colspan="7">영화 목록이 없습니다.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<div id="movie-page-container" class="frame">
+    <div class="movie-page-wrapper">
+        <div class="prev">
+            <a th:if="${pageVo.requestPage > pageVo.movableMinPage}"
+               th:href="@{'./is_admin' (page=${pageVo.movableMinPage}, filter=${filter}, keyword=${keyword}, mode='movie')}"
+            >|&lt;</a>
+            <a th:if="${pageVo.requestPage > pageVo.movableMinPage}"
+               th:href="@{'./is_admin' (page=${pageVo.requestPage - 1}, filter=${filter}, keyword=${keyword}, mode='movie')}"
+            >&lt;</a>
+        </div>
+        <div class="page">
+            <a
+                    th:each="page : ${#numbers.sequence(pageVo.displayMinPage, pageVo.displayMaxPage)}"
+                    th:text="${page}"
+                    th:href="@{'./is_admin' (page=${page}, filter=${filter}, keyword=${keyword}, mode='movie')}"
+                    th:classappend="${page == pageVo.requestPage} ? 'selected'"></a>
+
+        </div>
+        <div class="next">
+            <a th:if="${pageVo.requestPage < pageVo.movableMaxPage}"
+               th:href="@{'./is_admin' (page=${pageVo.requestPage + 1}, filter=${filter}, keyword=${keyword}, mode='movie')}"
+            >&gt;</a>
+            <a th:if="${pageVo.requestPage < pageVo.movableMaxPage}"
+               th:href="@{'./is_admin' (page=${pageVo.movableMaxPage}, filter=${filter}, keyword=${keyword}, mode='movie')}"
+            >&gt;|</a>
+        </div>
+    </div>
+</div>
+
+<main id="theater-admin-page" class="frame">
+    <div class="admin-theater-list">
+        <table class="frame">
+            <thead>
+            <tr>
+                <th colspan="7">상영정보</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="entry : ${groupedScreens}">
+                <!-- 영화 이미지 출력 (영화 제목과 영화관보다 위쪽에 배치) -->
+                <td rowspan="2">
+                    <img th:src="${entry.value.values().iterator().next().get(0).mImgUrl}" alt="영화 이미지" width="100">
+                </td>
+
+                <!-- 영화 이름과 영화관 출력 -->
+                <td colspan="3" style="font-size: 1.5rem; font-weight: 700;">
+                    <strong th:text="${entry.key.split(' - ')[0]}"></strong> <!-- 영화 이름 -->
+                    <span th:text="${entry.key.split(' - ')[1]}"></span> <!-- 영화관 -->
+                </td>
+
+                <!-- 상영 정보 출력 -->
+                <td>
+                    <ul>
+                        <!-- 각 상영관별로 상영 번호와 상영일시 출력 -->
+                        <li th:each="ciEntry : ${entry.value}">
+                            <div>
+                                <strong th:text="${ciEntry.key}"></strong>
+                                <!-- 상영관 이름
+                                 -->
+                            </div>
+                            <ul>
+                                <li th:each="screen : ${ciEntry.value}" class="screen-item">
+                                    <form class="modal hidden">
+                                        <div class="head">
+                                            <div class="h1">
+                                                <div class="text">상영정보 수정</div>
+                                                <div class="stretch"></div>
+                                                <div class="button"></div>
+                                            </div>
+                                        </div>
+                                        <div class="content">
+                                            <div class="center">
+                                                <table class="rating-content">
+                                                    <thead>
+                                                    <tr>
+                                                        <td>현재 상영일</td>
+                                                        <td>변경할 상영일</td>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <th>
+                                                            <div class="container">
+                                                                <div th:text="${screen.scStartDate.toString().replace('T', ' ')}"></div>
+                                                            </div>
+                                                        </th>
+                                                        <th>
+                                                            <label>
+                                                                <input name="modify" type="text">
+                                                            </label>
+                                                        </th>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                                <button class="modify">확인</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                     <span class="scNum" th:text="'상영 번호: ' + ${screen.scNum}"></span>,
+                                     <span class="date" th:text="'상영일: ' + ${screen.scStartDate.toString().replace('T', ' ')}"></span>
+                                    <div class="-spring"></div>
+                                    <button class="theater-modify">수정</button>
+                                    <button class="theater-delete">삭제</button>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center" th:if="${#maps.isEmpty(groupedScreens)}">현재 조건에 해당하는 영화가 없습니다.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<div id="theater-page-container" class="frame">
+    <div class="theater-page-wrapper">
+        <div class="prev">
+            <!-- 이전 페이지 -->
+            <a th:if="${screenPageVo.requestPage > screenPageVo.movableMinPage}"
+               th:href="@{'./is_admin' (page=${screenPageVo.movableMinPage}, screen-filter=${screenFilter}, screen-keyword=${screenKeyword}, mode='theater')}">|&lt;</a>
+            <a th:if="${screenPageVo.requestPage > screenPageVo.movableMinPage}"
+               th:href="@{'./is_admin' (page=${screenPageVo.requestPage - 1}, screen-filter=${screenFilter}, screen-keyword=${screenKeyword}, mode='theater')}">&lt;</a>
+        </div>
+        <div class="page">
+            <!-- 페이지 번호들 -->
+            <a th:each="page : ${#numbers.sequence(screenPageVo.displayMinPage, screenPageVo.displayMaxPage)}"
+               th:text="${page}"
+               th:href="@{'./is_admin' (page=${page}, screen-filter=${screenFilter}, screen-keyword=${screenKeyword}, mode='theater')}"
+               th:classappend="${page == screenPageVo.requestPage} ? 'selected'"></a>
+        </div>
+        <div class="next">
+            <!-- 다음 페이지 -->
+            <a th:if="${screenPageVo.requestPage < screenPageVo.movableMaxPage}"
+               th:href="@{'./is_admin' (page=${screenPageVo.requestPage + 1}, screen-filter=${screenFilter}, screen-keyword=${screenKeyword}, mode='theater')}">&gt;</a>
+            <a th:if="${screenPageVo.requestPage < screenPageVo.movableMaxPage}"
+               th:href="@{'./is_admin' (page=${screenPageVo.movableMaxPage}, screen-filter=${screenFilter}, screen-keyword=${screenKeyword}, mode='theater')}">&gt;|</a>
+        </div>
+    </div>
+</div>
+
+
+<th:block th:replace="~{fragments/common.html :: footer}"></th:block>
+</body>
+</html>

@@ -123,7 +123,8 @@
 #main > .main-container > .main > .section .body .content > .movie > .item-container {
   margin-top: 0.1rem;
   width: 100%;
-  font-weight: 600;
+  font-weight: 500;
+  font-size: 0.85rem;
   border: 0.1rem solid transparent;
   box-sizing: border-box;
   cursor: pointer;
@@ -367,9 +368,7 @@
   box-sizing: border-box;
   height: 100%;
   padding: 1rem 1rem;
-}
-#main > .main-container > .main > .section .body.time > .time-container.hidden {
-  display: none;
+  overflow-x: hidden;
 }
 #main > .main-container > .main > .section .body.time > .time-container > .time-table {
   border-top: 0.15rem solid #cfcdc3;
@@ -432,6 +431,20 @@
 }
 #main > .main-container > .main > .section .body.time > .time-container > .time-table > .times > .item > .seat {
   color: #3d7c35;
+}
+
+#whiteBlow {
+  position: absolute;
+  width: 100%;
+  height: 70rem;
+  filter: blur(200rem);
+  background-color: white;
+  z-index: 1;
+  top: 242px;
+  left: 0;
+}
+#whiteBlow.hidden {
+  display: none;
 }
 
 .button-container {
@@ -756,6 +769,8 @@
 #main-payment > .left-container > .card-container > .card-content > .card-label > [name=card] {
   height: 1.5rem;
   border-radius: 0.2rem;
+  background-color: white;
+  border: solid 1px rgb(118, 118, 118);
 }
 #main-payment > .left-container > .card-container > .text-space {
   width: 100%;
@@ -1110,7 +1125,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1;
+  z-index: 2;
 }
 #payment-section.hidden {
   display: none;
@@ -1174,6 +1189,7 @@
   justify-content: center;
   align-items: center;
   border-bottom: 0.1rem solid rgb(190, 190, 189);
+  padding: 1rem 0 1rem 0;
 }
 #payment-section > .pay-form > .table-div > div > .img {
   height: 9.7rem;
@@ -1185,10 +1201,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  width: 5rem;
-  gap: 0.2rem;
+  width: 4rem;
+  gap: 0.5rem;
   font-weight: 700;
   font-size: 0.75rem;
+  padding-left: 1rem;
 }
 #payment-section > .pay-form > .table-div > .div-content1 {
   height: 100%;
@@ -1197,7 +1214,7 @@
   justify-content: center;
   align-items: flex-start;
   width: 20.07rem;
-  gap: 0.2rem;
+  gap: 0.5rem;
   font-weight: 400;
   font-size: 0.75rem;
   border-right: 0.1rem solid rgb(190, 190, 189);
@@ -1210,7 +1227,7 @@
   align-items: flex-start;
   width: 8.43rem;
   padding-left: 3rem;
-  gap: 0.2rem;
+  gap: 0.5rem;
   margin-bottom: 5rem;
   font-weight: 400;
   font-size: 0.75rem;
@@ -1222,7 +1239,7 @@
   justify-content: center;
   align-items: flex-start;
   width: 21rem;
-  gap: 0.2rem;
+  gap: 0.5rem;
   margin-bottom: 5rem;
   font-weight: 400;
   font-size: 0.75rem;
@@ -1293,6 +1310,7 @@
   justify-content: center;
   align-items: flex-start;
   border-right: 0.1rem solid rgb(190, 190, 189);
+  gap: 0.3rem;
 }
 #payment-section > .pay-form > .agree > div.agree-div2 > span {
   height: 0.95rem;
@@ -1347,12 +1365,14 @@
   margin: 0.2rem;
   border: 0.1rem solid white;
   border-radius: 0.2rem;
+  cursor: pointer;
 }
 #pay-button > .real-cancel {
   height: 2.8125rem;
   width: 4.6785rem;
   border: 0.1rem solid rgb(51, 51, 51);
   border-radius: 0.2rem;
+  cursor: pointer;
 }
 
 .control-bar {
@@ -1450,6 +1470,17 @@
   background-position: 50% -68px;
 }
 .control-bar > .container > .theater-container.hidden {
+  display: none;
+}
+.control-bar > .container > .seat-container {
+  width: 111px;
+  height: 100%;
+  margin: 2rem 0 0 1.5rem;
+  background-image: url("https://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/tnb/tnb_steps.png");
+  background-repeat: no-repeat;
+  background-position: 50% -190px;
+}
+.control-bar > .container > .seat-container.hidden {
   display: none;
 }
 .control-bar > .container > .seat-container {
@@ -1612,6 +1643,15 @@
 .control-bar > .container .right-button.third {
   width: 220px;
   background-position: 0 -550px;
+}
+.control-bar > .container .right-button > .forward {
+  right: 0;
+  width: 106px;
+  height: 108px;
+  position: absolute;
+  cursor: pointer;
+  background-image: url("http://img.cgv.co.kr/CGV_RIA/Ticket/image/reservation/tnb/tnb_buttons.png");
+  background-repeat: no-repeat;
 }
 
 .add {

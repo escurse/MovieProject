@@ -1,6 +1,5 @@
 package com.escass.movieproject.exceptions;
 
-// ctrl + O
 public class TransactionalException extends RuntimeException {
     public TransactionalException() {
         super();
@@ -13,6 +12,7 @@ public class TransactionalException extends RuntimeException {
     public TransactionalException(String message, Throwable cause) {
         super(message, cause);
     }
+
 
     public TransactionalException(Throwable cause) {
         super(cause);

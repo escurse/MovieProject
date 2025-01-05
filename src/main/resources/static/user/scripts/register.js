@@ -20,7 +20,6 @@ $registerForm['addr-button'].onclick = () => {
 
             document.getElementById('postcode').value = data.zonecode; // 우편번호
             document.getElementById('address').value = roadAddr; // 도로명 주소
-            document.getElementById('detailAddress').value = data.jibunAddress; // 지번 주소
             document.getElementById('extraAddress').value = extraRoadAddr; // 추가 주소 정보
 
         }
@@ -39,6 +38,7 @@ $registerForm['duplicate-id-button'].onclick = () => {
 
             return;
         }
+        Loading.hide();
         if (xhr.status < 200 || xhr.status >= 300) {
             alert('요청을 전송하는 도중 오류가 발생하였습니다. 잠시 후 다시 시도해 주세요.');
             return;
@@ -49,6 +49,10 @@ $registerForm['duplicate-id-button'].onclick = () => {
             alert('이미 사용중인 아이디 입니다.');
             return isIdValid = false;
 
+        }
+        if (result === 'failure_invalid_id') {
+            alert('올바른 아이디 형식이 아닙니다 다시 확인해주세요. 아이디는 소문자와 숫자만 포함되어야 하며, 8~20자여야 합니다.');
+            return;
         }
         if (result === 'failure') {
             alert('올바른 아이디를 입력해주세요. 아이디는 6~20자의 소문자 + 숫자 입니다.');
@@ -62,6 +66,7 @@ $registerForm['duplicate-id-button'].onclick = () => {
     };
     xhr.open('GET', '/user/check-duplicate-id?user=' + encodeURIComponent($usId));
     xhr.send();
+    Loading.show(0);
 }
 // endregion
 
@@ -76,6 +81,7 @@ $registerForm['duplicate-nickname-button'].onclick = () => {
 
             return;
         }
+        Loading.hide();
         if (xhr.status < 200 || xhr.status >= 300) {
             alert('요청을 전송하는 도중 오류가 발생하였습니다. 잠시 후 다시 시도해 주세요.');
             return;
@@ -88,7 +94,7 @@ $registerForm['duplicate-nickname-button'].onclick = () => {
             return isNicknameValid = false;
         }
         if (result === 'failure') {
-            alert('올바른 닉네임을 입력해주세요. 닉네임은 2~20자 입니다.');
+            alert('올바른 닉네임을 입력해주세요. 닉네임은 2~12자 입니다.');
 
             return isNicknameValid = false;
         }
@@ -99,6 +105,7 @@ $registerForm['duplicate-nickname-button'].onclick = () => {
     };
     xhr.open('GET', '/user/check-duplicate-nickname?nickname=' + encodeURIComponent($nickname));
     xhr.send();
+    Loading.show(0);
 }
 // endregion
 
@@ -118,7 +125,7 @@ $valueButton.addEventListener('click', function (e) {
 
 $domainButtons.forEach(button => {
     button.addEventListener('click', function () {
-        $domainInput.value = button.textContent.trim();
+        $domainInput.value = button.value;
         $modal.style.display = 'none';
     });
 });
@@ -201,18 +208,23 @@ $passwordInput.addEventListener('keyup', (e) => {
 
         if ($registerForm['password'].value.length < 6 && $registerForm['password'].value.length > 50) {
             alert('올바른 비밀번호를 입력해 주세요.');
+            return;
         }
         if ($registerForm['password'].value !== $registerForm['passwordCheck'].value) {
             alert('비밀번호가 서로 일치하지 않습니다.');
+            return;
         }
         if ($registerForm['contact'].value.length < 10 && $registerForm['contact'].value.length > 13) {
             alert('올바른 연락처를 입력해주세요.');
+            return;
         }
         if ($registerForm['email'].value.length < 6 && $registerForm['email'].value.length > 50) {
             alert('올바른 이메일을 입력해주세요.');
+            return;
         }
         if (!$registerForm['agree'].checked) {
             alert('서비스 이용약관 및 개인정보 처리방침에 동의하지 않으면 회원가입을 하실 수 없습니다.');
+            return;
         }
         const xhr = new XMLHttpRequest();
         const formData = new FormData();
@@ -227,9 +239,8 @@ $passwordInput.addEventListener('keyup', (e) => {
         // 주소 결합
         const zipcode = $registerForm['postcode'].value;
         const address = $registerForm['address'].value;
-        const detailAddress = $registerForm['detailAddress'].value;
         const extraAddress = $registerForm['extraAddress'].value;
-        const fullAddress = `${zipcode} ${address} ${detailAddress} ${extraAddress ? extraAddress : ''}`.trim();
+        const fullAddress = `${zipcode} ${address} ${extraAddress ? extraAddress : ''}`.trim();
         formData.append('usAddr', fullAddress);
 
         // 이메일 결합
@@ -244,6 +255,7 @@ $passwordInput.addEventListener('keyup', (e) => {
 
                 return;
             }
+            Loading.hide();
             if (xhr.status < 200 || xhr.status >= 300) {
                 alert('요청을 전송하는 도중 오류가 발생하였습니다. 잠시 후 다시 시도해 주세요.');
                 return;
@@ -261,12 +273,23 @@ $passwordInput.addEventListener('keyup', (e) => {
                 alert('올바른 아이디 형식이 아닙니다 다시 확인해주세요. 아이디는 소문자와 숫자만 포함되어야 하며, 8~20자여야 합니다.');
             } else if (response['result'] === 'failure_invalid_password') {
                 alert('비밀번호는 8~100자 사이에 대소문자, 숫자, 특수문자를 포함해야 합니다.');
-            } else {
+            } else if (response['result'] === 'failure_duplicate_contact') {
+                alert('이미 사용중인 연락처 입니다.');
+            } else if (response['result'] === 'failure_duplicate_email') {
+                alert('이미 사용중인 이메일 입니다.');
+            } else if (response['result'] === 'failure_duplicate_nickname') {
+                alert('이미 사용중인 닉네임 입니다.');
+            }
+            else if (response['result'] === 'failure_duplicate_id') {
+                alert('이미 사용중인 아이디 입니다.');
+            }
+            else {
                 alert('서버가 알 수 없는 응답을 반환하였습니다. 잠시 후 다시 시도해 주세요.');
             }
         };
         xhr.open('POST', '/user/register');
         xhr.send(formData);
+        Loading.show(0);
 
     }
 }

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JGV - 영화 수정</title>
+    <link rel="stylesheet" th:href="@{'../../assets/styles/common.css'}" type="text/css">
+    <link rel="stylesheet" th:href="@{'../../fragments/assets/styles/index.css'}" type="text/css">
+    <link rel="stylesheet" href="/admin/styles/movie-modify.css" type="text/css">
+    <script defer th:src="@{'../../fragments/assets/scripts/common.js'}"></script>
+    <script defer th:src="@{'../../assets/scripts/common.js'}"></script>
+    <script defer src="/admin/script/movie-modify.js"></script>
+    <link rel="shortcut icon" href="https://img.cgv.co.kr/theater_img/favicon.ico" type="image/x-icon">
+    <script th:if="${!session.user.isUsIsAdmin()}">
+        alert('올바르지 않은 접근입니다.');
+        if (history.length > 1) {
+            history.back();
+        } else {
+            window.close();
+        }
+    </script>
+</head>
+<body th:if="${session.user.isUsIsAdmin()}">
+<th:block th:replace="~{fragments/common.html :: advertisement}"></th:block>
+<th:block th:replace="~{fragments/common.html :: header}"></th:block>
+<th:block th:replace="~{fragments/common.html :: nav}"></th:block>
+<div class="movie-edit-container">
+    <h1>영화 수정</h1>
+    <form id="movie-edit-form">
+        <label>
+            <span class="title"> 제목: </span>
+            <input type="text" id="movie-title" name="movieTitle" disabled>
+        </label>
+        <label>
+            <span class="running-time"> 러닝타임 : </span>
+            <input type="number" id="movie-runtime" name="movieRuntime">
+        </label>
+        <label>
+            <span class="plot"> 줄거리 : </span>
+            <textarea id="movie-description" name="movieDescription"></textarea>
+        </label>
+        <label>
+            <span class="raiting"> 관람등급 : </span>
+            <select id="movie-rating" name="movieRating">
+                <option value="전체관람가">전체관람가</option>
+                <option value="12세이상관람가">12세이상관람가</option>
+                <option value="15세이상관람가">15세이상관람가</option>
+                <option value="청소년관람불가">청소년관람불가</option>
+                <option value="미정">미정</option>
+            </select>
+        </label>
+        <label>
+            <span class="genre"> 장르(쉼표로 구분) : </span>
+            <input type="text" id="movie-genre" name="movieGenre">
+        </label>
+        <label>
+            <span class="country"> 제작 국가(쉼표로 구분) : </span>
+            <input type="text" id="movie-country" name="movieCountry">
+        </label>
+        <div id="movie-image">
+        </div>
+        <div id="movie-characters">
+            <h3>영화 인물</h3>
+            <div class="character-entry">
+                <label>
+                    이름:
+                    <input type="text" name="characterName" value="기존 인물 이름">
+                </label>
+                <label>
+                    삭제:
+                    <input type="checkbox" name="deleteCharacter">
+                </label>
+            </div>
+            <button type="button" id="add-character-button">인물 추가</button>
+        </div>
+        <button type="button" id="cancel-button">취소</button>
+        <button type="submit" id="save-button">저장</button>
+    </form>
+</div>
+<th:block th:replace="~{fragments/common.html :: footer}"></th:block>
+</body>
+</html>

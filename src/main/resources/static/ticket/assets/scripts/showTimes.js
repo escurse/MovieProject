@@ -13,6 +13,44 @@ const $dayContainers = $cinemaInfo.querySelector(':scope > .cinema-header > .day
 const $screens = $cinemaInformation.querySelector(':scope > .cinema-info > .items');
 const $informations = Array.from($main.querySelectorAll(':scope > .information'));
 
+{
+    const $sideAdvertisementArray = ['https://adimg.cgv.co.kr/images/202411/Firefighters/1121_980x90.jpg', 'https://adimg.cgv.co.kr/images/202412/PORORO/1231_980x90.jpg', 'https://adimg.cgv.co.kr/images/202412/HARBIN/1227_980x90.jpg'];
+    document.addEventListener("DOMContentLoaded", () => {
+        const $advertisement = document.querySelector('.advertisement-info');
+        const $advertisementRandom = $sideAdvertisementArray[Math.floor(Math.random() * $sideAdvertisementArray.length)];
+        const $a = $advertisement.querySelector(':scope > a')
+        const $img = $advertisement.querySelector(':scope > a > img');
+        if ($advertisementRandom === $sideAdvertisementArray[0]) {
+            $a.setAttribute('href', '../movies/movieList/movieInfo/3651')
+        } else if ($advertisementRandom === $sideAdvertisementArray[1]) {
+            $a.setAttribute('href', '../movies/movieList/movieInfo/3628')
+        } else {
+            $a.setAttribute('href', '../movies/movieList/movieInfo/3611')
+        }
+        $img.setAttribute('src', $advertisementRandom);
+    });
+
+    const $advertisementContainerArray = ['https://adimg.cgv.co.kr/images/202412/PORORO/1231_160x300.jpg', 'https://adimg.cgv.co.kr/images/202412/Moana2/1218_160x300.jpg', 'https://adimg.cgv.co.kr/images/202412/HARBIN/1227_160x300.png'];
+    const $advertisementContainer = Array.from(document.querySelectorAll('.advertisement-container'));
+    document.addEventListener("DOMContentLoaded", () => {
+        $advertisementContainer.forEach((advertisement) => {
+            const $advertisementMove = Array.from(advertisement.querySelectorAll(':scope > .advertisement-move'));
+            $advertisementMove.forEach((ad) => {
+                const $advertisementRandom = $advertisementContainerArray[Math.floor(Math.random() * $advertisementContainerArray.length)];
+                if ($advertisementRandom === $advertisementContainerArray[0]) {
+                    ad.setAttribute('href', '../movies/movieList/movieInfo/3628')
+                } else if ($advertisementRandom === $advertisementContainerArray[1]) {
+                    ad.setAttribute('href', '../movies/movieList/movieInfo/3669')
+                } else {
+                    ad.setAttribute('href', '../movies/movieList/movieInfo/3611')
+                }
+                const $img = ad.querySelector(':scope > img');
+                $img.setAttribute('src', $advertisementRandom);
+            })
+        })
+    });
+}
+
 let text = null;
 
 {
@@ -117,7 +155,7 @@ let text = null;
                                             let year = currentDate.getFullYear();
                                             const currentMonth = currentDate.getMonth() + 1;
                                             const month = item.querySelector(':scope > .small-container > .day:nth-child(1)');
-                                            if (month < currentMonth || (month === currentMonth)) {
+                                            if (month.innerText.replace('월', '') < currentMonth || (month.innerText.replace('월', '') === currentMonth)) {
                                                 year += 1;
                                             }
                                             const day = item.querySelector(':scope > .day');
@@ -140,10 +178,7 @@ let text = null;
                                                     $timeTable.forEach((time) => {
                                                         time.onclick = (e) => {
                                                             e.preventDefault();
-                                                            const $moTitle = screen.querySelector(':scope > .movie-container > .text');
-                                                            const xhr = new XMLHttpRequest();
-                                                            const url = new URL('http://localhost:8080/ticket/');
-                                                            // 파라미터 값들을 객체로 저장
+                                                            const $moTitle = screen.querySelector(':scope > .movie-container > .text');// 파라미터 값들을 객체로 저장
                                                             const params = {
                                                                 moTitle: $moTitle.innerText,
                                                                 thName: x.innerText,
@@ -151,26 +186,9 @@ let text = null;
                                                                 time: time.innerText.split('\n')[0]
                                                             };
                                                             sessionStorage.setItem('ticketParams', JSON.stringify(params));
-                                                            xhr.onreadystatechange = () => {
-                                                                if (xhr.readyState !== XMLHttpRequest.DONE) {
-                                                                    return;
-                                                                }
-                                                                if (xhr.status < 200 || xhr.status >= 300) {
-                                                                    alert('오류 발생');
-                                                                    return;
-                                                                }
-                                                                window.location.href = url.toString();
-                                                                Loading.hide();
-                                                            };
-                                                            xhr.open('GET', url.toString());
-                                                            xhr.send();
-                                                            Loading.show(0);
                                                         }
                                                     })
                                                 })
-                                                const $main = document.getElementById('main');
-                                                const $buttons = Array.from($buttonContainer.querySelectorAll(':scope > .button'));
-                                                const $informations = Array.from($main.querySelectorAll(':scope > .information'));
                                             }
                                             xhr.open('GET', url.toString());
                                             xhr.send();
@@ -337,7 +355,7 @@ let text = null;
                                 $dayContainer.append($afterButton);
                                 $dayContainer.append($days);
                                 $items.forEach((item, index) => {
-                                    if (index >= 9) {
+                                    if (index >= 8) {
                                         item.classList.add('hidden');
                                     }
                                     item.onclick = () => {
@@ -349,7 +367,7 @@ let text = null;
                                                 let year = currentDate.getFullYear();
                                                 const currentMonth = currentDate.getMonth() + 1;
                                                 const month = item.querySelector(':scope > .small-container > .day:nth-child(1)');
-                                                if (month.innerText.substring(0, 2) < currentMonth) {
+                                                if (month.innerText.replace('월', '') < currentMonth || (month.innerText.replace('월', '') === currentMonth)) {
                                                     year += 1;
                                                 }
                                                 const day = item.querySelector(':scope > .day');
@@ -392,6 +410,32 @@ let text = null;
                                                                         const $screenItems = document.querySelector('#schedule > .cinema-info > .items');
                                                                         const $newScreens = new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelector('#schedule > .cinema-info > .items');
                                                                         $screenItems.replaceWith($newScreens);
+                                                                        const $screenItem = Array.from($newScreens.querySelectorAll(':scope > .item'));
+                                                                        $screenItem.forEach((screen) => {
+                                                                            const $theater = screen.querySelector(':scope > .theater')
+                                                                            $theater.onclick = () => {
+                                                                                const theater = {
+                                                                                    thName: $theater.innerText.replace('\n', '')
+                                                                                };
+                                                                                sessionStorage.setItem('theater', JSON.stringify(theater));
+                                                                            }
+                                                                            const $timeTable = Array.from(screen.querySelectorAll(':scope > .screens > .screen-container > .time-table-container > .time-table'));
+                                                                            $timeTable.forEach((time) => {
+                                                                                time.onclick = (e) => {
+                                                                                    e.preventDefault();
+                                                                                    const $moTitle = document.querySelector('.movie-title > .movie > .select > .text > .name');
+                                                                                    // 파라미터 값들을 객체로 저장
+                                                                                    const params = {
+                                                                                        moTitle: $moTitle.innerText,
+                                                                                        thName: $theater.innerText.split('\n')[1],
+                                                                                        scStartDate: year + '-' + month.innerText.substring(0, 2) + '-' + day.innerText,
+                                                                                        time: time.innerText.split('\n')[0]
+                                                                                    };
+                                                                                    sessionStorage.setItem('ticketParams', JSON.stringify(params));
+                                                                                }
+                                                                            })
+
+                                                                        })
                                                                     }
                                                                     xhr.open('GET', url.toString());
                                                                     xhr.send();
@@ -415,19 +459,19 @@ let text = null;
                                 $dayButtons.forEach((dayButton) => {
                                     dayButton.onclick = () => {
                                         if (dayButton.classList.contains('after')) {
-                                            Index += 9;
+                                            Index += 8;
                                         }
                                         if (dayButton.classList.contains('before')) {
-                                            Index -= 9;
+                                            Index -= 8;
                                         }
                                         if (Index < 0) {
                                             Index = 0;
                                         }
                                         if (Index >= $items.length) {
-                                            Index = Index - 9;
+                                            Index = Index - 8;
                                         }
                                         $items.forEach((iem, index) => {
-                                            if (index >= Index && index < Index + 9) {
+                                            if (index >= Index && index < Index + 8) {
                                                 iem.classList.remove('hidden');
                                             } else {
                                                 iem.classList.add('hidden');

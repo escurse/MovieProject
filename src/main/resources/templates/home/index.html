@@ -5,14 +5,17 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>깊게 빠져보다. JGV</title>
+    <title>JGV</title>
     <link rel="stylesheet" th:href="@{'./assets/styles/index.css'}" type="text/css">
     <link rel="stylesheet" th:href="@{'../../assets/styles/common.css'}" type="text/css">
     <link rel="stylesheet" th:href="@{'../../fragments/assets/styles/index.css'}" type="text/css">
     <link rel="stylesheet" th:href="@{'../../fragments/assets/styles/common.css'}" type="text/css">
     <link rel="stylesheet" href="/home/styles/index.css" type="text/css">
-    <script defer th:src="@{'./assets/scripts/index.js'}" type="text/javascript"></script>
-    <script defer src="/user/scripts/login.js" type="text/javascript"></script>
+    <link rel="shortcut icon" href="https://img.cgv.co.kr/theater_img/favicon.ico" type="image/x-icon">
+    <!--    <script defer th:src="@{'./assets/scripts/index.js'}" type="text/javascript"></script>-->
+    <!--    <script defer src="/user/scripts/login.js" type="text/javascript"></script>-->
+    <script defer src="/fragments/assets/scripts/common.js" type="text/javascript"></script>
+    <script defer th:src="@{./home/scripts/index.js}"></script>
 </head>
 <body>
 <th:block th:replace="~{fragments/common.html :: advertisement}"></th:block>
@@ -21,90 +24,142 @@
 <main id="main">
     <div class="contents">
         <div class="video_wrapper">
-            <video autoplay muted loop>
-                <source src="https://adimg.cgv.co.kr/images/202412/HARBIN/HARBIN_pc_1080x608.mp4" type="video/mp4">
+            <video autoplay muted>
+                <source src="" type="video/mp4">
+                "이 브라우저는 Video 태그를 지원하지 않습니다. (Your browser does not support the video tag.)"
             </video>
-            <strong>하얼빈</strong>
-            <span>늙은 늑대를 처단하라!<br>12월 24일 극장 대개봉!</span>
+            <strong></strong>
+            <span></span>
             <div class="link-container">
-                <a href="#">
+                <a href="/movies/movieList/movieInfo/3611">
                     상세보기 &gt;
-                    <!--TODO 영화 페이지의 상세 정보로 링크 연결  -->
                 </a>
             </div>
         </div>
     </div>
-    <section id="movie-container"> <!--col-->
-        <div class="title-container"> <!--row-->
-            <h2>
-                <a href="#">무비차트</a>
-            </h2>
-            <span>&nbsp;|&nbsp;</span>
-            <h2>
-                <a href="#">상영예정작</a>
-            </h2>
 
+    <div class="movie-container">
+        <div class="movie-header">
+            <a class="tab-button current-tab active">무비차트</a>
+            <span style="color: gray; margin-top: 20px"> | </span>
+            <a class="tab-button upcoming-tab">상영예정작</a>
+            <span class="spring"></span>
+            <a href="/movies/movieList" class="show-all">전체보기</a>
         </div>
-        <ul class="movie-chart">
-            <li class="movie-wrapper">
-                <a href="#">
-                    <img src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88797/88797_320.jpg" alt="영화 이미지">
-                </a>
-                <span class="movie-title">하얼빈</span>
-                <span style="display: flex; flex-direction: row; align-items: center; justify-content: center; gap:0.4rem">
-                <span>94%</span>
-                <span>|</span>
-                <span>예매율 11.4%</span>
-                </span>
-            </li>
-            <li class="movie-wrapper">
-                <a href="#">
-                    <img src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88992/88992_320.jpg" alt="영화 이미지">
-                </a>
-                <span class="movie-title">에사는</span>
-                <span style="display: flex; flex-direction: row; align-items: center; justify-content: center; gap:0.4rem">
-                <span>94%</span>
-                <span>|</span>
-                <span>예매율 11.4%</span>
-                </span>
-            </li>
-            <li class="movie-wrapper">
-                <a href="#">
-                    <img src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000077/77372/77372_320.jpg" alt="영화 이미지">
-                </a>
-                <span class="movie-title">조선족</span>
-                <span style="display: flex; flex-direction: row; align-items: center; justify-content: center; gap:0.4rem">
-                <span>94%</span>
-                <span>|</span>
-                <span>예매율 11.4%</span>
-                </span>
-            </li>
-            <li class="movie-wrapper">
-                <a href="#">
-                    <img src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000089/89072/89072_320.jpg" alt="영화 이미지">
-                </a>
-                <span class="movie-title">김종율</span>
-                <span style="display: flex; flex-direction: row; align-items: center; justify-content: center; gap:0.4rem">
-                <span>94%</span>
-                <span>|</span>
-                <span>예매율 11.4%</span>
-                </span>
-            </li>
-            <li class="movie-wrapper">
-                <a href="#">
-                    <img src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88381/88381_320.jpg" alt="영화 이미지">
-                </a>
-                <span class="movie-title">입니다</span>
-                <span style="display: flex; flex-direction: row; align-items: center; justify-content: center; gap:0.4rem">
-                <span>94%</span>
-                <span>|</span>
-                <span>예매율 11.4%</span>
-                </span>
-            </li>
-        </ul>
-    </section>
-</main>
 
+        <!-- 무비차트 캐러셀 -->
+        <div id="current-movies" class="carousel-container active">
+            <div class="carousel">
+                <div class="movies-wrapper">
+                    <div class="movie-card" th:each="movie : ${currentMovies}">
+                        <div class="movie-poster"
+                             th:style="'background-image: url(' + (${movie.m_img_url} ?: '/images/default-poster.jpg') + ')'">
+                        </div>
+                        <div class="hover-actions">
+                            <a th:href="'/movies/movieList/movieInfo/' + ${movie.moNum}" class="detail-button">상세보기</a>
+                            <button class="reserve-button" th:data-moTitle="${movie.moTitle}">예매하기</button>
+                        </div>
+                        <h3 th:text="${movie.moTitle ?: '제목 없음'}"></h3>
+                        <p th:text="'예매율: ' + (${movie.moBookingRate ?: '0'}) + '%'"></p>
+                    </div>
+                </div>
+                <button class="carousel-button prev"></button>
+                <button class="carousel-button next"></button>
+            </div>
+        </div>
+
+        <!-- 상영예정작 캐러셀 -->
+        <div id="upcoming-movies" class="carousel-container">
+            <div class="carousel">
+                <div class="movies-wrapper">
+                    <div class="movie-card" th:each="movie : ${upComingMovies}">
+                        <div class="movie-poster"
+                             th:style="'background-image: url(' + (${movie.m_img_url} ?: '/images/default-poster.jpg') + ')'">
+                        </div>
+                        <div class="hover-actions">
+                            <button class="detail-button">상세보기</button>
+                            <button class="reserve-button">예매하기</button>
+                        </div>
+                        <h3 th:text="${movie.moTitle ?: '제목 없음'}"></h3>
+                        <p th:text="'예매율: ' + (${movie.moBookingRate ?: '0'}) + '%'"></p>
+                    </div>
+                </div>
+                <button class="carousel-button prev"></button>
+                <button class="carousel-button next"></button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="theater">
+        <div class="background">
+            <div class="title-container">
+                <h3>상영관</h3>
+            </div>
+            <div class="theater-list">
+                <div class="image-wrapper">
+                    <div class="IMAX special" rel="IMAX">
+                        <div class="name text">IMAX</div>
+                        <div class="tag text">#궁극의 몰입감</div>
+                    </div>
+                    <div class="DX special hidden" rel="DX">
+                        <div class="name text">4DX</div>
+                        <div class="tag text">#모션시트 #오감체험</div>
+                    </div>
+                    <div class="SCREENX special hidden" rel="SCREENX">
+                        <div class="name text">SCREENX</div>
+                        <div class="tag text">#3면 확장 스크린</div>
+                    </div>
+                    <div class="RECLINER special hidden" rel="RECLINER">
+                        <div class="name text">RECLINER</div>
+                        <div class="tag text">#리클라이너 상영관</div>
+                    </div>
+                    <div class="CINE special hidden" rel="CINE">
+                        <div class="name text">CINE & FORET</div>
+                        <div class="tag text">#자연 컨셉의 힐링 상영관</div>
+                    </div>
+                </div>
+                <div class="item-container">
+                    <div class="item">
+                        <div class="text" rel="IMAX">
+                            <span class="title">IMAX</span>
+                            <div class="-spring"></div>
+                            <span class="sub-text">#궁극의 몰입감</span>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="text" rel="DX">
+                            <span class="title">4DX</span>
+                            <div class="-spring"></div>
+                            <span class="sub-text">#모션시트 #오감체험</span>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="text" rel="SCREENX">
+                            <span class="title">SCREENX</span>
+                            <div class="-spring"></div>
+                            <span class="sub-text">#3면 확장 스크린</span>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="text" rel="RECLINER">
+                            <span class="title">RECLINER</span>
+                            <div class="-spring"></div>
+                            <span class="sub-text">#리클라이너 상영관</span>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="text" rel="CINE">
+                            <span class="title">CINE & FORET</span>
+                            <div class="-spring"></div>
+                            <span class="sub-text">#자연 컨셉의 힐링 상영관</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 <th:block th:replace="~{fragments/common.html :: footer}"></th:block>
 </body>
 </html>

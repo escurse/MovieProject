@@ -1,0 +1,89 @@
+@import "../../../fragments/assets/styles/global";
+
+#passwordCheck {
+  @include flex(column, flex-start, flex-start, 0.7rem);
+  width: 750px;
+  height: 15rem;
+
+  > .title {
+    > h2 {
+      font-weight: 500;
+    }
+  }
+
+  > .button-container {
+    @include flex(row, center, center, 0.5rem);
+    width: 100%;
+
+    > .complete {
+      width: 3.5rem;
+      height: 27px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background-color: #FB4357;
+      color: #ffffff;
+    }
+
+    > .home {
+      width: 7rem;
+      height: 27px;
+      border: 2px solid #7b7b7b;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background-color: transparent;
+
+      > a {
+        color: #7b7b7b;
+      }
+    }
+  }
+
+  > .check-password {
+    @include flex(column, center, flex-start, 1rem);
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #222222;
+    border-bottom: 1px solid #222222;
+    padding: 0 0.5rem;
+
+    > .input-wrapper {
+      @include flex(column, flex-start, center, 1rem);
+
+      > .id-wrapper {
+        @include flex(row, center, flex-start, 5rem);
+
+        > .text {
+          color: #666666;
+          font-weight: 500;
+        }
+      }
+
+      > label {
+        @include flex(row, center, flex-start, 4rem);
+
+        > .text {
+          color: #666666;
+          font-weight: 500;
+        }
+
+        > input {
+          height: 1.5rem;
+          width: 7.5rem;
+        }
+      }
+    }
+
+
+    > .caution {
+      @include flex(row, center, flex-start);
+      width: 100%;
+      height: 1.5rem;
+      background-color: #e2e2e2;
+      font-size: 0.8rem;
+      font-weight: 400;
+      padding: 0.2rem 0.5rem;
+    }
+  }
+}
