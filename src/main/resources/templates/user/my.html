@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>회원 페이지</title>
+  <script type="text/javascript" th:src="@{/assets/scripts/common.js}"></script>
+  <script defer type="text/javascript" th:src="@{/user/assets/scripts/my.js}"></script>
+  <link rel="stylesheet" type="text/css" th:href="@{/assets/styles/common.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/user/assets/styles/my.css}">
+</head>
+<body>
+<!--/*@thymesVar id="user" type="dev.yhpark.socialloginexample.entities.UserEntity"*/-->
+<div class="dialog" th:with="user = ${session.user}">
+  <h1 class="title">회원 페이지</h1>
+  <span class="text">
+  <span class="bold" th:text="${user.getUsNickname()}"></span>님 반갑습니다!</span>
+  <span class="text">소셜 로그인: <span class="bold" th:text="${user.getUsSocialTypeCode() == null ? '일반 계정' : user.getUsSocialTypeCode()}"></span></span>
+  <span class="text">소셜 식별자: <span class="bold" th:text="${user.getUsSocialId() == null ? '해당 없음' : user.getUsSocialId()}"></span></span>
+  <a class="logout-anchor" target="_self" th:href="@{/user/logout}">로그아웃</a>
+  <a class="cancel-anchor" href="#" rel="cancel">탈퇴하기</a>
+</div>
+</body>
+</html>

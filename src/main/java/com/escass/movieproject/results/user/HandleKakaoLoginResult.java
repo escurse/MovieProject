@@ -1,0 +1,7 @@
+package com.escass.movieproject.results.user;
+
+import com.escass.movieproject.results.Result;
+
+public enum HandleKakaoLoginResult implements Result {
+    FAILURE_NOT_REGISTERED
+}

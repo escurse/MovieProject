@@ -12,6 +12,10 @@ import java.util.List;
 
 @Mapper
 public interface UserMapper {
+    int deleteUserByEmail(@Param("usEmail") String email);
+
+    UserEntity selectUserBySocialTypeCodeAndSocialId(@Param("usSocialTypeCode") String socialTypeCode,
+                                                     @Param("usSocialId") String socialId);
 
     int insertUser(UserEntity user);
 

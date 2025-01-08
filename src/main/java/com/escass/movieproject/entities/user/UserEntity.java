@@ -1,16 +1,19 @@
 package com.escass.movieproject.entities.user;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Setter
+@Builder
 @Getter
-@EqualsAndHashCode(of = {"usNum"})
+@Setter
+@EqualsAndHashCode(of = "usNum")
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserEntity {
+    public static final String NAME_SINGULAR = "user";
+
     private int usNum;
     private String usId;
     private String usPw;
@@ -23,10 +26,10 @@ public class UserEntity {
     private String usAddr;
     private LocalDateTime usCreatedAt;
     private LocalDateTime usUpdatedAt;
-    // private boolean usIsDeleted; // true , false
-    private boolean usIsDeleted;    // true , false, null
+    private boolean usIsDeleted;
     private boolean usIsAdmin;
     private boolean usIsSuspended;
     private boolean usIsVerified;
-
+    private String usSocialTypeCode;
+    private String usSocialId;
 }

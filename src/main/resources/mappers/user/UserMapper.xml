@@ -3,11 +3,44 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.escass.movieproject.mappers.user.UserMapper">
+    <delete id="deleteUserByEmail">
+        DELETE
+        FROM `jgv`.`user`
+        WHERE `us_email` = #{usEmail}
+        LIMIT 1
+    </delete>
+    <select id="selectUserBySocialTypeCodeAndSocialId"
+            resultType="com.escass.movieproject.entities.user.UserEntity">
+        SELECT us_num              AS `usNum`,
+               us_id               AS `usId`,
+               us_pw               AS `usPw`,
+               us_name             AS `usName`,
+               us_nickname         AS `usNickName`,
+               us_birth            AS `usBirth`,
+               us_gender           AS `usGender`,
+               us_email            AS `usEmail`,
+               us_contact          AS `usContact`,
+               us_addr             AS `usAddr`,
+               us_created_at       AS `usCreatedAt`,
+               us_updated_at       AS `usUpdatedAt`,
+               us_is_deleted       AS `usIsDeleted`,
+               us_is_admin         AS `usIsAdmin`,
+               us_is_suspended     AS `usIsSuspended`,
+               us_verified         AS `usIsVerified`,
+               us_social_type_code AS `usSocialTypeCode`,
+               us_social_id        AS `usSocialId`
+        FROM `jgv`.`user`
+        WHERE `us_social_type_code` = #{usSocialTypeCode}
+          AND `us_social_id` = #{usSocialId}
+        LIMIT 1
+    </select>
+
+<!-- 소셜 로그인 -->
 
     <insert id="insertUser"
     parameterType="com.escass.movieproject.entities.user.UserEntity">
-        INSERT INTO `jgv`.`user` (`us_id`, `us_pw`, `us_name`, `us_nickname`, `us_birth`, `us_gender`, `us_email`, `us_contact`, `us_addr`, `us_created_at`, `us_updated_at`,`us_is_deleted`,`us_is_admin` ,`us_is_suspended`, `us_verified`)
-        VALUES (#{usId}, #{usPw}, #{usName}, #{usNickName}, #{usBirth}, #{usGender}, #{usEmail}, #{usContact}, #{usAddr}, #{usCreatedAt}, #{usUpdatedAt}, #{usIsDeleted}, #{usIsAdmin}, #{usIsSuspended}, #{usIsVerified})
+        INSERT INTO `jgv`.`user` (`us_id`, `us_pw`, `us_name`, `us_nickname`, `us_birth`, `us_gender`, `us_email`, `us_contact`, `us_addr`, `us_created_at`, `us_updated_at`,`us_is_deleted`,`us_is_admin` ,`us_is_suspended`, `us_verified`, `us_social_type_code`, `us_social_id`)
+        VALUES (#{usId}, #{usPw}, #{usName}, #{usNickName}, #{usBirth}, #{usGender}, #{usEmail}, #{usContact}, #{usAddr}, #{usCreatedAt}, #{usUpdatedAt}, #{usIsDeleted}, #{usIsAdmin}, #{usIsSuspended}, #{usIsVerified}, #{usSocialTypeCode}, #{usSocialId})
     </insert>
     <update id="updateUser"
     parameterType="com.escass.movieproject.entities.user.UserEntity">
@@ -29,22 +62,24 @@
 
     <select id="selectUserByEmail"
             resultType="com.escass.movieproject.entities.user.UserEntity">
-        SELECT us_num          AS `usNum`,
-               us_id           AS `usId`,
-               us_pw           AS `usPw`,
-               us_name         AS `usName`,
-               us_nickname     AS `usNickName`,
-               us_birth        AS `usBirth`,
-               us_gender       AS `usGender`,
-               us_email        AS `usEmail`,
-               us_contact      AS `usContact`,
-               us_addr         AS `usAddr`,
-               us_created_at   AS `usCreatedAt`,
-               us_updated_at   AS `usUpdatedAt`,
-               us_is_deleted   AS `usIsDeleted`,
-               us_is_admin     AS `usIsAdmin`,
-               us_is_suspended AS `usIsSuspended`,
-               us_verified     AS `usIsVerified`
+        SELECT us_num                AS `usNum`,
+               us_id                 AS `usId`,
+               us_pw                 AS `usPw`,
+               us_name               AS `usName`,
+               us_nickname           AS `usNickName`,
+               us_birth              AS `usBirth`,
+               us_gender             AS `usGender`,
+               us_email              AS `usEmail`,
+               us_contact            AS `usContact`,
+               us_addr               AS `usAddr`,
+               us_created_at         AS `usCreatedAt`,
+               us_updated_at         AS `usUpdatedAt`,
+               us_is_deleted         AS `usIsDeleted`,
+               us_is_admin           AS `usIsAdmin`,
+               us_is_suspended       AS `usIsSuspended`,
+               us_verified           AS `usIsVerified`,
+               `us_social_type_code` AS `usSocialTypeCode`,
+               `us_social_id`        AS `usSocialId`
         FROM `jgv`.`user`
         WHERE `us_email` = #{usEmail}
         LIMIT 1
@@ -75,22 +110,24 @@
 
     <select id="selectUserByNickname"
             resultType="com.escass.movieproject.entities.user.UserEntity">
-        SELECT us_num          AS `usNum`,
-               us_id           AS `usId`,
-               us_pw           AS `usPw`,
-               us_name         AS `usName`,
-               us_nickname     AS `usNickName`,
-               us_birth        AS `usBirth`,
-               us_gender       AS `usGender`,
-               us_email        AS `usEmail`,
-               us_contact      AS `usContact`,
-               us_addr         AS `usAddr`,
-               us_created_at   AS `usCreatedAt`,
-               us_updated_at   AS `usUpdatedAt`,
-               us_is_deleted   AS `usIsDeleted`,
-               us_is_admin     AS `usIsAdmin`,
-               us_is_suspended AS `usIsSuspended`,
-               us_verified     AS `usIsVerified`
+        SELECT us_num                AS `usNum`,
+               us_id                 AS `usId`,
+               us_pw                 AS `usPw`,
+               us_name               AS `usName`,
+               us_nickname           AS `usNickName`,
+               us_birth              AS `usBirth`,
+               us_gender             AS `usGender`,
+               us_email              AS `usEmail`,
+               us_contact            AS `usContact`,
+               us_addr               AS `usAddr`,
+               us_created_at         AS `usCreatedAt`,
+               us_updated_at         AS `usUpdatedAt`,
+               us_is_deleted         AS `usIsDeleted`,
+               us_is_admin           AS `usIsAdmin`,
+               us_is_suspended       AS `usIsSuspended`,
+               us_verified           AS `usIsVerified`,
+               `us_social_type_code` AS `usSocialTypeCode`,
+               `us_social_id`        AS `usSocialId`
         FROM `jgv`.`user`
         WHERE `us_nickname` = #{usNickname}
         LIMIT 1
