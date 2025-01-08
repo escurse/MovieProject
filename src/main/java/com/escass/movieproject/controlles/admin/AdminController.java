@@ -40,14 +40,14 @@ public class AdminController {
 
     @RequestMapping(value = "/is_admin", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView getIsAdmin(Model model, @SessionAttribute(value = "user") UserEntity user,
-                                   HttpServletRequest request,HttpServletResponse response,
+                                   HttpServletRequest request, HttpServletResponse response,
                                    @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                    @RequestParam(value = "filter", required = false) String filter,
                                    @RequestParam(value = "keyword", required = false) String keyword,
                                    @RequestParam(value = "screen-filter", required = false) String screenFilter,
                                    @RequestParam(value = "screen-keyword", required = false) String screenKeyword)
 
-                                    throws IOException {
+            throws IOException {
         ModelAndView modelAndView = new ModelAndView();
 
         // 영화 페이징
@@ -83,8 +83,8 @@ public class AdminController {
         }
 
         if (user == null || !user.isUsIsAdmin()) {
-           modelAndView.setViewName("redirect:/error");
-           return modelAndView;
+            modelAndView.setViewName("redirect:/error");
+            return modelAndView;
         }
         modelAndView.setViewName("admin/is_admin");
         return modelAndView;
@@ -161,7 +161,7 @@ public class AdminController {
         System.out.println("Received movieInfo: " + movieDTO);
         // 영화 수정 로직
         boolean isUpdated = movieService.updateMovie(movieNum, movieDTO);
-        if(isUpdated) {
+        if (isUpdated) {
             return MovieDeleteModifyResult.SUCCESS;
         } else {
             return MovieDeleteModifyResult.FAILURE;
@@ -171,7 +171,6 @@ public class AdminController {
     //endregion
 
 
-  
     @RequestMapping(value = "/is_admin", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String modifyIsAdmin(@RequestParam(value = "scNum", required = false, defaultValue = "0") int scNum,

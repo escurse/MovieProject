@@ -1,8 +1,6 @@
 package com.escass.movieproject.services.movie;
 
-import com.escass.movieproject.DTO.AllMovieInfoDTO;
-import com.escass.movieproject.DTO.Movie_ImageDTO;
-import com.escass.movieproject.DTO.Movie_InfoDTO;
+import com.escass.movieproject.DTO.*;
 import com.escass.movieproject.entities.movie.*;
 import com.escass.movieproject.mappers.movie.*;
 import org.json.JSONArray;

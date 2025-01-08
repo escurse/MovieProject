@@ -19,6 +19,7 @@ const $firstButton = $controlBar.querySelector(':scope > .container > [data-id="
 const $theaterCinema = document.getElementById('theater-cinema');
 const ticketParams = JSON.parse(sessionStorage.getItem('ticketParams'));
 
+
 // region 광고
 {
     const $sideAdvertisementArray = ['https://adimg.cgv.co.kr/images/202411/Firefighters/996x140.jpg', 'https://adimg.cgv.co.kr/images/202412/PORORO/996x140.jpg', 'https://adimg.cgv.co.kr/images/202412/HARBIN/996x140.jpg'];
@@ -615,7 +616,7 @@ function checkScreen() {
             document.querySelectorAll('.day.select').forEach((selectedItem) => {
                 let array = selectedItem.innerText.split('\n');
                 $theaterTime.innerText = $data.date.replaceAll('-', '.') + '(' + array[0] + ')';
-            })  
+            })
             const $content = document.querySelector('.time > .time > .content');
             const $oldText = $theaterTime.innerText;
             $theaterCinema.innerText = '';
@@ -640,6 +641,9 @@ function checkScreen() {
                             }
                         }
                         item.onclick = () => {
+                            if (ticketParams) {
+                                sessionStorage.removeItem('ticketParams');
+                            }
                             params.time = item.innerText.split('\n')[0];
                             const $cinema = screen.querySelector(':scope > .title > .cinema');
                             const $type = screen.querySelector(':scope > .title > .cinema-type');
@@ -857,7 +861,8 @@ const $RightThird = $controlBar.querySelector(':scope > .container > .third.righ
 const $RightSecond = $controlBar.querySelector(':scope > .container > .second.right-button');
 const $LeftSecond = $controlBar.querySelector(':scope > .container > .second.left-button');
 const $paymentSection = document.getElementById('payment-section');
-
+const $titleCinema = document.getElementById('title-cinema');
+const $titleTheater = document.getElementById('title-theater');
 
 const $mainPayment = document.getElementById("main-payment");
 const $payForm = $paymentSection.querySelector(':scope > .pay-form');
@@ -973,23 +978,34 @@ $rightButtons.forEach((x) => {
     x.onclick = () => {
         if (x.classList.contains('after')) {
             // 메인 바꾸기
-            if (sessionStorage.getItem('user') === null) {
-                const userCheck = confirm("로그인이 필요한 서비스입니다.\n로그인 페이지로 이동하시겠습니까?")
-                if (userCheck) {
-                    params.moTitle = $data.movie;
-                    params.thName = $data.theater;
-                    params.scStartDate = $data.date;
-                    sessionStorage.setItem('ticketParams', JSON.stringify(params));
-                    const redirectUrl = window.location.pathname;
-                    window.location.replace(`.././user/login?forward=${encodeURIComponent(redirectUrl)}`);
-                } else {
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState !== XMLHttpRequest.DONE) {
                     return;
                 }
-            }
-            if (sessionStorage.getItem('user') !== null) {
-                sessionStorage.removeItem('ticketParams');
-            }
-
+                if (xhr.status < 200 || xhr.status >= 300) {
+                    alert('오류 발생');
+                    return;
+                }
+                const response = JSON.parse(xhr.responseText);
+                if (response['session'] === "success") {
+                    sessionStorage.removeItem('ticketParams');
+                } else {
+                    const userCheck = confirm("로그인이 필요한 서비스입니다.\n로그인 페이지로 이동하시겠습니까?")
+                    if (userCheck) {
+                        params.moTitle = $data.movie;
+                        params.thName = $data.theater;
+                        params.scStartDate = $data.date;
+                        sessionStorage.setItem('ticketParams', JSON.stringify(params));
+                        const redirectUrl = window.location.pathname;
+                        window.location.replace(`.././user/login?forward=${encodeURIComponent(redirectUrl)}`);
+                    } else {
+                        return;
+                    }
+                }
+            };
+            xhr.open("POST", './session');
+            xhr.send();
             const $theaterMovie = $containers.querySelector(':scope > .posters > .movie-info > .title');
 
             $mains.forEach((main) => {
@@ -999,6 +1015,8 @@ $rightButtons.forEach((x) => {
                     main.classList.remove('hidden');
                     $seatDate.innerText = `${$theaterTime.innerText}`;
                     $theaterTheater2 = `${$theaterTheater.innerText.substring(0, $theaterTheater.innerText.length - 1)}`;
+                    $titleCinema.innerText = `${$theaterCinema.innerText}`;
+                    $titleTheater.innerText = `${$theaterTheater2}`;
 
                     let rawDateStr = $theaterTime.innerText;
                     let formattedDate = rawDateStr
@@ -1437,21 +1455,6 @@ $payForm.onsubmit = (e) => {
         // FormData 객체 생성
         const formData = new FormData();
 
-        // 세션에서 userId 값을 가져옴
-        const sessionUsId = sessionStorage.getItem('user');  // 세션에서 user 가져오기
-
-        if (sessionUsId === null || sessionUsId.trim() === "") {
-            const userCheck = confirm("로그인이 필요한 서비스입니다.\n로그인 페이지로 이동하시겠습니까?")
-            if (userCheck) {
-                const redirectUrl = window.location.pathname;
-                window.location.replace(`.././user/login?forward=${encodeURIComponent(redirectUrl)}`);
-            } else {
-                return;
-            }
-        } else {
-            const trimmedUsId = sessionUsId.trim();  // null 체크 후 trim 호출
-            formData.append("usNum", trimmedUsId);  // 세션에서 가져온 userId 추가
-        }
         let rawDateStr = $theaterTime.innerText;
         let formattedDate = rawDateStr
             .replace(/\([^)]+\)/, "T") // "(금)" 제거

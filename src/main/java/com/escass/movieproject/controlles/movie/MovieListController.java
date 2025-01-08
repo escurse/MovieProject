@@ -1,9 +1,6 @@
 package com.escass.movieproject.controlles.movie;
 
-import com.escass.movieproject.DTO.CharacterDTO;
-import com.escass.movieproject.DTO.Movie_ImageDTO;
-import com.escass.movieproject.DTO.Movie_InfoDTO;
-import com.escass.movieproject.DTO.ReviewDTO;
+import com.escass.movieproject.DTO.*;
 import com.escass.movieproject.entities.theater.RegionEntity;
 import com.escass.movieproject.results.movie.SearchResult;
 import com.escass.movieproject.services.movie.MovieService;

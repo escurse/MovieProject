@@ -161,20 +161,20 @@ public class MovieProjectApplication {
 
 
         // ChromeDriver 경로 설정
-        System.setProperty("chromedriver.exe", "./chromedriver.exe"); // chromedriver.exe 경로 지정
-
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--disable-blink-features=AutomationControlled"); // 자동화 브라우저 감지 비활성화
-        options.addArguments("--headless"); // 브라우저 창을 띄우지 않고 실행 (옵션)
+//        System.setProperty("chromedriver.exe", "./chromedriver.exe"); // chromedriver.exe 경로 지정
+//
+//        ChromeOptions options = new ChromeOptions();
+//        options.addArguments("--disable-blink-features=AutomationControlled"); // 자동화 브라우저 감지 비활성화
+//        options.addArguments("--headless"); // 브라우저 창을 띄우지 않고 실행 (옵션)
 
         // WebDriver 생성
-        WebDriver driver = new ChromeDriver();
+//        WebDriver driver = new ChromeDriver();
 
         try {
             // URL에 날짜 파라미터 추가
-            String url = "https://www.cgv.co.kr/rules/service.aspx";
+//            String url = "https://www.cgv.co.kr/rules/service.aspx";
             // CGV 극장 URL 열기
-            driver.get(url);
+//            driver.get(url);
 
 
             // iframe 요소 찾기 및 전환
@@ -182,8 +182,8 @@ public class MovieProjectApplication {
 //            driver.switchTo().frame(iframe);
 
             // 영화 시간표 요소 가져오기
-            WebElement movieElements = driver.findElement(By.cssSelector(".edit_box"));
-            System.out.println(movieElements.getAttribute("outerHTML"));
+//            WebElement movieElements = driver.findElement(By.cssSelector(".edit_box"));
+//            System.out.println(movieElements.getAttribute("outerHTML"));
 
 //            for (WebElement movieElement : movieElements) {
 //                // 영화 제목 추출
@@ -217,7 +217,7 @@ public class MovieProjectApplication {
             e.printStackTrace();
         } finally {
             // 브라우저 닫기
-            driver.quit();
+//            driver.quit();
         }
 
 //        String URL = "https://www.cgv.co.kr/rules/privacy.aspx";

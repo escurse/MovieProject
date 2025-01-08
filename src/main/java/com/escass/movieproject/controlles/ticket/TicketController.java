@@ -1,18 +1,15 @@
 package com.escass.movieproject.controlles.ticket;
 
 import com.escass.movieproject.entities.theater.RegionEntity;
-import com.escass.movieproject.entities.theater.ScreenEntity;
 import com.escass.movieproject.entities.theater.TheaterEntity;
 import com.escass.movieproject.entities.user.UserEntity;
 import com.escass.movieproject.results.Result;
 import com.escass.movieproject.services.theater.TheaterService;
 import com.escass.movieproject.services.ticket.TicketService;
-import com.escass.movieproject.vos.theater.MovieVo;
-import com.escass.movieproject.vos.theater.RegionVo;
-import com.escass.movieproject.vos.theater.ScreenVo;
-import com.escass.movieproject.vos.theater.TheaterVo;
+import com.escass.movieproject.vos.theater.*;
 import com.escass.movieproject.vos.ticket.CinemaTypeVo;
 import com.escass.movieproject.vos.ticket.SeatVo;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
@@ -20,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -210,11 +208,12 @@ public class TicketController {
             for (ScreenVo screen : screens) {
                 List<String> keys = new ArrayList<>();
                 List<String> contents = new ArrayList<>();
+                ScreenDataVo screenDataVo = new ScreenDataVo(screen.getSeatCount(), screen.getUsedSeatCount());
                 keys.add(screen.getCitName());
                 keys.add(screen.getCiName());
                 keys.add(String.valueOf(screen.getSeatCount()));
                 contents.add(String.valueOf(screen.getScStartDate()));
-                contents.add(String.valueOf(screen.getSeatCount()));
+                contents.add(String.valueOf(screenDataVo.getEmptySeatCount()));
                 times.computeIfAbsent(keys, k -> new ArrayList<>()).add(contents);
             }
             modelAndView.addObject("times", times);
@@ -229,6 +228,18 @@ public class TicketController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/session", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String postSession(HttpSession session) {
+        JSONObject response = new JSONObject();
+        if (session.getAttribute("user") != null) {
+            response.put(Result.RESULT, "success");
+        } else {
+            response.put(Result.RESULT, "failure");
+        }
+        return response.toString();
+    }
+
     @RequestMapping(value = "/movies", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView getMovies() {
         ModelAndView modelAndView = new ModelAndView();
@@ -239,9 +250,9 @@ public class TicketController {
     }
 
     @RequestMapping(value = "/crawling", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView getCrawling(ScreenEntity screen) {
+    public ModelAndView getCrawling() throws IOException, InterruptedException {
         ModelAndView modelAndView = new ModelAndView();
-        this.ticketService.Crawl(screen);
+        this.ticketService.Crawl();
         modelAndView.setViewName("ticket/crawling");
         return modelAndView;
     }
@@ -348,12 +359,12 @@ public class TicketController {
     public String postIndex(@SessionAttribute(value = "user") UserEntity user,
                             @RequestParam(value = "meName", required = false) String meName,
                             @RequestParam(value = "paPrice", required = false) int paPrice,
-                            @RequestParam(value = "usNum", required = false) int usNum,
                             @RequestParam(value = "seName", required = false) String[] seNames,  // 여러 좌석 정보 배열로 받기
                             @RequestParam(value = "moTitle", required = false) String moTitle,
                             @RequestParam(value = "ciName", required = false) String ciName,
                             @RequestParam(value = "thName", required = false) String thName,
-                            @RequestParam(value = "scStartDate", required = false) LocalDateTime scStartDate) {
+                            @RequestParam(value = "scStartDate", required = false) LocalDateTime scStartDate,
+                            HttpSession session) {
 
         System.out.println("유저 정보 :" + user.getUsName());
 
@@ -364,28 +375,24 @@ public class TicketController {
 //            return response.toString();
 
 //        }
-
+        UserEntity loggedInUser = (UserEntity) session.getAttribute("user");
         // seNames 배열이 비어 있는지 체크
         if (seNames == null || seNames.length == 0) {
             throw new IllegalArgumentException("좌석 정보가 전달되지 않았습니다.");
         }
 
         // 결제 정보 저장
-        Result result = this.ticketService.insertReservationAndPayment(user, moTitle, ciName, thName, scStartDate, meName, usNum, seNames, paPrice);
+        Result result = this.ticketService.insertReservationAndPayment(loggedInUser.getUsNum(), meName, paPrice, seNames, moTitle, ciName, thName, scStartDate);
 
-        int results = this.ticketService.selectPaymentNum(moTitle, ciName, thName, scStartDate, paPrice, usNum);
+        int results = this.ticketService.selectPaymentNum(moTitle, ciName, thName, scStartDate, paPrice, loggedInUser.getUsNum());
 
         // 응답 데이터 생성
         JSONObject response = new JSONObject();
 
-        if (user == null) {
-            response.put(Result.NAME, result.nameToLower());
-        }
 
 
         response.put(Result.NAME, result.nameToLower());
         response.put(Result.NAMES, results);
-
 
         return response.toString();
     }

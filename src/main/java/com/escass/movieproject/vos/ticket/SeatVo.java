@@ -1,5 +1,6 @@
 package com.escass.movieproject.vos.ticket;
 
+
 import com.escass.movieproject.entities.ticket.SeatEntity;
 import lombok.Getter;
 import lombok.Setter;
