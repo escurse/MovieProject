@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class UserEntity {
     public static final String NAME_SINGULAR = "user";
+    public static final String LAST_SINGULAR = "social";
 
     private int usNum;
     private String usId;

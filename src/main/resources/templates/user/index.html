@@ -15,58 +15,8 @@
   </script>
 </head>
 <body>
-<form class="form -visible" id="loginForm" th:if="${isSocialRegister != true}">
-  <h1 class="title">로그인</h1>
-  <label class="label">
-    <span class="text">이메일</span>
-    <input autofocus required autocomplete="email" class="input" maxlength="50" minlength="6" name="email" spellcheck="false" placeholder="이메일 형식(6자 이상 50자 이하)" type="text">
-  </label>
-  <label class="label">
-    <span class="text">비밀번호</span>
-    <input autocomplete="off" class="input" maxlength="50" minlength="6" name="password" spellcheck="false" placeholder="비밀번호(6자 이상 50자 이하)" type="password">
-  </label>
-  <button class="button -color-primary" type="submit">로그인</button>
-  <span class="separator" role="none">
-    <span class="line"></span>
-    <span class="text">혹은</span>
-  </span>
-  <a class="button -color-kakao" target="_self" th:href="@{https://kauth.kakao.com/oauth/authorize (response_type='code', client_id=${kakaoClientId}, redirect_uri = ${kakaoRedirectUri})}">
-    <img alt="" class="image" th:src="@{/user/assets/images/index/loginForm.kakao.png}">
-    <span class="text">카카오 로그인</span>
-  </a>
-  <a class="button -color-naver" target="_self" th:href="@{https://nid.naver.com/oauth2.0/authorize (response_type='code', client_id = ${naverClientId}, redirect_uri = ${naverRedirectUri}, state = 'study')}">
-    <img alt="" class="image" th:src="@{/user/assets/images/index/loginForm.naver.png}">
-    <span class="text">네이버 로그인</span>
-  </a>
-  <ul class="menu">
-    <li class="item">
-      <span class="text">아직 계정이 없으신가요?</span>
-      <a class="link" href="#" rel="register">회원가입</a>
-    </li>
-    <li class="item">
-      <span class="text">계정 정보를 분실하셨나요?</span>
-      <a class="link" href="#" rel="recover">계정복구</a>
-    </li>
-  </ul>
-</form>
-<form class="form" id="registerForm" th:classappend="${isSocialRegister == true} ? '-visible'">
-  <h1 class="title" th:text="${isSocialRegister == true ? '소셜 계정 가입' : '회원가입'}"></h1>
-  <input hidden name="socialTypeCode" type="hidden" th:if="${isSocialRegister == true}" th:value="${socialTypeCode}">
-  <input hidden name="socialId" type="hidden" th:if="${isSocialRegister == true}" th:value="${socialId}">
-  <label class="label">
-    <span class="text">이메일</span>
-    <input required autocomplete="email" class="input" maxlength="50" minlength="6" name="email" spellcheck="false" placeholder="이메일 형식(6자 이상 50자 이하)" type="text">
-  </label>
-  <label class="label" th:if="${isSocialRegister != true}">
-    <span class="text">비밀번호</span>
-    <input autocomplete="off" class="input" maxlength="50" minlength="6" name="password" spellcheck="false" placeholder="비밀번호(6자 이상 50자 이하)" type="password">
-    <input autocomplete="off" class="input" maxlength="50" minlength="6" name="passwordCheck" spellcheck="false" placeholder="비밀번호 재입력" type="password">
-  </label>
-  <label class="label">
-    <span class="text">닉네임</span>
-    <input required autocomplete="off" class="input" maxlength="10" minlength="2" name="nickname" spellcheck="false" placeholder="닉네임(영문 대소문자, 완성 한글 조합 2자 이상 10자 이하)" type="text">
-  </label>
-  <button class="button -color-primary" type="submit" th:text="${isSocialRegister == true ? '소셜 계정 가입' : '회원가입'}"></button>
+<form class="form -visible" id="registerForm">
+  <button class="button -color-primary" type="submit">소셜 계정 가입</button>
   <button class="button -color-gray" name="back" type="button">돌아가기</button>
 </form>
 </body>

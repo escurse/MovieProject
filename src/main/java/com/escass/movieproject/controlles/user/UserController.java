@@ -67,25 +67,6 @@ public class UserController extends AbstractGeneralController {
         return this.generateRestResponse(result).toString();
     }
 
-
-    @RequestMapping(value = "/my", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView getMy(@SessionAttribute(value = UserEntity.NAME_SINGULAR, required = false) UserEntity user) {
-        ModelAndView modelAndView = new ModelAndView();
-        if (user == null) {
-            modelAndView.setViewName("redirect:/user/");
-        } else {
-            modelAndView.setViewName("user/my");
-        }
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView getUser() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("user/index");
-        return modelAndView;
-    }
-
     @RequestMapping(value = "/login/kakao", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView getLoginKakao(HttpSession session,
                                       @RequestParam(value = "code", required = false) String code) throws URISyntaxException, IOException, InterruptedException {
@@ -98,7 +79,7 @@ public class UserController extends AbstractGeneralController {
             modelAndView.setViewName("user/index");
         } else if (result.getResult() == CommonResult.SUCCESS) {
             session.setAttribute(UserEntity.NAME_SINGULAR, result.getPayload());
-            modelAndView.setViewName("redirect:/user/my");
+            modelAndView.setViewName("redirect:/user/myPage/main");
         } else {
             modelAndView.setViewName("redirect:https://kauth.kakao.com/oauth/authorize?response_type");
         }
@@ -111,13 +92,12 @@ public class UserController extends AbstractGeneralController {
         ResultDto<Result, UserEntity> result = this.userService.handleNaverLogin(code);
         ModelAndView modelAndView = new ModelAndView();
         if (result.getResult() == HandleNaverLoginResult.FAILURE_NOT_REGISTERED) {
-            modelAndView.addObject("socialTypeCode", result.getPayload().getUsSocialTypeCode());
-            modelAndView.addObject("socialId", result.getPayload().getUsSocialId());
             modelAndView.addObject("isSocialRegister", true);
+            session.setAttribute(UserEntity.LAST_SINGULAR, result.getPayload());
             modelAndView.setViewName("user/index");
         } else if (result.getResult() == CommonResult.SUCCESS) {
             session.setAttribute(UserEntity.NAME_SINGULAR, result.getPayload());
-            modelAndView.setViewName("redirect:/user/my");
+            modelAndView.setViewName("redirect:/user/myPage/main");
         } else {
             modelAndView.setViewName("redirect:https://kauth.naver.com/oauth/authorize?response_type");
         }
@@ -126,7 +106,7 @@ public class UserController extends AbstractGeneralController {
 
     @RequestMapping(value = "/social", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String postSocialRegister(UserEntity user) {
+    public String postSocialRegister(@SessionAttribute(value = "social", required = false) UserEntity user) throws URISyntaxException, IOException, InterruptedException {
         Result result = this.userService.socialRegister(user);
         return this.generateRestResponse(result).toString();
     }

@@ -22,6 +22,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -35,9 +36,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -212,17 +215,28 @@ public class UserService {
             return ResultDto.<Result, UserEntity>builder().result(CommonResult.FAILURE).build();
         }
         String id = responseObject.getJSONObject("response").getString("id");
+        String birth = responseObject.getJSONObject("response").getString("birthyear") + "-" + responseObject.getJSONObject("response").getString("birthday");
+        String gender = responseObject.getJSONObject("response").getString("gender");
+        String nickname = responseObject.getJSONObject("response").getString("nickname");
+        String contact = responseObject.getJSONObject("response").getString("mobile");
+        String name = responseObject.getJSONObject("response").getString("name");
+        String email = responseObject.getJSONObject("response").getString("email");
         UserEntity user = this.userMapper.selectUserBySocialTypeCodeAndSocialId(SocialTypes.NAVER.getCode(), id);
         if (user == null) {
             return ResultDto.<Result, UserEntity>builder()
                     .result(HandleNaverLoginResult.FAILURE_NOT_REGISTERED)
                     .payload(UserEntity.builder()
+                            .usBirth(LocalDate.parse(birth))
+                            .usEmail(email)
+                            .usContact(contact)
+                            .usGender(gender)
+                            .usNickName(nickname)
+                            .usName(name)
                             .usSocialTypeCode(SocialTypes.NAVER.getCode())
                             .usSocialId(id)
                             .build())
                     .build();
         }
-        user.setUsPw(accessToken);
         return ResultDto.<Result, UserEntity>builder()
                 .result(CommonResult.SUCCESS)
                 .payload(user)
@@ -244,40 +258,48 @@ public class UserService {
                 .build();
     }
 
-    public Result socialRegister(UserEntity user) {
-        if (user == null ||
-                !UserRegex.checkEmail(user.getUsEmail()) ||
-                !UserRegex.checkNickname(user.getUsNickName())) {
-            System.out.println("시발");
+    public Result socialRegister(UserEntity user) throws URISyntaxException, IOException, InterruptedException {
+        if (user == null) {
+            System.out.println(1);
             return CommonResult.FAILURE;
         }
         boolean isSocialRegister = user.getUsSocialTypeCode() != null && user.getUsSocialId() != null;
         if (isSocialRegister) {
             if (user.getUsSocialTypeCode().isEmpty() || user.getUsSocialId().isEmpty() || SocialTypes.parse(user.getUsSocialTypeCode()).isEmpty()) {
-                System.out.println("병신");
+                System.out.println(2);
                 return CommonResult.FAILURE;
             }
             if (this.userMapper.selectUserBySocialTypeCodeAndSocialId(user.getUsSocialTypeCode(), user.getUsSocialId()) != null) {
-                System.out.println("노답");
+                System.out.println(3);
                 return CommonResult.FAILURE;
             }
-            user.setUsPw("");
         } else {
             if (!UserRegex.checkPassword(user.getUsPw())) {
-                System.out.println("등신");
+                System.out.println(4);
                 return CommonResult.FAILURE;
             }
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             user.setUsPw(encoder.encode(user.getUsPw()));
         }
         if (this.userMapper.selectUserByEmail(user.getUsEmail()) != null) {
+            int count = this.userMapper.updateSocial(user.getUsSocialId(), user.getUsSocialTypeCode(), user.getUsEmail());
+            if (count == 0) {
+                throw new TransactionalException();
+            }
             return RegisterResult.FAILURE_DUPLICATE_EMAIL;
         }
-        if (this.userMapper.selectUserByNickname(user.getUsNickName()) != null) {
-            return RegisterResult.FAILURE_DUPLICATE_NICKNAME;
-        }
+        user.setUsId("");
+        user.setUsPw("");
+        user.setUsName(user.getUsName());
+        user.setUsNickName(user.getUsNickName());
+        user.setUsBirth(user.getUsBirth());
+        user.setUsGender(user.getUsGender());
+        user.setUsEmail(user.getUsEmail());
+        user.setUsContact(user.getUsContact());
+        user.setUsAddr("");
         user.setUsCreatedAt(LocalDateTime.now());
-        System.out.println("에휴");
+        user.setUsSocialTypeCode(user.getUsSocialTypeCode());
+        user.setUsSocialId(user.getUsSocialId());
         return this.userMapper.insertUser(user) > 0
                 ? CommonResult.SUCCESS
                 : CommonResult.FAILURE;

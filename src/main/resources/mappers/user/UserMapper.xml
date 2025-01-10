@@ -327,6 +327,12 @@
         where pa_num = #{paNum}
           and us_num = #{usNum};
     </update>
+    <update id="updateSocial" parameterType="com.escass.movieproject.entities.user.UserEntity">
+        UPDATE `jgv`.`user`
+        SET `us_social_id` = #{usSocialId},
+            `us_social_type_code` = #{usSocialTypeCode}
+        WHERE `us_email` = #{usEmail}
+    </update>
 
     <select id="selectArticleByUsNumCount" resultType="java.lang.Integer">
         select count(*)

@@ -15,7 +15,7 @@
 <div class="dialog" th:with="user = ${session.user}">
   <h1 class="title">회원 페이지</h1>
   <span class="text">
-  <span class="bold" th:text="${user.getUsNickname()}"></span>님 반갑습니다!</span>
+  <span class="bold" th:text="${user.getUsNickName()}"></span>님 반갑습니다!</span>
   <span class="text">소셜 로그인: <span class="bold" th:text="${user.getUsSocialTypeCode() == null ? '일반 계정' : user.getUsSocialTypeCode()}"></span></span>
   <span class="text">소셜 식별자: <span class="bold" th:text="${user.getUsSocialId() == null ? '해당 없음' : user.getUsSocialId()}"></span></span>
   <a class="logout-anchor" target="_self" th:href="@{/user/logout}">로그아웃</a>
