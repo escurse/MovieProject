@@ -73,9 +73,9 @@ public class UserController extends AbstractGeneralController {
         ResultDto<Result, UserEntity> result = this.userService.handleKakaoLogin(code);
         ModelAndView modelAndView = new ModelAndView();
         if (result.getResult() == HandleKakaoLoginResult.FAILURE_NOT_REGISTERED) {
-            modelAndView.addObject("socialTypeCode", result.getPayload().getUsSocialTypeCode());
-            modelAndView.addObject("socialId", result.getPayload().getUsSocialId());
             modelAndView.addObject("isSocialRegister", true);
+            session.setAttribute(UserEntity.LAST_SINGULAR, result.getPayload());
+            session.setAttribute("type", "kakao");
             modelAndView.setViewName("user/index");
         } else if (result.getResult() == CommonResult.SUCCESS) {
             session.setAttribute(UserEntity.NAME_SINGULAR, result.getPayload());
@@ -94,6 +94,7 @@ public class UserController extends AbstractGeneralController {
         if (result.getResult() == HandleNaverLoginResult.FAILURE_NOT_REGISTERED) {
             modelAndView.addObject("isSocialRegister", true);
             session.setAttribute(UserEntity.LAST_SINGULAR, result.getPayload());
+            session.setAttribute("type", "naver");
             modelAndView.setViewName("user/index");
         } else if (result.getResult() == CommonResult.SUCCESS) {
             session.setAttribute(UserEntity.NAME_SINGULAR, result.getPayload());
@@ -106,8 +107,8 @@ public class UserController extends AbstractGeneralController {
 
     @RequestMapping(value = "/social", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String postSocialRegister(@SessionAttribute(value = "social", required = false) UserEntity user) throws URISyntaxException, IOException, InterruptedException {
-        Result result = this.userService.socialRegister(user);
+    public String postSocialRegister(@SessionAttribute(value = "social", required = false) UserEntity user, @SessionAttribute(value = "type", required = false) String code) {
+        Result result = this.userService.socialRegister(user, code);
         return this.generateRestResponse(result).toString();
     }
 

@@ -157,6 +157,7 @@ public class UserService {
             return ResultDto.<Result, UserEntity>builder().result(CommonResult.FAILURE).build();
         }
         String id = String.valueOf(responseObject.getLong("id"));
+        String nickname = responseObject.getJSONObject("properties").getString("nickname");
         UserEntity user = this.userMapper.selectUserBySocialTypeCodeAndSocialId(SocialTypes.KAKAO.getCode(), id);
         if (user == null) {
             return ResultDto.<Result, UserEntity>builder()
@@ -164,6 +165,7 @@ public class UserService {
                     .payload(UserEntity.builder()
                             .usSocialTypeCode(SocialTypes.KAKAO.getCode())
                             .usSocialId(id)
+                            .usNickName(nickname)
                             .build())
                     .build();
         }
@@ -243,44 +245,20 @@ public class UserService {
                 .build();
     }
 
-    public ResultDto<Result, UserEntity> socialLogin(String email, String password) {
-        if (!UserRegex.checkEmail(email) || !UserRegex.checkPassword(password)) {
-            return ResultDto.<Result, UserEntity>builder().result(CommonResult.FAILURE).build();
-        }
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        UserEntity user = this.userMapper.selectUserByEmail(email);
-        if (user == null || !encoder.matches(password, user.getUsPw()) || user.getUsSocialTypeCode() != null || user.getUsSocialId() != null) {
-            return ResultDto.<Result, UserEntity>builder().result(CommonResult.FAILURE).build();
-        }
-        return ResultDto.<Result, UserEntity>builder()
-                .result(CommonResult.SUCCESS)
-                .payload(user)
-                .build();
-    }
-
-    public Result socialRegister(UserEntity user) throws URISyntaxException, IOException, InterruptedException {
+    public Result socialRegister(UserEntity user, String code) {
         if (user == null) {
-            System.out.println(1);
             return CommonResult.FAILURE;
         }
         boolean isSocialRegister = user.getUsSocialTypeCode() != null && user.getUsSocialId() != null;
         if (isSocialRegister) {
             if (user.getUsSocialTypeCode().isEmpty() || user.getUsSocialId().isEmpty() || SocialTypes.parse(user.getUsSocialTypeCode()).isEmpty()) {
-                System.out.println(2);
                 return CommonResult.FAILURE;
             }
             if (this.userMapper.selectUserBySocialTypeCodeAndSocialId(user.getUsSocialTypeCode(), user.getUsSocialId()) != null) {
-                System.out.println(3);
                 return CommonResult.FAILURE;
             }
-        } else {
-            if (!UserRegex.checkPassword(user.getUsPw())) {
-                System.out.println(4);
-                return CommonResult.FAILURE;
-            }
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            user.setUsPw(encoder.encode(user.getUsPw()));
         }
+        // 이메일이 이미 있을 경우, 원래 JGV의 회원으로 판단해서 아이디 통합 절차를 가짐.
         if (this.userMapper.selectUserByEmail(user.getUsEmail()) != null) {
             int count = this.userMapper.updateSocial(user.getUsSocialId(), user.getUsSocialTypeCode(), user.getUsEmail());
             if (count == 0) {
@@ -288,18 +266,34 @@ public class UserService {
             }
             return RegisterResult.FAILURE_DUPLICATE_EMAIL;
         }
-        user.setUsId("");
-        user.setUsPw("");
-        user.setUsName(user.getUsName());
-        user.setUsNickName(user.getUsNickName());
-        user.setUsBirth(user.getUsBirth());
-        user.setUsGender(user.getUsGender());
-        user.setUsEmail(user.getUsEmail());
-        user.setUsContact(user.getUsContact());
-        user.setUsAddr("");
-        user.setUsCreatedAt(LocalDateTime.now());
-        user.setUsSocialTypeCode(user.getUsSocialTypeCode());
-        user.setUsSocialId(user.getUsSocialId());
+        if (code.equals("naver")) {
+            user.setUsId("");
+            user.setUsPw("");
+            user.setUsName(user.getUsName());
+            user.setUsNickName(user.getUsNickName());
+            user.setUsBirth(user.getUsBirth());
+            user.setUsGender(user.getUsGender());
+            user.setUsEmail(user.getUsEmail());
+            user.setUsContact(user.getUsContact());
+            user.setUsAddr("");
+            user.setUsCreatedAt(LocalDateTime.now());
+            user.setUsSocialTypeCode(user.getUsSocialTypeCode());
+            user.setUsSocialId(user.getUsSocialId());
+        }
+        if (code.equals("kakao")) {
+            user.setUsId("");
+            user.setUsPw("");
+            user.setUsName("");
+            user.setUsNickName(user.getUsNickName());
+            user.setUsBirth(LocalDate.parse("1900-01-01"));
+            user.setUsGender("");
+            user.setUsEmail("");
+            user.setUsContact("");
+            user.setUsAddr("");
+            user.setUsCreatedAt(LocalDateTime.now());
+            user.setUsSocialTypeCode(user.getUsSocialTypeCode());
+            user.setUsSocialId(user.getUsSocialId());
+        }
         return this.userMapper.insertUser(user) > 0
                 ? CommonResult.SUCCESS
                 : CommonResult.FAILURE;
