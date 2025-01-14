@@ -15,9 +15,11 @@ import com.escass.movieproject.services.user.UserService;
 import com.escass.movieproject.vos.PageVo;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.apache.catalina.User;
 import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,8 +77,8 @@ public class UserController extends AbstractGeneralController {
         if (result.getResult() == HandleKakaoLoginResult.FAILURE_NOT_REGISTERED) {
             modelAndView.addObject("isSocialRegister", true);
             session.setAttribute(UserEntity.LAST_SINGULAR, result.getPayload());
-            session.setAttribute("type", "kakao");
-            modelAndView.setViewName("user/index");
+            modelAndView.addObject("social", result.getPayload());
+            modelAndView.setViewName("user/social-register");
         } else if (result.getResult() == CommonResult.SUCCESS) {
             session.setAttribute(UserEntity.NAME_SINGULAR, result.getPayload());
             modelAndView.setViewName("redirect:/user/myPage/main");
@@ -94,8 +96,8 @@ public class UserController extends AbstractGeneralController {
         if (result.getResult() == HandleNaverLoginResult.FAILURE_NOT_REGISTERED) {
             modelAndView.addObject("isSocialRegister", true);
             session.setAttribute(UserEntity.LAST_SINGULAR, result.getPayload());
-            session.setAttribute("type", "naver");
-            modelAndView.setViewName("user/index");
+            modelAndView.addObject("social", result.getPayload());
+            modelAndView.setViewName("user/social-register");
         } else if (result.getResult() == CommonResult.SUCCESS) {
             session.setAttribute(UserEntity.NAME_SINGULAR, result.getPayload());
             modelAndView.setViewName("redirect:/user/myPage/main");
@@ -107,8 +109,8 @@ public class UserController extends AbstractGeneralController {
 
     @RequestMapping(value = "/social", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String postSocialRegister(@SessionAttribute(value = "social", required = false) UserEntity user, @SessionAttribute(value = "type", required = false) String code) {
-        Result result = this.userService.socialRegister(user, code);
+    public String postSocialRegister(UserEntity user, @SessionAttribute(value = "social") UserEntity social) {
+        Result result = this.userService.socialRegister(user, social);
         return this.generateRestResponse(result).toString();
     }
 
@@ -288,10 +290,13 @@ public class UserController extends AbstractGeneralController {
 
     @RequestMapping(value = "/myPage/personal", method = RequestMethod.POST, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView postMyPagePersonal(@SessionAttribute("user") UserEntity user,
+                                           @SessionAttribute(UserEntity.NAME_SINGULAR) UserEntity social,
+                                           HttpSession session,
                                            @RequestParam(value = "password") String password,
                                            @RequestParam(value = "forward", required = false) String forward) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         Boolean passwordMatches = encoder.matches(password, user.getUsPw()); // true, false, null
+        System.out.println(passwordMatches);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("passwordMatches", passwordMatches);
@@ -305,6 +310,7 @@ public class UserController extends AbstractGeneralController {
             }
 
         }
+        System.out.println(user.getUsId());
         return modelAndView;
     }
 
@@ -411,7 +417,7 @@ public class UserController extends AbstractGeneralController {
     @RequestMapping(value = "/find-password-result", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ModelAndView getRecoverPassword(@RequestParam(value = "userEmail", required =
-            false) String userEmail,
+                                                   false) String userEmail,
                                            @RequestParam(value = "key", required = false) String key,
                                            @RequestParam(value = "userId", required =
                                                    false) String userId

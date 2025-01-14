@@ -164,6 +164,9 @@ function checkScreen() {
                                 const $theaterItem = Array.from(new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelectorAll('.theater > .body > .content > .theater-container > .theater'));
                                 $theaterItem.forEach((x) => {
                                     $theater.append(x);
+                                    if (x.innerText === $data.theater.substring(3)) {
+                                        x.classList.add('select');
+                                    }
                                     x.onclick = () => {
                                         $theaterItem.forEach((item) => {
                                             item.classList.remove('select');
@@ -696,6 +699,9 @@ function movieItem($movieItems) {
                                             const $theaterItem = Array.from(new DOMParser().parseFromString(xhr.responseText, 'text/html').querySelectorAll('.theater > .body > .content > .theater-container > .theater'));
                                             $theaterItem.forEach((x) => {
                                                 $theater.append(x);
+                                                if (x.innerText === $data.theater.substring(3)) {
+                                                    x.classList.add('select')
+                                                }
                                                 x.onclick = () => {
                                                     $theaterItem.forEach((item) => {
                                                         item.classList.remove('select');
@@ -1005,6 +1011,9 @@ function dayItem($dayItems) {
 function theaterItem($theaterItems) {
     $theaterItems.forEach((x) => {
         $theater.append(x);
+        if ($data.theater != null && x.innerText === $data.theater.substring(3)) {
+            x.classList.add('select');
+        }
         x.onclick = () => {
             $theaterItems.forEach((item) => {
                 item.classList.remove('select');
@@ -1116,34 +1125,6 @@ $regionItems.forEach((x) => {
         })
     }
 })
-
-// $dayContainer.forEach((days) => {
-//     const $dayTitle = Array.from(days.querySelectorAll(':scope > .title'));
-//     const $dayItems = Array.from(days.querySelectorAll(':scope > .day'));
-//     $dayItems.forEach((x) => {
-//         x.onclick = () => {
-//             document.querySelectorAll('.day.select').forEach((selectedItem) => {
-//                 selectedItem.classList.remove('select');
-//             })
-//             x.classList.add('select');
-//             let array = x.innerText.split('\n');
-//             $theaterInfo.forEach((theater) => {
-//                 theater.classList.add('hidden');
-//                 if (theater.classList.contains('theater')) {
-//                     theater.classList.remove('hidden');
-//                 }
-//                 $dayTitle.forEach((day) => {
-//                     const $year = day.querySelector('.year');
-//                     const $month = day.querySelector('.month');
-//                     $theaterTime.innerText = $year.innerText + '.' + $month.innerText + '.' + array[1] + '(' + array[0] + ')';
-//                 })
-//             })
-//             $data.date = $theaterTime.innerText;
-//             $data.date = $data.date.split('(')[0].replaceAll('.', '-');
-//             checkScreen();
-//         }
-//     })
-// })
 
 // ---------------------------------- 분리점
 

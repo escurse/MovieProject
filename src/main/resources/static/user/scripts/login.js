@@ -39,7 +39,6 @@ $loginForm.addEventListener('submit', () => {
     }
 });
 
-
 // region 로그인
 $loginForm.onsubmit = (e) => {
     e.preventDefault();

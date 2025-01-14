@@ -3,7 +3,7 @@
     const $advertisementArray = ['https://adimg.cgv.co.kr/images/202412/Moana2/1218_980x80.jpg', 'https://adimg.cgv.co.kr/images/202412/PORORO/1231_980x80.jpg', 'https://adimg.cgv.co.kr/images/202412/HARBIN/1224_980x80.png', 'https://adimg.cgv.co.kr/images/202411/jjanggu/1209_980x80.png', 'https://adimg.cgv.co.kr/images/202501/DarkNuns/980x80.png', 'https://adimg.cgv.co.kr/images/202501/Panda/980x80.jpg', 'https://adimg.cgv.co.kr/images/202501/RealPain/980x80.jpg']
     document.addEventListener("DOMContentLoaded", () => {
         const $advertisement = document.getElementById('advertisement');
-        if($advertisement) {
+        if ($advertisement) {
             const $advertisementRandom = $advertisementArray[Math.floor(Math.random() * $advertisementArray.length)];
             const $img = $advertisement.querySelector(':scope > a > img');
             const $a = $advertisement.querySelector(':scope > a')
@@ -56,7 +56,7 @@ if ($logout) {
 
 {
     const $form = document.querySelector('.nav > .nav-wrapper > .search-wrapper > .search-form')
-    if($form) {
+    if ($form) {
         const $searchKeyword = $form.querySelector('.search > .keyword');
 
 
@@ -91,7 +91,7 @@ if ($logout) {
 }
 
 const $scrollNav = document.getElementById('scroll-nav');
-if($scrollNav) {
+if ($scrollNav) {
     $scrollNav.style.display = 'none';
 }
 

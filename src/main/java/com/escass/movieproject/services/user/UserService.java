@@ -90,7 +90,6 @@ public class UserService {
                     .POST(HttpRequest.BodyPublishers.noBody())
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
             if (response.statusCode() < 200 || response.statusCode() >= 400) {
                 throw new RuntimeException();
             }
@@ -109,6 +108,28 @@ public class UserService {
             }
         }
         return CommonResult.SUCCESS;
+    }
+
+    public ResultDto<Result, UserEntity> socialLogout(UserEntity social) throws URISyntaxException, IOException, InterruptedException {
+        HttpClient client = HttpClient.newBuilder().build();
+        URI uri = new URI(String.format("https://kauth.kakao.com/oauth/logout?client_id=%s&logout_redirect_uri=http://localhost:8080/", this.kakaoClientId));
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() < 200 || response.statusCode() >= 400) {
+            return ResultDto.<Result, UserEntity>builder().result(CommonResult.FAILURE).build();
+        }
+        JSONObject responseObject;
+        try {
+            responseObject = new JSONObject(response.body());
+        } catch (JSONException ignored) {
+            return ResultDto.<Result, UserEntity>builder().result(CommonResult.FAILURE).build();
+        }
+        return ResultDto.<Result, UserEntity>builder()
+                .result(CommonResult.SUCCESS)
+                .build();
     }
 
     public ResultDto<Result, UserEntity> handleKakaoLogin(String code) throws URISyntaxException, IOException, InterruptedException {
@@ -169,7 +190,6 @@ public class UserService {
                             .build())
                     .build();
         }
-        user.setUsPw(accessToken);
         return ResultDto.<Result, UserEntity>builder()
                 .result(CommonResult.SUCCESS)
                 .payload(user)
@@ -245,55 +265,38 @@ public class UserService {
                 .build();
     }
 
-    public Result socialRegister(UserEntity user, String code) {
+    public Result socialRegister(UserEntity user, UserEntity social) {
         if (user == null) {
             return CommonResult.FAILURE;
         }
-        boolean isSocialRegister = user.getUsSocialTypeCode() != null && user.getUsSocialId() != null;
+        boolean isSocialRegister = social.getUsSocialTypeCode() != null && social.getUsSocialId() != null;
         if (isSocialRegister) {
-            if (user.getUsSocialTypeCode().isEmpty() || user.getUsSocialId().isEmpty() || SocialTypes.parse(user.getUsSocialTypeCode()).isEmpty()) {
+            if (social.getUsSocialTypeCode().isEmpty() || social.getUsSocialId().isEmpty() || SocialTypes.parse(social.getUsSocialTypeCode()).isEmpty()) {
                 return CommonResult.FAILURE;
             }
-            if (this.userMapper.selectUserBySocialTypeCodeAndSocialId(user.getUsSocialTypeCode(), user.getUsSocialId()) != null) {
+            if (this.userMapper.selectUserBySocialTypeCodeAndSocialId(social.getUsSocialTypeCode(), social.getUsSocialId()) != null) {
                 return CommonResult.FAILURE;
             }
         }
         // 이메일이 이미 있을 경우, 원래 JGV의 회원으로 판단해서 아이디 통합 절차를 가짐.
         if (this.userMapper.selectUserByEmail(user.getUsEmail()) != null) {
-            int count = this.userMapper.updateSocial(user.getUsSocialId(), user.getUsSocialTypeCode(), user.getUsEmail());
+            int count = this.userMapper.updateSocial(social.getUsSocialId(), social.getUsSocialTypeCode(), user.getUsEmail());
             if (count == 0) {
                 throw new TransactionalException();
             }
             return RegisterResult.FAILURE_DUPLICATE_EMAIL;
         }
-        if (code.equals("naver")) {
-            user.setUsId("");
-            user.setUsPw("");
-            user.setUsName(user.getUsName());
-            user.setUsNickName(user.getUsNickName());
-            user.setUsBirth(user.getUsBirth());
-            user.setUsGender(user.getUsGender());
-            user.setUsEmail(user.getUsEmail());
-            user.setUsContact(user.getUsContact());
-            user.setUsAddr("");
-            user.setUsCreatedAt(LocalDateTime.now());
-            user.setUsSocialTypeCode(user.getUsSocialTypeCode());
-            user.setUsSocialId(user.getUsSocialId());
+        String passwordRegex = "(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,100}$";
+        Pattern passwordPattern = Pattern.compile(passwordRegex);
+        Matcher passwordMatcher = passwordPattern.matcher(user.getUsPw());
+        if (!passwordMatcher.matches()) {
+            return RegisterResult.FAILURE_INVALID_PASSWORD;
         }
-        if (code.equals("kakao")) {
-            user.setUsId("");
-            user.setUsPw("");
-            user.setUsName("");
-            user.setUsNickName(user.getUsNickName());
-            user.setUsBirth(LocalDate.parse("1900-01-01"));
-            user.setUsGender("");
-            user.setUsEmail("");
-            user.setUsContact("");
-            user.setUsAddr("");
-            user.setUsCreatedAt(LocalDateTime.now());
-            user.setUsSocialTypeCode(user.getUsSocialTypeCode());
-            user.setUsSocialId(user.getUsSocialId());
-        }
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        user.setUsPw(encoder.encode(user.getUsPw()));
+        user.setUsCreatedAt(LocalDateTime.now());
+        user.setUsSocialTypeCode(social.getUsSocialTypeCode());
+        user.setUsSocialId(social.getUsSocialId());
         return this.userMapper.insertUser(user) > 0
                 ? CommonResult.SUCCESS
                 : CommonResult.FAILURE;
@@ -319,19 +322,15 @@ public class UserService {
         if (!passwordMatcher.matches()) {
             return RegisterResult.FAILURE_INVALID_PASSWORD;
         }
-        if (
-                user == null ||
-                        user.getUsName() == null ||
-                        user.getUsName().isEmpty() || user.getUsName().length() < 2 || user.getUsName().length() > 15 ||
-                        user.getUsId() == null || user.getUsId().isEmpty() || user.getUsId().length() < 2 || user.getUsId().length() > 20 ||
-                        user.getUsPw() == null || user.getUsPw().isEmpty() || user.getUsPw().length() < 8 || user.getUsPw().length() > 100 ||
-                        user.getUsBirth() == null ||
-                        user.getUsContact() == null || user.getUsContact().isEmpty() || user.getUsContact().length() < 10 || user.getUsContact().length() > 13 ||
-                        user.getUsEmail() == null || user.getUsEmail().isEmpty() || user.getUsEmail().length() < 8 || user.getUsEmail().length() > 50 ||
-                        user.getUsGender() == null || user.getUsAddr() == null || user.getUsAddr().isEmpty()
-
-        ) {
-
+        if (user == null ||
+                user.getUsName() == null ||
+                user.getUsName().isEmpty() || user.getUsName().length() < 2 || user.getUsName().length() > 15 ||
+                user.getUsId() == null || user.getUsId().isEmpty() || user.getUsId().length() < 2 || user.getUsId().length() > 20 ||
+                user.getUsPw() == null || user.getUsPw().isEmpty() || user.getUsPw().length() < 8 || user.getUsPw().length() > 100 ||
+                user.getUsBirth() == null ||
+                user.getUsContact() == null || user.getUsContact().isEmpty() || user.getUsContact().length() < 10 || user.getUsContact().length() > 13 ||
+                user.getUsEmail() == null || user.getUsEmail().isEmpty() || user.getUsEmail().length() < 8 || user.getUsEmail().length() > 50 ||
+                user.getUsGender() == null || user.getUsAddr() == null || user.getUsAddr().isEmpty()) {
             return CommonResult.FAILURE;
         }
         if (this.userMapper.selectUserById(user.getUsId()) != null) {
@@ -834,7 +833,6 @@ public class UserService {
     }
 
 
-
     // endregion
 
     // region 예매 취소
@@ -873,17 +871,17 @@ public class UserService {
     public List<String> selectCancelPaNumByAll(int usNum, int paNum) {
         ReservationVo paCancelData = this.userMapper.selectCancelPaNumByAll(usNum, paNum);
 
-            List<String> stringList = new ArrayList<>();
+        List<String> stringList = new ArrayList<>();
 
-            stringList.add(paCancelData.getMoTitle());
-            stringList.add(String.valueOf(paCancelData.getPaNum()));
+        stringList.add(paCancelData.getMoTitle());
+        stringList.add(String.valueOf(paCancelData.getPaNum()));
 
-            String[] startDateTimeParts = paCancelData.getScStartDate().toString().split("T");
-            LocalDate localDate = LocalDate.parse(startDateTimeParts[0], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            String formattedStartDate = startDateTimeParts[0] + "(" +
-                    localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN).split("요일")[0] +
-                    ") " + startDateTimeParts[1];
-            stringList.add(formattedStartDate);
+        String[] startDateTimeParts = paCancelData.getScStartDate().toString().split("T");
+        LocalDate localDate = LocalDate.parse(startDateTimeParts[0], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String formattedStartDate = startDateTimeParts[0] + "(" +
+                localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN).split("요일")[0] +
+                ") " + startDateTimeParts[1];
+        stringList.add(formattedStartDate);
 
         stringList.add(paCancelData.getThName());
         stringList.add(String.valueOf(paCancelData.getCount()));
@@ -892,7 +890,6 @@ public class UserService {
         stringList.add(String.format("%,d", paCancelData.getPaPrice()) + "원");
 
         stringList.add(paCancelData.getMeName());
-
 
 
         return stringList;

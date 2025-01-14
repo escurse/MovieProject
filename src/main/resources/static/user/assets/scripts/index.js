@@ -82,9 +82,6 @@ const $registerForm = document.getElementById('registerForm');
         const formData = new FormData();
         const url = new URL(location.href);
         formData.append("code", url.searchParams.get('code'))
-        if (_isSocialRegister === true) {
-
-        }
         xhr.onreadystatechange = () => {
             if (xhr.readyState !== XMLHttpRequest.DONE) return;
             if (xhr.status < 200 || xhr.status >= 300) {
