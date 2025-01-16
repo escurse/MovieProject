@@ -14,6 +14,14 @@
     <script defer th:src="@{'../../fragments/assets/scripts/common.js'}"></script>
     <script defer src="/assets/scripts/common.js" type="text/javascript"></script>
     <link rel="shortcut icon" href="https://img.cgv.co.kr/theater_img/favicon.ico" type="image/x-icon">
+    <script th:if="${deleteMessage}" th:inline="javascript">
+        const message = [[${deleteMessage}]];
+        alert(message);
+    </script>
+    <script th:if="${suspendMessage}" th:inline="javascript">
+        const message = [[${suspendMessage}]];
+        alert(message);
+    </script>
 </head>
 <body>
 <th:block th:replace="~{fragments/common.html :: advertisement}"></th:block>
@@ -31,15 +39,13 @@
                 <img src="/user/images/user_id.png"
                      alt="person-male--v2">
                     </span>
-                <input class="--obj-filed" placeholder="아이디를 입력해주세요." type="text" required autofocus maxlength="20"
-                       minlength="2" name="id">
+                <input class="--obj-filed" placeholder="아이디를 입력해주세요." type="text" required autofocus maxlength="20" minlength="2" name="id">
             </label>
             <label class="--obj-label">
                 <span class="image-wrapper">
                     <img src="/user/images/user.password.png" alt="unlock">
                 </span>
-                <input class="--obj-filed" placeholder="비밀번호를 입력해주세요." type="password" required maxlength="100"
-                       minlength="8" autocomplete="off" name="password">
+                <input class="--obj-filed" placeholder="비밀번호를 입력해주세요." type="password" required maxlength="100" minlength="8" autocomplete="off" name="password">
             </label>
             <div class="button-container">
                 <button class="button" type="submit">로그인</button>
@@ -75,7 +81,7 @@
         <div class="-spring"></div>
         <div class="ad" style="border: 2px solid #f6f6f6;">
             <a th:href="@{'https://g-sa.koreaisacademy.com/'}">
-                <img src="https://www.koreaedugroup.com/m/img/affiliate/koreais/001.gif" alt="로그인배너">
+            <img src="https://www.koreaedugroup.com/m/img/affiliate/koreais/001.gif" alt="로그인배너">
             </a>
         </div>
     </form>

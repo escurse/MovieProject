@@ -2,18 +2,30 @@ const $loginForm = document.getElementById('login-form');
 
 // region nav 광고
 {
-    const $sideAdvertisementArray = ['https://adimg.cgv.co.kr/images/202411/Firefighters/1121_980x90.jpg', 'https://adimg.cgv.co.kr/images/202412/PORORO/1231_980x90.jpg', 'https://adimg.cgv.co.kr/images/202412/HARBIN/1227_980x90.jpg'];
+    const $sideAdvertisementArray = ['https://adimg.cgv.co.kr/images/202411/Firefighters/1121_980x90.jpg', 'https://adimg.cgv.co.kr/images/202412/PORORO/1231_980x90.jpg', 'https://adimg.cgv.co.kr/images/202412/HARBIN/1227_980x90.jpg', 'https://adimg.cgv.co.kr/images/202501/RealPain/0114_980x90.jpg', 'https://adimg.cgv.co.kr/images/202501/Panda/980x90.jpg', 'https://adimg.cgv.co.kr/images/202501/DarkNuns/980x90.jpg'];
     document.addEventListener("DOMContentLoaded", () => {
         const $advertisement = document.querySelector('.advertisement-info');
         const $advertisementRandom = $sideAdvertisementArray[Math.floor(Math.random() * $sideAdvertisementArray.length)];
         const $img = $advertisement.querySelector(':scope > img');
-        const $a = $advertisement.querySelector(':scope > a')
-        if ($advertisementRandom === $sideAdvertisementArray[0]) {
-            $advertisement.setAttribute('href', '../movies/movieList/movieInfo/3651')
-        } else if ($advertisementRandom === $sideAdvertisementArray[1]) {
-            $advertisement.setAttribute('href', '../movies/movieList/movieInfo/3628')
-        } else {
-            $advertisement.setAttribute('href', '../movies/movieList/movieInfo/3611')
+        switch ($advertisementRandom) {
+            case ($sideAdvertisementArray[0]):
+                $advertisement.setAttribute('href', '../movies/movieList/movieInfo/3651');
+                break;
+            case ($sideAdvertisementArray[1]):
+                $advertisement.setAttribute('href', '../movies/movieList/movieInfo/3628');
+                break;
+            case ($sideAdvertisementArray[2]):
+                $advertisement.setAttribute('href', '../movies/movieList/movieInfo/3611');
+                break;
+            case ($sideAdvertisementArray[3]):
+                $advertisement.setAttribute('href', '../movies/movieList/movieInfo/3927')
+                break;
+            case ($sideAdvertisementArray[4]):
+                $advertisement.setAttribute('href', '../movies/movieList/movieInfo/3974')
+                break;
+            case ($sideAdvertisementArray[5]):
+                $advertisement.setAttribute('href', '../movies/movieList/movieInfo/4024')
+                break;
         }
         $img.setAttribute('src', $advertisementRandom);
     });
@@ -38,6 +50,7 @@ $loginForm.addEventListener('submit', () => {
         localStorage.removeItem('rememberId');
     }
 });
+
 
 // region 로그인
 $loginForm.onsubmit = (e) => {
@@ -64,8 +77,9 @@ $loginForm.onsubmit = (e) => {
             return;
         }
         const response = JSON.parse(xhr.responseText);
+        console.log(response['result']);
 
-        if (response['logout']) {
+        if (response['result'] === 'failure_duplicate_user') {
             alert(response['message']);  // 강제 로그아웃 메시지
             window.location.href = '/logout';  // 로그아웃 페이지로 이동
             return;  // 이후 코드 실행을 방지
@@ -87,10 +101,57 @@ $loginForm.onsubmit = (e) => {
             alert('해당 계정은 이용이 정지된 상태입니다. 관리자에게 문의해 주세요.');
 
         }
+        else if (response['result'] === 'failure_blocked_ip') {
+            alert('해당 IP 주소에서의 로그인 시도가 차단되었습니다. 관리자가 검토 후 조치를 취할 수 있습니다."');
+        }
+        else if (response['result'] === 'failure_password_mismatch') {
+            let customDialog = '';
+
+            // 5회 미만 실패 시 기본 다이얼로그
+            if (response["count"] < 5) {
+                customDialog = `
+            <div id="missing-email" class="frame" style="padding: 20px; background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 5px; width: 350px; text-align: center; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 97; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                <span style="font-weight: 500; color: #222222;">비밀번호가 일치하지 않습니다.</span>
+                <div style="display: flex; flex-direction: row">
+                    <span style="font-weight: 500; color: #6e6c6d;">(</span>
+                    <span style="font-weight: 700; color: #FB4357;">${response['count']}회 실패</span>
+                    <span style="font-weight: 500; color: #6e6c6d;">, 5회 실패시 계정 정지</span>
+                    <span style="font-weight: 500; color: #6e6c6d;">)</span>
+                </div>
+                <div>
+                    <span style="font-weight: 500; color: #6e6c6d;">비밀번호를 잊어버리셨나요? &gt; <a style="color: #FB4357; font-weight: 700;" href="./find-password">비밀번호 찾기</a></span>
+                </div>
+                <button style="color: #6e6c6d; cursor: pointer; font-weight: 700;" onclick="window.location.reload();">닫기</button>
+            </div>
+        `;
+            }
+            // 5회 실패 시 IP 차단 다이얼로그
+            else if (response["count"] === 5) {
+                customDialog = `
+            <div id="missing-email" class="frame" style="padding: 20px; background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 5px; width: 350px; text-align: center; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 97; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                <span style="font-weight: 500; color: #222222;">비밀번호가 일치하지 않습니다.</span>
+                <div style="display: flex; flex-direction: row">
+                    <span style="font-weight: 500; color: #6e6c6d;">(</span>
+                    <span style="font-weight: 700; color: #FB4357;">${response['count']}회 실패</span>
+                    <span style="font-weight: 500; color: #6e6c6d;">, 계정 정지</span>
+                    <span style="font-weight: 500; color: #6e6c6d;">)</span>
+                </div>
+                <div>
+                    <span style="font-weight: 500; color: #6e6c6d;">해당 IP에서의 접근이 차단되었습니다.</span>
+                </div>
+                <button style="color: #6e6c6d; cursor: pointer; font-weight: 700;" onclick="window.location.reload();">닫기</button>
+            </div>
+        `;
+            }
+
+            // 다이얼로그 HTML을 body에 추가
+            const dialogDiv = document.createElement('div');
+            dialogDiv.innerHTML = customDialog;
+            document.body.appendChild(dialogDiv);
+            // 5회 실패 전까지는 다이얼로그와 함께 실패 횟수만 표시
+        }
         else if (response['result'] === 'failure_not_verified') {
-            // 이미 다이얼로그가 존재하는지 확인
             if (!document.getElementById("missing-email")) {
-                // 커스텀 다이얼로그 HTML 생성
                 const customDialog = `
         <div id="missing-email" class="frame" style="padding: 20px; background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 5px; width: 350px; text-align: center; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 97;">
             <span style="font-weight: 500; color: #222222; text-decoration: underline;">${response['userEmail']}</span>
@@ -134,8 +195,11 @@ $loginForm.onsubmit = (e) => {
                 });
             }
         }
-        else if (response['result'] === 'failure') {
+        else if (response['result'] === 'failure_id_mismatch') {
             alert('올바른 아이디, 비밀번호를 입력해 주세요.');
+        }
+        else if (response['result'] === 'failure') {
+            alert(`올바른 아이디, 비밀번호를 입력해주세요.`);
         }
         else {
             alert('서버가 알 수 없는 응답을 반환하였습니다. 잠시 후 다시 시도해 주세요.');

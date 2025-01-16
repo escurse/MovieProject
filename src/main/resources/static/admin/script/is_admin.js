@@ -23,14 +23,20 @@ $theaterCrawl.onclick = () => {
     const $buttonWrapper = $titleChange.querySelector(':scope > .admin-button-wrapper');
     const $movieInfo = $titleChange.querySelector(':scope > .movie-information');
     const $theaterInfo = $titleChange.querySelector(':scope > .theater-information');
+    const $userInfo = $titleChange.querySelector(':scope > .user-information');
     const $movieButton = document.getElementById('movie-crawl-button');
     const $theaterButton = document.getElementById('theater-crawl-button');
     const $movieMain = document.getElementById('movie-admin-page');
     const $theaterMain = document.getElementById('theater-admin-page');
+    const $userMain = document.getElementById('user-admin-page')
     const $movieSearchForm = document.getElementById('movie-search-form');
     const $theaterSearchForm = document.getElementById('theater-search-form');
+    const $userSearchForm = document.getElementById('user-search-form');
     const $moviePage = document.getElementById('movie-page-container');
     const $theaterPage = document.getElementById('theater-page-container');
+    const $userPage = document.getElementById('user-page-container');
+    const $userButton = document.getElementById('user-history-button');
+
 
     $movieInfo.onclick = () => {
         $movieButton.style.display = 'block';
@@ -41,9 +47,14 @@ $theaterCrawl.onclick = () => {
         $theaterInfo.style.color = '#666666';
         $theaterMain.style.display = 'none';
         $theaterSearchForm.style.display = 'none';
+        $userSearchForm.style.display = 'none';
         $buttonWrapper.style.border = '2px solid #fb4357';
         $moviePage.style.display = 'block';
         $theaterPage.style.display = 'none';
+        $userInfo.style.color = '#666666';
+        $userMain.style.display = 'none';
+        $userPage.style.display = 'none';
+        $userButton.style.display = 'none';
 
         const url = new URL(location.href);
         url.searchParams.set('mode', 'movie');
@@ -52,30 +63,65 @@ $theaterCrawl.onclick = () => {
 
     $theaterInfo.onclick = () => {
         $movieButton.style.display = 'none';
+        $theaterButton.style.display = 'block';
         $movieInfo.style.color = '#666666';
         $movieMain.style.display = 'none';
         $movieSearchForm.style.display = 'none';
         $theaterInfo.style.color = '#000000';
-        $theaterButton.style.display = 'block';
         $theaterMain.style.display = 'block';
         $theaterButton.style.backgroundColor = '#2275a4';
         $theaterButton.style.border = '1px solid #2275a4';
         $theaterSearchForm.style.display = 'block';
+        $userSearchForm.style.display = 'none';
         $buttonWrapper.style.border = '2px solid #2275a4'
         $moviePage.style.display = 'none';
         $theaterPage.style.display = 'block';
+        $userInfo.style.color = '#666666';
+        $userMain.style.display = 'none';
+        $userPage.style.display = 'none';
+        $userButton.style.display = 'none';
 
         const url = new URL(location.href);
         url.searchParams.set('mode', 'theater');
         history.pushState(undefined, undefined, url.toString());
     }
 
+    $userInfo.onclick = () => {
+        $userInfo.style.color = '#000000';
+        $movieInfo.style.color = '#666666';
+        $theaterInfo.style.color = '#666666';
+        $movieButton.style.display = 'none';
+        $theaterButton.style.display = 'none';
+        $movieSearchForm.style.display = 'none';
+        $movieMain.style.display = 'none';
+        $moviePage.style.display = 'none';
+        $theaterMain.style.display = 'none';
+        $theaterPage.style.display = 'none';
+        $theaterSearchForm.style.display = 'none';
+        $userSearchForm.style.display = 'block';
+        $userMain.style.display = 'block';
+        $userPage.style.display = 'block';
+        $userButton.style.display = 'block';
+        $userButton.style.backgroundColor = '#aa3ebc';
+        $userButton.style.border = '1px solid #aa3ebc';
+        $buttonWrapper.style.border = '2px solid #aa3ebc';
+
+
+        const url = new URL(location.href);
+        url.searchParams.set('mode', 'user');
+        history.pushState(undefined, undefined, url.toString());
+
+    }
+
+
     const url = new URL(location.href);
     const mode = url.searchParams.get('mode') ?? 'movie'
     if (mode === 'movie') {
         $movieInfo.dispatchEvent(new Event('click'));
-    } else {
+    } else if (mode === 'theater') {
         $theaterInfo.dispatchEvent(new Event('click'));
+    } else {
+        $userInfo.dispatchEvent(new Event('click'));
     }
 }
 
@@ -210,4 +256,51 @@ document.addEventListener("DOMContentLoaded", function () {
             window.location.href = `/admin/modify/${movieNum}`;
         })
     })
-})
+});
+
+{
+    const $userForms = document.querySelectorAll('.user-status-form');
+
+    $userForms.forEach((form) => {
+        form.onsubmit = (e) => {
+            e.preventDefault();
+
+            const userNum = form.closest('tr').querySelector('#user-number').innerText;
+            const userStatus = form.querySelector('.user-status').value;
+
+            if (userStatus === 'default') {
+                alert("변경할 상태를 선택하세요.");
+                return;
+            }
+
+            const xhr = new XMLHttpRequest();
+            const formData = new FormData();
+
+            formData.append('usNum', userNum);
+            formData.append('usIsSuspended', userStatus === 'suspend' ? 'true' : 'false');
+
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState !== XMLHttpRequest.DONE) return;
+
+                if (xhr.status < 200 || xhr.status >= 300) {
+                    alert('요청을 전송하는 도중 오류가 발생하였습니다. 잠시 후 다시 시도해 주세요.');
+                    return;
+                }
+
+                const response = JSON.parse(xhr.responseText);
+                if (response['result'] === 'success') {
+                    alert('회원 정보가 변경 되었습니다.');
+                    location.reload(); // 변경 후 페이지 리로드
+                } else if (response['result'] === 'failure') {
+                    alert('회원 정보 변경에 실패하였습니다.');
+                } else {
+                    alert('서버가 알 수 없는 응답을 반환하였습니다. 잠시 후 다시 시도해 주세요.');
+                }
+            };
+
+            // 서버에 요청을 보냅니다.
+            xhr.open('PATCH', '/admin/is_admin_user');
+            xhr.send(formData);
+        };
+    });
+}

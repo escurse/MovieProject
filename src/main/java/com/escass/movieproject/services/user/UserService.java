@@ -19,6 +19,7 @@ import com.escass.movieproject.vos.user.ReservationVo;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,64 +73,6 @@ public class UserService {
         this.emailTokenMapper = emailTokenMapper;
         this.mailSender = mailSender;
         this.templateEngine = templateEngine;
-    }
-
-    @Transactional
-    public Result deleteUser(UserEntity user) throws URISyntaxException, IOException, InterruptedException {
-        if (user == null || !UserRegex.checkEmail(user.getUsEmail())) {
-            return CommonResult.FAILURE;
-        }
-        if (this.userMapper.deleteUserByEmail(user.getUsEmail()) == 0) {
-            return CommonResult.FAILURE;
-        }
-        if (SocialTypes.KAKAO.getCode().equals(user.getUsSocialTypeCode())) {
-            HttpClient client = HttpClient.newBuilder().build();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("https://kapi.kakao.com/v1/user/unlink"))
-                    .setHeader("Authorization", String.format("Bearer %s", user.getUsPw()))
-                    .POST(HttpRequest.BodyPublishers.noBody())
-                    .build();
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() < 200 || response.statusCode() >= 400) {
-                throw new RuntimeException();
-            }
-        } else if (SocialTypes.NAVER.getCode().equals(user.getUsSocialTypeCode())) {
-            HttpClient client = HttpClient.newBuilder().build();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI(String.format("https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=%s&client_secret=%s&access_token=%s",
-                            this.naverClientId,
-                            this.naverClientSecret,
-                            user.getUsPw())))
-                    .POST(HttpRequest.BodyPublishers.noBody())
-                    .build();
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() < 200 || response.statusCode() >= 400) {
-                throw new RuntimeException();
-            }
-        }
-        return CommonResult.SUCCESS;
-    }
-
-    public ResultDto<Result, UserEntity> socialLogout(UserEntity social) throws URISyntaxException, IOException, InterruptedException {
-        HttpClient client = HttpClient.newBuilder().build();
-        URI uri = new URI(String.format("https://kauth.kakao.com/oauth/logout?client_id=%s&logout_redirect_uri=http://localhost:8080/", this.kakaoClientId));
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(uri)
-                .GET()
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode() < 200 || response.statusCode() >= 400) {
-            return ResultDto.<Result, UserEntity>builder().result(CommonResult.FAILURE).build();
-        }
-        JSONObject responseObject;
-        try {
-            responseObject = new JSONObject(response.body());
-        } catch (JSONException ignored) {
-            return ResultDto.<Result, UserEntity>builder().result(CommonResult.FAILURE).build();
-        }
-        return ResultDto.<Result, UserEntity>builder()
-                .result(CommonResult.SUCCESS)
-                .build();
     }
 
     public ResultDto<Result, UserEntity> handleKakaoLogin(String code) throws URISyntaxException, IOException, InterruptedException {
@@ -244,6 +187,14 @@ public class UserService {
         String name = responseObject.getJSONObject("response").getString("name");
         String email = responseObject.getJSONObject("response").getString("email");
         UserEntity user = this.userMapper.selectUserBySocialTypeCodeAndSocialId(SocialTypes.NAVER.getCode(), id);
+        if (user != null) {
+            if (user.isUsIsDeleted()) {
+                return ResultDto.<Result, UserEntity>builder().result(HandleNaverLoginResult.IS_DELETED).build();
+            }
+            if (user.isUsIsSuspended()) {
+                return ResultDto.<Result, UserEntity>builder().result(HandleNaverLoginResult.IS_SUSPENDED).build();
+            }
+        }
         if (user == null) {
             return ResultDto.<Result, UserEntity>builder()
                     .result(HandleNaverLoginResult.FAILURE_NOT_REGISTERED)
@@ -278,13 +229,23 @@ public class UserService {
                 return CommonResult.FAILURE;
             }
         }
-        // 이메일이 이미 있을 경우, 원래 JGV의 회원으로 판단해서 아이디 통합 절차를 가짐.
-        if (this.userMapper.selectUserByEmail(user.getUsEmail()) != null) {
-            int count = this.userMapper.updateSocial(social.getUsSocialId(), social.getUsSocialTypeCode(), user.getUsEmail());
-            if (count == 0) {
-                throw new TransactionalException();
+        if (this.userMapper.selectUserByEmailAndSocialType(user.getUsEmail(), social.getUsSocialTypeCode()) != null) {
+            if (this.userMapper.selectUserByEmailAndSocialType(user.getUsEmail(), social.getUsSocialTypeCode()).getUsSocialTypeCode() == null) {
+                // 이메일이 이미 있을 경우, 원래 JGV의 회원으로 판단해서 아이디 통합 절차를 가짐.
+                if (this.userMapper.selectUserByEmail(user.getUsEmail()) != null) {
+                    int count = this.userMapper.updateSocial(social.getUsSocialId(), social.getUsSocialTypeCode(), user.getUsEmail());
+                    if (count == 0) {
+                        throw new TransactionalException();
+                    }
+                    return RegisterResult.FAILURE_DUPLICATE_EMAIL;
+                }
             }
-            return RegisterResult.FAILURE_DUPLICATE_EMAIL;
+        }
+        if (this.userMapper.selectUserById(user.getUsId()) != null) {
+            return RegisterResult.FAILURE_DUPLICATE_ID;
+        }
+        if (this.userMapper.selectUserByNickname(user.getUsNickName()) != null) {
+            return RegisterResult.FAILURE_DUPLICATE_NICKNAME;
         }
         String passwordRegex = "(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,100}$";
         Pattern passwordPattern = Pattern.compile(passwordRegex);
@@ -297,6 +258,7 @@ public class UserService {
         user.setUsCreatedAt(LocalDateTime.now());
         user.setUsSocialTypeCode(social.getUsSocialTypeCode());
         user.setUsSocialId(social.getUsSocialId());
+        user.setUsIsVerified(true);
         return this.userMapper.insertUser(user) > 0
                 ? CommonResult.SUCCESS
                 : CommonResult.FAILURE;

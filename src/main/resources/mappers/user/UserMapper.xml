@@ -3,12 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.escass.movieproject.mappers.user.UserMapper">
-    <delete id="deleteUserByEmail">
-        DELETE
-        FROM `jgv`.`user`
-        WHERE `us_email` = #{usEmail}
-        LIMIT 1
-    </delete>
     <select id="selectUserBySocialTypeCodeAndSocialId"
             resultType="com.escass.movieproject.entities.user.UserEntity">
         SELECT us_num              AS `usNum`,
@@ -408,5 +402,29 @@
         GROUP BY
             payment.`pa_num` -- paNum별로 그룹화
 
+    </select>
+    <select id="selectUserByEmailAndSocialType"
+            resultType="com.escass.movieproject.entities.user.UserEntity">
+        SELECT us_num              AS `usNum`,
+               us_id               AS `usId`,
+               us_pw               AS `usPw`,
+               us_name             AS `usName`,
+               us_nickname         AS `usNickName`,
+               us_birth            AS `usBirth`,
+               us_gender           AS `usGender`,
+               us_email            AS `usEmail`,
+               us_contact          AS `usContact`,
+               us_addr             AS `usAddr`,
+               us_created_at       AS `usCreatedAt`,
+               us_updated_at       AS `usUpdatedAt`,
+               us_is_deleted       AS `usIsDeleted`,
+               us_is_admin         AS `usIsAdmin`,
+               us_is_suspended     AS `usIsSuspended`,
+               us_verified         AS `usIsVerified`,
+               us_social_type_code AS `usSocialTypeCode`,
+               us_social_id        AS `usSocialId`
+        FROM `jgv`.`user`
+        WHERE `us_social_type_code` = #{usSocialTypeCode}
+          AND `us_email` = #{usEmail}
     </select>
 </mapper>

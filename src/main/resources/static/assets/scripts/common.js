@@ -1,28 +1,10 @@
-/**
- * @param {number} fromInclusive
- * @param {number} toInclusive
- * @return {boolean}
- */
-String.prototype.lengthBetween = function (fromInclusive, toInclusive) {
-    return this.length >= fromInclusive && this.length <= toInclusive;
-}
-
-/** @return {HTMLElement} */
 HTMLElement.prototype.hide = function () {
     this.classList.remove('-visible');
     return this;
 }
 
-/** @return {HTMLElement} */
 HTMLElement.prototype.show = function () {
     this.classList.add('-visible');
-    return this;
-}
-
-/** @return {HTMLInputElement} */
-HTMLInputElement.prototype.focusAndSelect = function () {
-    this.focus();
-    this.select();
     return this;
 }
 
@@ -59,7 +41,8 @@ class Loading {
 //검색 기능 추가
 document.addEventListener('DOMContentLoaded', () => {
     const $form = document.querySelector('.nav > .nav-wrapper > .search-wrapper > .search-form');
-    if ($form) {
+    console.log($form)
+    if($form) {
         const $searchKeyword = $form.querySelector('.search > .keyword');
 
 

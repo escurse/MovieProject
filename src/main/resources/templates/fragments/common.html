@@ -32,14 +32,21 @@
                 <span class="text">로그인</span>
             </a>
         </li>
-        <li class="item" th:if="${session.user != null}">
+        <li class="item" th:if="${session.user != null && !session.isSocialRegister}">
             <a id="logout" th:href="@{'/logout'}">
                 <img src="https://img.cgv.co.kr/R2014/images/common/ico/loginPassword.png"
                      alt="로그아웃">
                 <span class="text">로그아웃</span>
             </a>
         </li>
-        <li class="item" th:if="${session.user == null}">
+        <li class="item" th:if="${session.user != null && session.isSocialRegister}">
+            <a id="social-logout"
+               th:href="@{https://kauth.kakao.com/oauth/logout (client_id=${session.kakaoClientId}, logout_redirect_uri=${session.kakaoLogoutRedirectUri})}">
+                <img src="https://img.cgv.co.kr/R2014/images/common/ico/loginPassword.png"
+                     alt="로그아웃">
+                <span class="text">로그아웃</span>
+            </a>
+        </li>        <li class="item" th:if="${session.user == null}">
             <a th:href="@{'/user/register'}">
                 <img src="https://img.cgv.co.kr/R2014/images/common/ico/loginJoin.png"
                      alt="회원가입">
@@ -99,9 +106,9 @@
 <nav th:fragment="nav" id="scroll-nav" class="nav">
     <div class="nav-wrapper frame">
         <ul class="nav-menu">
-            <li>
-                <a th:href="@{'/'}" style="color: #ffffff; font-size: 2rem;
-                font-weight: 700;">JGV
+            <li class="item">
+                <a th:href="@{'/'}">
+                    <img src="/user/images/scroll_nav_logo.png" alt="scroll-nav">
                 </a>
             </li>
             <li class="item">

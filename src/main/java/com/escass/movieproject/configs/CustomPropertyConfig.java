@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 public class CustomPropertyConfig {
     private String kakaoClientId;
     private String kakaoRedirectUri;
+    private String kakaoLogoutRedirectUri;
     private String naverClientId;
     private String naverClientSecret;
     private String naverRedirectUri;

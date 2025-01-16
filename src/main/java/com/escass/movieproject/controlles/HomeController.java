@@ -8,6 +8,7 @@ import com.escass.movieproject.services.movie.MovieService;
 import com.escass.movieproject.services.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,7 +48,6 @@ public class HomeController {
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public ModelAndView logout(HttpSession session) throws URISyntaxException, IOException, InterruptedException {
-        ResultDto<Result, UserEntity> result = this.userService.socialLogout((UserEntity) session.getAttribute(UserEntity.NAME_SINGULAR));
         session.invalidate();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/");

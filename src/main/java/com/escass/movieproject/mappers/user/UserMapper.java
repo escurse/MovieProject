@@ -5,6 +5,7 @@ import com.escass.movieproject.entities.user.UserEntity;
 import com.escass.movieproject.vos.user.ReservationVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,7 +13,6 @@ import java.util.List;
 
 @Mapper
 public interface UserMapper {
-    int deleteUserByEmail(@Param("usEmail") String email);
 
     UserEntity selectUserBySocialTypeCodeAndSocialId(@Param("usSocialTypeCode") String socialTypeCode,
                                                      @Param("usSocialId") String socialId);
@@ -20,6 +20,9 @@ public interface UserMapper {
     int insertUser(UserEntity user);
 
     int findAllReservations(@Param("usNum") int usNum);
+
+    UserEntity selectUserByEmailAndSocialType(@Param("usEmail") String email,
+                                              @Param("usSocialTypeCode") String socialTypecode);
 
     UserEntity selectUserById(@Param("id") String id);
 

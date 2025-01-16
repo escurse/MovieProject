@@ -28,9 +28,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -53,21 +55,12 @@ public class UserController extends AbstractGeneralController {
     private String kakaoClientId;
     @Value("${custom.property.kakao-redirect-uri}")
     private String kakaoRedirectUri;
+    @Value("${custom.property.kakao-logout-redirect-uri}")
+    private String kakaoLogoutRedirectUri;
     @Value("${custom.property.naver-client-id}")
     private String naverClientId;
     @Value("${custom.property.naver-redirect-uri}")
     private String naverRedirectUri;
-
-    @RequestMapping(value = "/", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String deleteIndex(HttpSession session,
-                              @SessionAttribute(value = UserEntity.NAME_SINGULAR, required = false) UserEntity user) throws URISyntaxException, IOException, InterruptedException {
-        Result result = this.userService.deleteUser(user);
-        if (result == CommonResult.SUCCESS) {
-            session.setAttribute(UserEntity.NAME_SINGULAR, null);
-        }
-        return this.generateRestResponse(result).toString();
-    }
 
     @RequestMapping(value = "/login/kakao", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView getLoginKakao(HttpSession session,
@@ -81,7 +74,16 @@ public class UserController extends AbstractGeneralController {
             modelAndView.setViewName("user/social-register");
         } else if (result.getResult() == CommonResult.SUCCESS) {
             session.setAttribute(UserEntity.NAME_SINGULAR, result.getPayload());
+            session.setAttribute("kakaoClientId", kakaoClientId);
+            session.setAttribute("kakaoLogoutRedirectUri", kakaoLogoutRedirectUri);
+            session.setAttribute("isSocialRegister", true);
             modelAndView.setViewName("redirect:/user/myPage/main");
+        } else if (result.getResult() == HandleKakaoLoginResult.IS_DELETED) {
+            session.setAttribute("deleteMessage", true);
+            modelAndView.setViewName("redirect:/user/login");
+        } else if (result.getResult() == HandleKakaoLoginResult.IS_SUSPENDED) {
+            session.setAttribute("suspendMessage", true);
+            modelAndView.setViewName("redirect:/user/login");
         } else {
             modelAndView.setViewName("redirect:https://kauth.kakao.com/oauth/authorize?response_type");
         }
@@ -100,7 +102,14 @@ public class UserController extends AbstractGeneralController {
             modelAndView.setViewName("user/social-register");
         } else if (result.getResult() == CommonResult.SUCCESS) {
             session.setAttribute(UserEntity.NAME_SINGULAR, result.getPayload());
+            session.setAttribute("isSocialRegister", false);
             modelAndView.setViewName("redirect:/user/myPage/main");
+        } else if (result.getResult() == HandleNaverLoginResult.IS_DELETED) {
+            session.setAttribute("deleteMessage", true);
+            modelAndView.setViewName("redirect:/user/login");
+        } else if (result.getResult() == HandleNaverLoginResult.IS_SUSPENDED) {
+            session.setAttribute("suspendMessage", true);
+            modelAndView.setViewName("redirect:/user/login");
         } else {
             modelAndView.setViewName("redirect:https://kauth.naver.com/oauth/authorize?response_type");
         }
@@ -168,7 +177,13 @@ public class UserController extends AbstractGeneralController {
         modelAndView.addObject("kakaoRedirectUri", this.kakaoRedirectUri);
         modelAndView.addObject("naverClientId", this.naverClientId);
         modelAndView.addObject("naverRedirectUri", this.naverRedirectUri);
-
+        if (session.getAttribute("deleteMessage") != null) {
+            modelAndView.addObject("deleteMessage", "이미 탈퇴한 회원입니다. 관리자에게 문의하시길 바랍니다.");
+            session.invalidate();
+        } else if (session.getAttribute("suspendMessage") != null) {
+            modelAndView.addObject("suspendMessage", "차단된 회원입니다. 관리자에게 문의하시길 바랍니다.");
+            session.invalidate();
+        }
         return modelAndView;
     }
 
